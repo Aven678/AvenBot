@@ -5,7 +5,7 @@ plugins {
 }
 
 group 'fr.aven'
-version '1.0.3-SNAPSHOT'
+version '-SNAPSHOT'
 
 sourceCompatibility = 1.8
 
