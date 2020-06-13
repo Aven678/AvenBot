@@ -46,7 +46,7 @@ public class CommandManager {
         addCommands(new DJRoleCommand(), new Prefix(), new ClearConfigCommand());
 
         //MUSIC COMMANDS
-        addCommands(new JoinCommand(), new StopCommand(), new PlayCommand(), new QueueCommand(), new SkipCommand(), new VolumeCommand());
+        addCommands(new JoinCommand(), new StopCommand(), new PlayCommand(), new QueueCommand(), new ShuffleCommand(), new SkipCommand(), new VolumeCommand());
         //MODO COMMANDS
         addCommands(new BanCommand(), new KickCommand(), new MuteCommand(), new UnmuteCommand());
         //INFO COMMANDS

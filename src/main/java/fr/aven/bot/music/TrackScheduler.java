@@ -11,10 +11,7 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 
 import java.time.Duration;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -53,6 +50,20 @@ public class TrackScheduler extends AudioEventAdapter
     public BlockingQueue<AudioTrack> getQueue()
     {
         return queue;
+    }
+
+    public void shuffleQueue() {
+        List<AudioTrack> tQueue = new ArrayList<>(getQueuedTracks());
+        AudioTrack current = tQueue.get(0);
+        tQueue.remove(0);
+        Collections.shuffle(tQueue);
+        tQueue.add(0, current);
+        purgeQueue();
+        queue.addAll(tQueue);
+    }
+
+    public void purgeQueue() {
+        queue.clear();
     }
 
     public void nextTrack()
