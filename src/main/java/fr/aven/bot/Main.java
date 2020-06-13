@@ -19,7 +19,6 @@ public class Main
     private static Listener listener;
     private static SQL database;
 
-    //yesmec
     public static void main(String... args) throws Exception
     {
         lastRestart = new Date();

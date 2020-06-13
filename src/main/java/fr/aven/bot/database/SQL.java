@@ -158,6 +158,26 @@ public class SQL
         }
     }
 
+    public String getTextFor(String request, Guild guild)
+    {
+        try {
+            String checkLang = getLang(guild);
+            String SQL = "SELECT * FROM language WHERE cmd=? AND language=?";
+
+            PreparedStatement preparedStatement = connection.prepareStatement(SQL);
+            preparedStatement.setString(1, request);
+            preparedStatement.setString(2, checkLang);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next())
+                return resultSet.getString(1);
+        } catch (SQLException sqlException) {
+            LOGGER.error(sqlException.getMessage());
+        }
+
+        return null;
+    }
+
     public boolean isModerator (Member member, List modRoles, List adminRoles )
     {
         if (member.isOwner()) return true;
