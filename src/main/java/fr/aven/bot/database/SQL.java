@@ -20,6 +20,23 @@ public class SQL
     private Statement statement;
     private Logger LOGGER = LoggerFactory.getLogger(SQL.class);
 
+    public boolean resetConfig(Guild guild)
+    {
+        try {
+            String removeGuild = "DELETE FROM guild WHERE guildID="+guild.getId();
+            String muteRole = getMuteRole(guild);
+
+            statement.executeUpdate(removeGuild);
+            insertGuild(guild, muteRole);
+
+        } catch (SQLException sqlException)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
     private Connection createConnection()
     {
         Connection connection1 = null;
@@ -268,6 +285,21 @@ public class SQL
         } catch (SQLException e) {
             e.printStackTrace();
             return "en";
+        }
+    }
+
+    public String getMuteRole(Guild guild) {
+        String SQL = "SELECT muteRole FROM guild WHERE guildID = '" + guild.getId() + "'";
+        try {
+            ResultSet result = statement.executeQuery(SQL);
+            if (result.next()) {
+                return result.getString(1);
+            } else {
+                return "=";
+            }
+        } catch (SQLException e) {
+            LOGGER.error(e.getMessage());
+            return "=";
         }
     }
 

@@ -6,6 +6,7 @@ import fr.aven.bot.commands.util.search.SearchCommand;
 import fr.aven.bot.commands.util.search.subcommands.CountryCommand;
 import fr.aven.bot.commands.util.search.subcommands.ImdbCommand;*/
 //import fr.aven.bot.commands.info.InfoCommand;
+import fr.aven.bot.commands.admin.ClearConfigCommand;
 import fr.aven.bot.commands.admin.DJRoleCommand;
 import fr.aven.bot.commands.admin.Prefix;
 import fr.aven.bot.commands.info.HelpCommand;
@@ -42,7 +43,7 @@ public class CommandManager {
         COMMANDLOGGER.info("Loading commands");
 
         //ADMIN COMMANDS
-        addCommands(new DJRoleCommand(), new Prefix());
+        addCommands(new DJRoleCommand(), new Prefix(), new ClearConfigCommand());
 
         //MUSIC COMMANDS
         addCommands(new JoinCommand(), new StopCommand(), new PlayCommand(), new SkipCommand(), new VolumeCommand());
