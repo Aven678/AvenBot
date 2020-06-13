@@ -209,6 +209,6 @@ public class Listener extends ListenerAdapter
         if (PlayerManager.getInstance().getGuildMusicManager(event.getGuild(), event.getChannel()).scheduler.search.isEmpty()) return;
 
         PlayerManager.getInstance().getGuildMusicManager(event.getGuild(), event.getChannel()).scheduler.search.clear();
-        event.getChannel().editMessageById(event.getMessageId(), "Search canceled by "+event.getUser().getAsTag()).override(true).queue();
+        event.getChannel().editMessageById(event.getMessageId(), Main.getDatabase().getTextFor("music.canceled", event.getGuild())+event.getUser().getAsTag()).override(true).queue();
     }
 }
