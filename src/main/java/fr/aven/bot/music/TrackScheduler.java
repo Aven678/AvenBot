@@ -12,7 +12,9 @@ import net.dv8tion.jda.api.entities.User;
 
 import java.time.Duration;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -34,6 +36,10 @@ public class TrackScheduler extends AudioEventAdapter
         this.queue = new LinkedBlockingQueue<>();
         this.guild = guild;
         this.channel = channel;
+    }
+
+    public Set<AudioTrack> getQueuedTracks() {
+        return new LinkedHashSet<>(queue);
     }
 
     public void queue(AudioTrack track)
