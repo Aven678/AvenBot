@@ -26,6 +26,7 @@ import javax.annotation.Nonnull;
 import java.awt.*;
 import java.time.temporal.TemporalAccessor;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 public class Listener extends ListenerAdapter
@@ -164,8 +165,11 @@ public class Listener extends ListenerAdapter
         }
 
         private void createMutedRole(Guild guild) {
-
-            guild.createRole()
+            List<Role> roles = guild.getRolesByName("Muted", true);
+            if (roles.size() != 0)
+                Main.getDatabase().insertGuild(guild, roles.get(0).getId());
+            else
+                guild.createRole()
                     .setColor(Color.GRAY)
                     .setName("Muted")
                     .setMentionable(false)
@@ -188,10 +192,10 @@ public class Listener extends ListenerAdapter
                                 }
 
                                 Main.getDatabase().checkGuild(guild, mutedRole.getId());
+                        logger.info("Muted Role created on server: " + guild.getName());
                     }
             );
 
-            logger.info("Muted Role created on server: " + guild.getName());
         }
 
     @Override
