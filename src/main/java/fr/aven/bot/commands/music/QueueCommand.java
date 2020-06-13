@@ -35,7 +35,7 @@ public class QueueCommand implements ICommand
 
         Set<AudioTrack> queue = PlayerManager.getInstance().getGuildMusicManager(event.getGuild(), channel).scheduler.getQueuedTracks();
         ArrayList<String> tracks = new ArrayList<>();
-        queue.forEach(track -> tracks.add("\n[" + getTimestamp(track.getInfo().length) + "] **" + track.getInfo().title+ "** | *" + track.getInfo().author + "*"));
+        queue.forEach(track -> tracks.add("\n`[" + getTimestamp(track.getInfo().length) + "]` " + track.getInfo().title));
 
 
         List<String> tracksSublist;
