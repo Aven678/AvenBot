@@ -1,6 +1,7 @@
 package fr.aven.bot.commands.modo;
 
 import fr.aven.bot.Constants;
+import fr.aven.bot.Main;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -17,15 +18,15 @@ public class UnmuteCommand extends ModoCommands {
 
         Role mutedRole = guild.getRolesByName("Muted", true).get(0);
         if (args.isEmpty()) {
-            channel.sendMessage("Please provide some arguments").queue();
+            channel.sendMessage(Main.getDatabase().getTextFor("argsNotFound", event.getGuild())).queue();
 
             return;
         } else if (message.getMentionedUsers().isEmpty()) {
-            channel.sendMessage("Please provide a member to unmute").queue();
+            channel.sendMessage(Main.getDatabase().getTextFor("unmute.notMentionned", event.getGuild())).queue();
 
             return;
         } else if (!message.getMentionedMembers().get(0).getRoles().contains(mutedRole)) {
-            channel.sendMessage("Please provide a muted member").queue();
+            channel.sendMessage(Main.getDatabase().getTextFor("unmute.isNotMute", event.getGuild())).queue();
 
             return;
         }
@@ -33,6 +34,8 @@ public class UnmuteCommand extends ModoCommands {
         guild.removeRoleFromMember(message.getMentionedMembers().get(0), mutedRole).queue();
 
         MODOLOGGER.info(event.getAuthor().getName() + " unmuted " + message.getMentionedMembers().get(0).getEffectiveName());
+
+        channel.sendMessage(Main.getDatabase().getTextFor("unmute.confirm", event.getGuild())).queue();
 
     }
 

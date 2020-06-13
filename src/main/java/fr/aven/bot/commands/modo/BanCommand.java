@@ -20,12 +20,12 @@ public class BanCommand extends ModoCommands {
 
         if (args.isEmpty())
         {
-            channel.sendMessage("Please provide some arguments").queue();
+            channel.sendMessage(Main.getDatabase().getTextFor("argsNotFound", event.getGuild())).queue();
 
             return;
         } else if (message.getMentionedMembers().isEmpty()) {
 
-            channel.sendMessage("Please provide a member to ban").queue();
+            channel.sendMessage(Main.getDatabase().getTextFor("ban.notMentionned", event.getGuild())).queue();
 
             return;
         }
@@ -42,6 +42,8 @@ public class BanCommand extends ModoCommands {
             reason = reasonBuilder.toString();
             Main.getDatabase().addBan(message.getMentionedUsers().get(0).getId(), event.getGuild().getId(), message.getTimeCreated().format(DateTimeFormatter.RFC_1123_DATE_TIME), reason);
             event.getGuild().ban(message.getMentionedMembers().get(0), 0, reason).queue();
+
+            channel.sendMessage(Main.getDatabase().getTextFor("ban.confirm", event.getGuild())).queue();
 
             MODOLOGGER.info(event.getAuthor().getName() + " banned " + message.getMentionedMembers().get(0).getEffectiveName() + " for: " + reason);
         }

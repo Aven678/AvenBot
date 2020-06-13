@@ -22,12 +22,12 @@ public class KickCommand extends ModoCommands {
 
         if (args.isEmpty())
         {
-            channel.sendMessage("Please provide some arguments").queue();
+            channel.sendMessage(Main.getDatabase().getTextFor("argsNotFound", event.getGuild())).queue();
             return;
         }
         else if (message.getMentionedUsers().isEmpty())
         {
-            channel.sendMessage("Please provide a member to kick").queue();
+            channel.sendMessage(Main.getDatabase().getTextFor("kick.notMentionned", event.getGuild())).queue();
 
             return;
         }
@@ -46,6 +46,8 @@ public class KickCommand extends ModoCommands {
             reason = reasonBuilder.toString();
             Main.getDatabase().addKick(message.getMentionedUsers().get(0).getId(), event.getGuild().getId(), message.getTimeCreated().format(DateTimeFormatter.RFC_1123_DATE_TIME), reason);
             event.getGuild().kick(message.getMentionedMembers().get(0), reason).queue();
+
+            channel.sendMessage(Main.getDatabase().getTextFor("kick.confirm", event.getGuild())).queue();
 
             MODOLOGGER.info(event.getAuthor().getName() + " kicked " + message.getMentionedMembers().get(0).getEffectiveName() + " for: " + reason);
 

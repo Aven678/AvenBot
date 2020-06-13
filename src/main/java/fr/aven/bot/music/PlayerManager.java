@@ -8,6 +8,7 @@ import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
+import fr.aven.bot.Main;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.Guild;
@@ -77,8 +78,8 @@ public class PlayerManager
                 title = track.getInfo().title;
                 author = track.getInfo().author;
 
-                message.getChannel().sendMessage(builder.setAuthor("Music added", track.getInfo().uri, message.getJDA().getSelfUser().getAvatarUrl())
-                        .addField("❱ Author : "+author, "❱ "+title, false)
+                message.getChannel().sendMessage(builder.setAuthor(Main.getDatabase().getTextFor("music.add", message.getGuild()), track.getInfo().uri, message.getJDA().getSelfUser().getAvatarUrl())
+                        .addField("❱ "+Main.getDatabase().getTextFor("music.author", message.getGuild())+" : "+author, "❱ "+title, false)
                         .setColor(new Color(0, 255, 151))
                         .setFooter("AvenBot by Aven#1000").build()).queue();
 
@@ -92,9 +93,9 @@ public class PlayerManager
                 if (playlist.isSearchResult())
                 {
                     EmbedBuilder builder = new EmbedBuilder();
-                    builder.setAuthor("Music search", "https://justaven.com", message.getAuthor().getAvatarUrl());
+                    builder.setAuthor(Main.getDatabase().getTextFor("music.searchTitle", message.getGuild()), "https://justaven.com", message.getAuthor().getAvatarUrl());
                     builder.setColor(message.getMember().getColor());
-                    builder.setFooter("Enter the number of your choice.", message.getJDA().getSelfUser().getAvatarUrl());
+                    builder.setFooter(Main.getDatabase().getTextFor("music.searchFooter", message.getGuild()), message.getJDA().getSelfUser().getAvatarUrl());
 
                     for (int i = 0; i < playlist.getTracks().size() && i < 5; i++)
                     {
@@ -102,7 +103,7 @@ public class PlayerManager
                         AudioTrackInfo info = track.getInfo();
                         int nbTrack = i;
                         nbTrack++;
-                        builder.appendDescription("\n`" + nbTrack + "`: **" + info.title + "** | Author : " + info.author);
+                        builder.appendDescription("\n`" + nbTrack + "`: **" + info.title + "** | "+Main.getDatabase().getTextFor("music.author", message.getGuild())+" : " + info.author);
 
                         musicManager.scheduler.search.put(nbTrack, track);
                     }
@@ -117,7 +118,7 @@ public class PlayerManager
                         firstTrack = playlist.getTracks().remove(0);
                     }
 
-                    message.getChannel().sendMessage("Adding to queue " + firstTrack.getInfo().title + " (first track of playlist " + playlist.getName() + ")").queue();
+                    message.getChannel().sendMessageFormat(Main.getDatabase().getTextFor("music.playlistAdd", message.getGuild()), firstTrack.getInfo().title, playlist.getName()).queue();
 
                     play(musicManager, firstTrack);
 

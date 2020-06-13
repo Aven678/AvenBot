@@ -4,6 +4,7 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
+import fr.aven.bot.Main;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -87,15 +88,16 @@ public class TrackScheduler extends AudioEventAdapter
         User userRequest = guild.getJDA().getUserById(usersRequest.get(track));
 
         EmbedBuilder builder = new EmbedBuilder();
-        builder.setAuthor("Music in progress", track.getInfo().uri, guild.getJDA().getSelfUser().getAvatarUrl());
+        builder.setAuthor(Main.getDatabase().getTextFor("music.progress", guild), track.getInfo().uri, guild.getJDA().getSelfUser().getAvatarUrl());
         builder.setColor(guild.getMember(userRequest).getColor());
 
-        builder.addField(track.getInfo().title, "❱ Author : "+track.getInfo().author
-                +"\n❱ Duration : "+ getTimestamp(track.getInfo().length), false);
+        builder.addField(track.getInfo().title, "❱ "+Main.getDatabase().getTextFor("music.author", guild)
+                +" : "+ track.getInfo().author
+                +"\n❱ "+Main.getDatabase().getTextFor("music.duration", guild)+" : "+ getTimestamp(track.getInfo().length), false);
 
         builder.setThumbnail("https://i.ytimg.com/vi/" + track.getInfo().identifier + "/hqdefault.jpg");
 
-        builder.setFooter("Request from "+userRequest.getName(), userRequest.getAvatarUrl());
+        builder.setFooter(Main.getDatabase().getTextFor("music.request", guild)+userRequest.getName(), userRequest.getAvatarUrl());
 
         channel.sendMessage(builder.build()).queue();
     }

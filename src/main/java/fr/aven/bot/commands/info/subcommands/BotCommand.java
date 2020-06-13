@@ -19,7 +19,6 @@ public class BotCommand extends InfoSubCommands {
     @Override
     public void handle(List<String> args, GuildMessageReceivedEvent event) {
         RuntimeMXBean rb = ManagementFactory.getRuntimeMXBean();
-        long uptime = rb.getUptime();
 
         Runtime rt = Runtime.getRuntime();
         long usedMB = (rt.totalMemory() - rt.freeMemory()) / 1024 / 1024;
@@ -38,7 +37,7 @@ public class BotCommand extends InfoSubCommands {
         botBuilder.setAuthor(event.getJDA().getSelfUser().getName(), "https://www.avenbot.xyz", event.getJDA().getSelfUser().getAvatarUrl());
         botBuilder.setThumbnail(event.getJDA().getSelfUser().getAvatarUrl());
         botBuilder.addField("Bot Informations: ",
-                "Creators ❱ " + event.getJDA().getUserById(Constants.OWNER).getAsMention() + " and " + event.getJDA().getUserById(Constants.COOWNER).getAsMention() +
+                "Creators ❱ " + event.getJDA().getUserById(Constants.OWNER).getAsMention() + " with the help of " + event.getJDA().getUserById(Constants.COOWNER).getAsMention() +
                         "\nUptime ❱ " + getTimeDiff(new Date(), Main.lastRestart) +
                         "\nVersion ❱ " + Constants.VERSION +
                         "\nLibraries used ❱ " + "JDA, OMDB, restcountries.eu",

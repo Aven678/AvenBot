@@ -1,6 +1,7 @@
 package fr.aven.bot.commands.music;
 
 import fr.aven.bot.Constants;
+import fr.aven.bot.Main;
 import fr.aven.bot.music.PlayerManager;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -21,7 +22,7 @@ public class StopCommand extends MusicCommands
 
         if (!audioManager.isConnected())
         {
-            channel.sendMessage("I'm not connected to a voice channel").queue();
+            channel.sendMessage(Main.getDatabase().getTextFor("stop.botNotConnected", event.getGuild())).queue();
             return;
         }
 
@@ -29,7 +30,7 @@ public class StopCommand extends MusicCommands
 
         if (!voiceChannel.getMembers().contains(event.getMember()))
         {
-            channel.sendMessage("You have to be in the same voice channel as me to use this").queue();
+            channel.sendMessage(Main.getDatabase().getTextFor("stop.isNotInSameChannel", event.getGuild())).queue();
             return;
         }
 
@@ -38,7 +39,7 @@ public class StopCommand extends MusicCommands
         manager.getGuildMusicManager(event.getGuild(), event.getChannel()).scheduler.getQueue().clear();
         manager.getGuildMusicManager(event.getGuild(), event.getChannel()).scheduler.nextTrack();
 
-        channel.sendMessage("Disconnected from your channel").queue();
+        channel.sendMessage(Main.getDatabase().getTextFor("stop.confirm", event.getGuild())).queue();
     }
 
     @Override

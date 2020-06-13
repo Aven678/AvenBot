@@ -1,6 +1,7 @@
 package fr.aven.bot.commands.music;
 
 import fr.aven.bot.Constants;
+import fr.aven.bot.Main;
 import fr.aven.bot.music.PlayerManager;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -16,7 +17,7 @@ public class SkipCommand extends MusicCommands
         manager.getGuildMusicManager(event.getGuild(), event.getChannel()).player.stopTrack();
         manager.getGuildMusicManager(event.getGuild(), event.getChannel()).scheduler.nextTrack();
 
-        event.getChannel().sendMessage("Track skipped !").queue();
+        event.getChannel().sendMessage(Main.getDatabase().getTextFor("skip.confirm", event.getGuild())).queue();
     }
 
     @Override

@@ -16,14 +16,14 @@ public class ClearConfigCommand implements ICommand
     @Override
     public void handle(List<String> args, GuildMessageReceivedEvent event) {
         if (Main.getDatabase().resetConfig(event.getGuild()))
-            event.getChannel().sendMessage(new EmbedBuilder().setTitle("Success")
-                    .setDescription("Config reset.")
+            event.getChannel().sendMessage(new EmbedBuilder().setTitle(Main.getDatabase().getTextFor("success", event.getGuild()))
+                    .setDescription(Main.getDatabase().getTextFor("cconfig.success", event.getGuild()))
                     .setColor(Color.GREEN)
                     .setFooter("AvenBot by Aven#1000")
                     .build()).queue();
         else
-            event.getChannel().sendMessage(new EmbedBuilder().setTitle("Error", "https://avenbot.eu")
-                    .setDescription("An error has occured, please retry.")
+            event.getChannel().sendMessage(new EmbedBuilder().setTitle(Main.getDatabase().getTextFor("error", event.getGuild()), "https://avenbot.eu")
+                    .setDescription(Main.getDatabase().getTextFor("errordesc", event.getGuild()))
             .setColor(Color.RED)
             .setFooter("AvenBot by Aven#1000").build()).queue();
     }

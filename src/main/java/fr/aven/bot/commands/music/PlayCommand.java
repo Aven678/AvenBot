@@ -1,6 +1,7 @@
 package fr.aven.bot.commands.music;
 
 import fr.aven.bot.Constants;
+import fr.aven.bot.Main;
 import fr.aven.bot.music.PlayerManager;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -29,16 +30,14 @@ public class PlayCommand extends MusicCommands
         if (args.isEmpty())
         {
             if (manager.getGuildMusicManager(event.getGuild(), event.getChannel()).scheduler.getQueue().isEmpty())
-                channel.sendMessage("Please provide some arguments").queue();
-            else
-                channel.sendMessage("Channel joined.").queue();
+                channel.sendMessage(Main.getDatabase().getTextFor("argsNotFound", event.getGuild())).queue();
 
             return;
         }
 
         if (!PlayerManager.getInstance().getGuildMusicManager(event.getGuild(), event.getChannel()).scheduler.search.isEmpty())
         {
-            channel.sendMessage("Please confirm your choice.").queue();
+            channel.sendMessage(Main.getDatabase().getTextFor("play.confirmChoice", event.getGuild())).queue();
             return;
         }
 

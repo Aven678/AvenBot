@@ -26,10 +26,10 @@ public class MuteCommand extends ModoCommands {
         mutedRole = guild.getRolesByName("Muted", true).get(0);
 
         if (args.isEmpty()) {
-            channel.sendMessage("Please provide some arguments").queue();
+            channel.sendMessage(Main.getDatabase().getTextFor("argsNotFound", event.getGuild())).queue();
             return;
         } else if (message.getMentionedUsers().isEmpty()) {
-            channel.sendMessage("Please provide a member to mute").queue();
+            channel.sendMessage(Main.getDatabase().getTextFor("mute.notMentionned", event.getGuild())).queue();
 
             return;
         }
@@ -49,6 +49,8 @@ public class MuteCommand extends ModoCommands {
             guild.addRoleToMember(mutedMember, mutedRole).reason(reason).queue();
 
             MODOLOGGER.info(event.getAuthor().getName() + " muted " + message.getMentionedMembers().get(0).getEffectiveName() + " for: " + reason);
+
+            channel.sendMessage(Main.getDatabase().getTextFor("mute.confirm", event.getGuild())).queue();
 
         }
     }

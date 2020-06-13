@@ -292,6 +292,18 @@ public class SQL
         return null;
     }
 
+    public boolean setLang(Guild guild, String newLang)
+    {
+        try {
+            getStatement().executeUpdate("UPDATE guild SET lang="+newLang+" WHERE guildID="+guild.getId());
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+            return false;
+        }
+
+        return true;
+    }
+
     public String getLang(Guild guild)
     {
         String SQL = "SELECT lang FROM guild WHERE guildID="+guild.getId();
