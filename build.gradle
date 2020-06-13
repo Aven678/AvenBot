@@ -5,7 +5,7 @@ plugins {
 }
 
 group 'fr.aven'
-version 'SNAPSHOT'
+version '1.0.1_'+System.properties['build.number']
 
 sourceCompatibility = 1.8
 
