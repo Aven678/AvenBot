@@ -162,7 +162,7 @@ public class SQL
     {
         try {
             String checkLang = getLang(guild);
-            String SQL = "SELECT * FROM language WHERE cmd=? AND language=?";
+            String SQL = "SELECT text FROM language WHERE cmd=? AND language=?";
 
             PreparedStatement preparedStatement = connection.prepareStatement(SQL);
             preparedStatement.setString(1, request);
