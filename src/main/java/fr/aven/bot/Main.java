@@ -19,6 +19,7 @@ public class Main
     private static Listener listener;
     private static SQL database;
 
+    //yesmec
     public static void main(String... args) throws Exception
     {
         lastRestart = new Date();
@@ -56,8 +57,6 @@ public class Main
             case DEFAULT:
                 JDAManager.getShardManager().setActivity(Activity.playing(text));
                 break;
-            default:
-                return;
         }
     }
 
