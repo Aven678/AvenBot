@@ -63,7 +63,16 @@ public class SQL
         return connection1;
     }
 
-    public Connection getConnection() { return connection; }
+    public Connection getConnection() {
+
+        try {
+            if (connection.isClosed()) connection = createConnection();
+        } catch (SQLException sqlException) {
+            LOGGER.error(sqlException.getMessage());
+        }
+
+        return connection;
+    }
 
     public Statement getStatement()
     {
@@ -75,7 +84,7 @@ public class SQL
 
         try
         {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            PreparedStatement preparedStatement = getConnection().prepareStatement(sql);
             preparedStatement.setString(1, command.getInvoke());
 
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -90,7 +99,7 @@ public class SQL
     public void insertCmd(ICommand command) {
         String SQL = "INSERT INTO cmd_list(cmdname, category, description, exemple)" + " VALUES(?,?,?,?)";
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement(SQL);
+            PreparedStatement preparedStatement = getConnection().prepareStatement(SQL);
             preparedStatement.setString(1, command.getInvoke());
             preparedStatement.setString(2, command.getType().name());
             preparedStatement.setString(3, command.getHelp().getName());
@@ -139,7 +148,7 @@ public class SQL
         String SQL = "INSERT INTO guild(guildID, lang, prefix, warnsLimit, warnsLimitType, muteRole, djRole, textJoin, textLeave, textBan, announceChannelID)" + "VALUES(?,?,?,?,?,?,?,?,?,?,?)";
 
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement(SQL);
+            PreparedStatement preparedStatement = getConnection().prepareStatement(SQL);
             preparedStatement.setString(1, guild.getId());
             preparedStatement.setString(2, "fr");
             preparedStatement.setString(3, "&");
@@ -164,7 +173,7 @@ public class SQL
             String checkLang = getLang(guild);
             String SQL = "SELECT text FROM language WHERE cmd=? AND language=?";
 
-            PreparedStatement preparedStatement = connection.prepareStatement(SQL);
+            PreparedStatement preparedStatement = getConnection().prepareStatement(SQL);
             preparedStatement.setString(1, request);
             preparedStatement.setString(2, checkLang);
 
@@ -280,7 +289,7 @@ public class SQL
     {
         try
         {
-            ResultSet resultSet = getStatement().executeQuery("SELECT * FROM guild WHERE guildID="+guild.getId());
+            ResultSet resultSet = getConnection().createStatement().executeQuery("SELECT * FROM guild WHERE guildID="+guild.getId());
 
             if (resultSet.next())
                 return resultSet.getObject(coluum);
@@ -295,7 +304,7 @@ public class SQL
     public boolean setLang(Guild guild, String newLang)
     {
         try {
-            getStatement().executeUpdate("UPDATE guild SET lang="+newLang+" WHERE guildID="+guild.getId());
+            getConnection().createStatement().executeUpdate("UPDATE guild SET lang="+newLang+" WHERE guildID="+guild.getId());
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
             return false;
@@ -309,7 +318,7 @@ public class SQL
         String SQL = "SELECT lang FROM guild WHERE guildID="+guild.getId();
         ResultSet resultSet = null;
         try {
-            resultSet = statement.executeQuery(SQL);
+            resultSet = getConnection().createStatement().executeQuery(SQL);
             if (resultSet.next())
                 return resultSet.getString(1);
             else
@@ -323,7 +332,7 @@ public class SQL
     public String getMuteRole(Guild guild) {
         String SQL = "SELECT muteRole FROM guild WHERE guildID = '" + guild.getId() + "'";
         try {
-            ResultSet result = statement.executeQuery(SQL);
+            ResultSet result = getConnection().createStatement().executeQuery(SQL);
             if (result.next()) {
                 return result.getString(1);
             } else {
@@ -339,7 +348,7 @@ public class SQL
     public String getGuildPrefix(Guild guild) {
         String SQL = "SELECT prefix FROM guild WHERE guildID = '" + guild.getId() + "'";
         try {
-            ResultSet result = statement.executeQuery(SQL);
+            ResultSet result = getConnection().createStatement().executeQuery(SQL);
             if (result.next()) {
                 return result.getString(1);
             } else {
@@ -354,7 +363,7 @@ public class SQL
     public void setPrefix(Guild guild, String prefix) {
         String SQL = "UPDATE guild SET prefix = '" + prefix + "' WHERE guildID = '" + guild.getId() + "'";
         try {
-            statement.executeUpdate(SQL);
+            getConnection().createStatement().executeUpdate(SQL);
         } catch (SQLException e) {
             LOGGER.error(e.getMessage());
         }
@@ -364,7 +373,7 @@ public class SQL
     {
         String SQL = "INSERT INTO "+table+"(idUser, guildId, dateTime, reason) VALUES (?,?,?,?);";
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement(SQL);
+            PreparedStatement preparedStatement = getConnection().prepareStatement(SQL);
             preparedStatement.setString(1,idUser);
             preparedStatement.setString(2, guildID);
             preparedStatement.setString(3, dateTime);
@@ -403,7 +412,7 @@ public class SQL
         String SQL = "SELECT * FROM warns WHERE idUser=? AND guildID=?";
 
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement(SQL);
+            PreparedStatement preparedStatement = getConnection().prepareStatement(SQL);
             preparedStatement.setString(1, idUser);
             preparedStatement.setString(2, idUser);
 
@@ -425,7 +434,7 @@ public class SQL
     {
         String SQL = "UPDATE guild SET djRole = '" + role.getId() + "' WHERE guildID = '" + role.getGuild().getId() + "'";
         try {
-            statement.executeUpdate(SQL);
+            getConnection().createStatement().executeUpdate(SQL);
         } catch (SQLException e) {
             LOGGER.error(e.getMessage());
         }
