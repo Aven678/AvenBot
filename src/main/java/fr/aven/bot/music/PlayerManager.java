@@ -126,13 +126,13 @@ public class PlayerManager
             @Override
             public void noMatches()
             {
-                message.getChannel().sendMessage("Nothing found, please retry.").queue();
+                message.getChannel().sendMessage(Main.getDatabase().getTextFor("music.notFound", message.getGuild())).queue();
             }
 
             @Override
             public void loadFailed(FriendlyException exception)
             {
-                message.getChannel().sendMessage("Could not play: " + exception.getMessage()).queue();
+                message.getChannel().sendMessage(Main.getDatabase().getTextFor("music.couldntPlay", message.getGuild()) + exception.getMessage()).queue();
             }
         });
 
