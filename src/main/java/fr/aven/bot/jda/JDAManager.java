@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.utils.ChunkingFilter;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 
 import java.util.EnumSet;
+import java.util.function.Function;
 
 public class JDAManager
 {
@@ -19,6 +20,7 @@ public class JDAManager
         {
             return DefaultShardManagerBuilder.createDefault(Main.getConfiguration().getString("token", "Insert your token here."))
                     .setMemberCachePolicy(MemberCachePolicy.ALL)
+                    .setShardsTotal(1)
                     .enableIntents(EnumSet.allOf(GatewayIntent.class))
                     .build();
         } catch (Exception e)

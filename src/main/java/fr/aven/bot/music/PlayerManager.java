@@ -25,21 +25,14 @@ public class PlayerManager
     private static PlayerManager INSTANCE;
     private final AudioPlayerManager playerManager;
     private final Map<Long, GuildMusicManager> musicManagers;
-    private final YoutubeAPI ytAPI;
 
     private PlayerManager()
     {
-        this.ytAPI = new YoutubeAPI();
-        ytAPI.buildYoutubeClient();
         this.musicManagers = new HashMap<>();
 
         this.playerManager = new DefaultAudioPlayerManager();
         AudioSourceManagers.registerLocalSource(playerManager);
         AudioSourceManagers.registerRemoteSources(playerManager);
-    }
-
-    public YoutubeAPI getYoutubeAPI() {
-        return ytAPI;
     }
 
     public boolean checkNullForEvent(Guild guild)
