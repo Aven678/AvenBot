@@ -95,12 +95,28 @@ public class PlayerManager
             }
 
             @Override
-            public void playlistLoaded(AudioPlaylist playlist)
-            {
+            public void playlistLoaded(AudioPlaylist playlist) {
+                if (playlist.isSearchResult()) {
+                    EmbedBuilder builder = new EmbedBuilder();
+                    builder.setAuthor(Main.getDatabase().getTextFor("music.searchTitle", message.getGuild()), "https://justaven.com", message.getAuthor().getAvatarUrl());
+                    builder.setColor(message.getMember().getColor());
+                    builder.setFooter(Main.getDatabase().getTextFor("music.searchFooter", message.getGuild()), message.getJDA().getSelfUser().getAvatarUrl());
+
+                    for (int i = 0; i < playlist.getTracks().size() && i < 5; i++) {
+                        AudioTrack track = playlist.getTracks().get(i);
+                        AudioTrackInfo info = track.getInfo();
+                        int nbTrack = i;
+                        nbTrack++;
+                        builder.appendDescription("\n`" + nbTrack + "`: **" + info.title + "** | " + Main.getDatabase().getTextFor("music.author", message.getGuild()) + " : " + info.author);
+
+                        musicManager.scheduler.search.put(nbTrack, track);
+                    }
+
+                    message.getTextChannel().sendMessage(builder.build()).queue(msg -> msg.addReaction("❌").queue());
+                } else {
                     AudioTrack firstTrack = playlist.getSelectedTrack();
 
-                    if (firstTrack == null)
-                    {
+                    if (firstTrack == null) {
                         firstTrack = playlist.getTracks().remove(0);
                     }
 
@@ -111,8 +127,9 @@ public class PlayerManager
                     playlist.getTracks().forEach(musicManager.scheduler::queue);
                     for (AudioTrack track : playlist.getTracks())
                         musicManager.scheduler.usersRequest.put(track, message.getAuthor().getIdLong());
-            }
+                }
 
+            }
             @Override
             public void noMatches()
             {

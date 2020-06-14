@@ -1,31 +1,23 @@
 package fr.aven.bot;
 
-import com.google.api.services.youtube.model.SearchResult;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import fr.aven.bot.commands.info.InfoCommands;
 import fr.aven.bot.jda.JDAManager;
-import fr.aven.bot.music.DownloadVideo;
 import fr.aven.bot.music.PlayerManager;
 import fr.aven.bot.util.ICommand;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.events.Event;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.ReadyEvent;
-import net.dv8tion.jda.api.events.guild.GenericGuildEvent;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
-import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
 import java.awt.*;
-import java.time.temporal.TemporalAccessor;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -147,7 +139,7 @@ public class Listener extends ListenerAdapter
         {
             if (PlayerManager.getInstance().checkNullForEvent(e.getGuild())) return;
 
-            Map<Integer, SearchResult> search = PlayerManager.getInstance().getGuildMusicManager(e.getGuild(), e.getChannel()).scheduler.search;
+            Map<Integer, AudioTrack> search = PlayerManager.getInstance().getGuildMusicManager(e.getGuild(), e.getChannel()).scheduler.search;
             if (search.size() == 0) return;
             if (e.getMessage().getContentDisplay().equalsIgnoreCase("cancel")) {
                 search.clear();
@@ -157,7 +149,7 @@ public class Listener extends ListenerAdapter
             try {
                 int choix = Integer.parseInt(e.getMessage().getContentDisplay());
                 e.getChannel().sendTyping().queue();
-                PlayerManager.getInstance().loadAndPlay(e.getMessage(), "https://youtube.com/watch?v="+search.get(choix).getId().getVideoId());
+                PlayerManager.getInstance().loadAndPlay(e.getMessage(), search.get(choix).getInfo().uri);
                 search.clear();
             } catch (NumberFormatException nfe)
             {

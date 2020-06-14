@@ -21,7 +21,7 @@ public class TrackScheduler extends AudioEventAdapter
     private final AudioPlayer player;
     private final BlockingQueue<AudioTrack> queue;
 
-    public Map<Integer, SearchResult> search = new HashMap<>();
+    public Map<Integer, AudioTrack> search = new HashMap<>();
     public Map<AudioTrack, Long> usersRequest = new HashMap<>();
 
     private Guild guild;

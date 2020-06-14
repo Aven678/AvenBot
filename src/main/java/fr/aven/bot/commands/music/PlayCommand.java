@@ -47,11 +47,9 @@ public class PlayCommand extends MusicCommands
         String input = String.join(" ", args);
 
         if (!isUrl(input))
-        {
-            sendMessage(input, event);
-        } else {
-            manager.loadAndPlay(event.getMessage(), input);
-        }
+            input = "ytsearch:"+input;
+
+        manager.loadAndPlay(event.getMessage(), input);
     }
 
     private boolean isUrl(String input)
@@ -67,30 +65,7 @@ public class PlayCommand extends MusicCommands
         }
     }
 
-    public void sendMessage(String input, GuildMessageReceivedEvent event)
-    {
-        Iterator<SearchResult> search = PlayerManager.getInstance().getYoutubeAPI().search(input);
-        int nbTrack = 1;
 
-        EmbedBuilder builder = new EmbedBuilder();
-        builder.setAuthor(Main.getDatabase().getTextFor("music.searchTitle", event.getGuild()), "https://justaven.com", event.getAuthor().getAvatarUrl());
-        builder.setColor(event.getMember().getColor());
-        builder.setFooter(Main.getDatabase().getTextFor("music.searchFooter", event.getGuild()), event.getJDA().getSelfUser().getAvatarUrl());
-
-        GuildMusicManager musicManager = PlayerManager.getInstance().getGuildMusicManager(event.getGuild(), event.getChannel());
-        while (search.hasNext()) {
-            SearchResult singleVideo = search.next();
-            System.out.println(singleVideo.getSnippet().getTitle());
-
-            musicManager.scheduler.search.put(nbTrack, singleVideo);
-            builder.appendDescription("\n`" + nbTrack + "`: **" + singleVideo.getSnippet().getTitle() + "** | "+Main.getDatabase().getTextFor("music.author", event.getGuild())+" : " + singleVideo.getSnippet().getChannelTitle());
-
-            nbTrack++;
-        }
-
-
-        event.getChannel().sendMessage(builder.build()).queue(msg -> msg.addReaction("❌").queue());
-    }
 
     @Override
     public boolean haveEvent() {
