@@ -1,5 +1,6 @@
 package fr.aven.bot;
 
+import com.google.api.services.youtube.model.SearchResult;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import fr.aven.bot.commands.info.InfoCommands;
 import fr.aven.bot.jda.JDAManager;
@@ -146,7 +147,7 @@ public class Listener extends ListenerAdapter
         {
             if (PlayerManager.getInstance().checkNullForEvent(e.getGuild())) return;
 
-            Map<Integer, AudioTrack> search = PlayerManager.getInstance().getGuildMusicManager(e.getGuild(), e.getChannel()).scheduler.search;
+            Map<Integer, SearchResult> search = PlayerManager.getInstance().getGuildMusicManager(e.getGuild(), e.getChannel()).scheduler.search;
             if (search.size() == 0) return;
             if (e.getMessage().getContentDisplay().equalsIgnoreCase("cancel")) {
                 search.clear();
@@ -156,7 +157,7 @@ public class Listener extends ListenerAdapter
             try {
                 int choix = Integer.parseInt(e.getMessage().getContentDisplay());
                 e.getChannel().sendTyping().queue();
-                PlayerManager.getInstance().loadAndPlay(e.getMessage(), search.get(choix).getInfo().uri, search.get(choix));
+                PlayerManager.getInstance().loadAndPlay(e.getMessage(), "https://youtube.com/watch?v="+search.get(choix).getId().getVideoId());
                 search.clear();
             } catch (NumberFormatException nfe)
             {

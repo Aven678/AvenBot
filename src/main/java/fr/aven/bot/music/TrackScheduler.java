@@ -1,5 +1,6 @@
 package fr.aven.bot.music;
 
+import com.google.api.services.youtube.model.SearchResult;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
@@ -10,7 +11,6 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 
-import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -21,7 +21,7 @@ public class TrackScheduler extends AudioEventAdapter
     private final AudioPlayer player;
     private final BlockingQueue<AudioTrack> queue;
 
-    public Map<Integer, AudioTrack> search = new HashMap<>();
+    public Map<Integer, SearchResult> search = new HashMap<>();
     public Map<AudioTrack, Long> usersRequest = new HashMap<>();
 
     private Guild guild;

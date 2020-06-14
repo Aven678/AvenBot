@@ -25,14 +25,21 @@ public class PlayerManager
     private static PlayerManager INSTANCE;
     private final AudioPlayerManager playerManager;
     private final Map<Long, GuildMusicManager> musicManagers;
+    private final YoutubeAPI ytAPI;
 
     private PlayerManager()
     {
+        this.ytAPI = new YoutubeAPI();
+        ytAPI.buildYoutubeClient();
         this.musicManagers = new HashMap<>();
 
         this.playerManager = new DefaultAudioPlayerManager();
         AudioSourceManagers.registerLocalSource(playerManager);
         AudioSourceManagers.registerRemoteSources(playerManager);
+    }
+
+    public YoutubeAPI getYoutubeAPI() {
+        return ytAPI;
     }
 
     public boolean checkNullForEvent(Guild guild)
@@ -62,7 +69,7 @@ public class PlayerManager
         return musicManager;
     }
 
-    public void loadAndPlay(Message message, String trackUrl, @Nullable AudioTrack possibleTrack)
+    public void loadAndPlay(Message message, String trackUrl)
     {
         GuildMusicManager musicManager = getGuildMusicManager(message.getGuild(), message.getTextChannel());
 
@@ -90,27 +97,6 @@ public class PlayerManager
             @Override
             public void playlistLoaded(AudioPlaylist playlist)
             {
-                if (playlist.isSearchResult())
-                {
-                    EmbedBuilder builder = new EmbedBuilder();
-                    builder.setAuthor(Main.getDatabase().getTextFor("music.searchTitle", message.getGuild()), "https://justaven.com", message.getAuthor().getAvatarUrl());
-                    builder.setColor(message.getMember().getColor());
-                    builder.setFooter(Main.getDatabase().getTextFor("music.searchFooter", message.getGuild()), message.getJDA().getSelfUser().getAvatarUrl());
-
-                    for (int i = 0; i < playlist.getTracks().size() && i < 5; i++)
-                    {
-                        AudioTrack track = playlist.getTracks().get(i);
-                        AudioTrackInfo info = track.getInfo();
-                        int nbTrack = i;
-                        nbTrack++;
-                        builder.appendDescription("\n`" + nbTrack + "`: **" + info.title + "** | "+Main.getDatabase().getTextFor("music.author", message.getGuild())+" : " + info.author);
-
-                        musicManager.scheduler.search.put(nbTrack, track);
-                    }
-
-                    message.getTextChannel().sendMessage(builder.build()).queue(msg -> msg.addReaction("❌").queue());
-                } else
-                {
                     AudioTrack firstTrack = playlist.getSelectedTrack();
 
                     if (firstTrack == null)
@@ -125,7 +111,6 @@ public class PlayerManager
                     playlist.getTracks().forEach(musicManager.scheduler::queue);
                     for (AudioTrack track : playlist.getTracks())
                         musicManager.scheduler.usersRequest.put(track, message.getAuthor().getIdLong());
-                }
             }
 
             @Override

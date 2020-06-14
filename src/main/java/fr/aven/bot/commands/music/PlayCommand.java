@@ -1,8 +1,13 @@
 package fr.aven.bot.commands.music;
 
+import com.google.api.services.youtube.model.SearchResult;
+import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 import fr.aven.bot.Constants;
 import fr.aven.bot.Main;
+import fr.aven.bot.music.GuildMusicManager;
 import fr.aven.bot.music.PlayerManager;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.GenericEvent;
@@ -10,6 +15,7 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Iterator;
 import java.util.List;
 
 public class PlayCommand extends MusicCommands
@@ -18,10 +24,7 @@ public class PlayCommand extends MusicCommands
     public void handle(List<String> args, GuildMessageReceivedEvent event)
     {
         if (!event.getGuild().getAudioManager().isConnected()) {
-            if (!event.getGuild().getAudioManager().isAttemptingToConnect())
-            {
                 JoinCommand.joinChannel(event);
-            }
         }
 
         TextChannel channel = event.getChannel();
@@ -44,9 +47,11 @@ public class PlayCommand extends MusicCommands
         String input = String.join(" ", args);
 
         if (!isUrl(input))
-            input = "ytsearch:" + input;
-
-        manager.loadAndPlay(event.getMessage(), input, null);
+        {
+            sendMessage(input, event);
+        } else {
+            manager.loadAndPlay(event.getMessage(), input);
+        }
     }
 
     private boolean isUrl(String input)
@@ -60,6 +65,31 @@ public class PlayCommand extends MusicCommands
         {
             return false;
         }
+    }
+
+    public void sendMessage(String input, GuildMessageReceivedEvent event)
+    {
+        Iterator<SearchResult> search = PlayerManager.getInstance().getYoutubeAPI().search(input);
+        int nbTrack = 1;
+
+        EmbedBuilder builder = new EmbedBuilder();
+        builder.setAuthor(Main.getDatabase().getTextFor("music.searchTitle", event.getGuild()), "https://justaven.com", event.getAuthor().getAvatarUrl());
+        builder.setColor(event.getMember().getColor());
+        builder.setFooter(Main.getDatabase().getTextFor("music.searchFooter", event.getGuild()), event.getJDA().getSelfUser().getAvatarUrl());
+
+        GuildMusicManager musicManager = PlayerManager.getInstance().getGuildMusicManager(event.getGuild(), event.getChannel());
+        while (search.hasNext()) {
+            SearchResult singleVideo = search.next();
+            System.out.println(singleVideo.getSnippet().getTitle());
+
+            musicManager.scheduler.search.put(nbTrack, singleVideo);
+            builder.appendDescription("\n`" + nbTrack + "`: **" + singleVideo.getSnippet().getTitle() + "** | "+Main.getDatabase().getTextFor("music.author", event.getGuild())+" : " + singleVideo.getSnippet().getChannelTitle());
+
+            nbTrack++;
+        }
+
+
+        event.getChannel().sendMessage(builder.build()).queue(msg -> msg.addReaction("❌").queue());
     }
 
     @Override
