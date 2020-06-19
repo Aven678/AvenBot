@@ -148,7 +148,7 @@ public class Listener extends ListenerAdapter
 
             try {
                 int choix = Integer.parseInt(e.getMessage().getContentDisplay());
-                e.getChannel().sendTyping().queue();
+                if (!search.containsKey(choix)) return;
                 PlayerManager.getInstance().loadAndPlay(e.getMessage(), search.get(choix).getInfo().uri);
                 search.clear();
             } catch (NumberFormatException nfe)
