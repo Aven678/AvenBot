@@ -121,7 +121,7 @@ public class ServerCommand extends InfoSubCommands {
                         "\nVoice ❱ " + guild.getVoiceChannels().size(),
                 false);
         builder.addField("Roles: ", guild.getRoles().size() == 0 ? "No roles found" : guild.getRoles().stream().map(Role::getAsMention).collect(Collectors.joining(", ")), true);
-        builder.addField("Emojis: ", guild.getEmotes().size() == 0 ? "No emojis found" : guild.getEmotes().stream().map(Emote::getAsMention).collect(Collectors.joining(", ")), false);
+        builder.addField("Emojis: ", guild.getEmotes().size() == 0 ? "No emojis found" : guild.getEmotes().stream().map(Emote::getAsMention).collect(Collectors.joining(" ")), false);
         event.getChannel().sendMessage(builder.build()).queue();
     }
 
