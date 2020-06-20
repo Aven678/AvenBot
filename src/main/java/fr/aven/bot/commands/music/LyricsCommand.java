@@ -110,7 +110,7 @@ public class LyricsCommand implements ICommand
 
     @Override
     public String getInvoke() {
-        return null;
+        return "lyrics";
     }
 
     @Override
