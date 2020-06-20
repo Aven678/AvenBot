@@ -4,6 +4,8 @@ import fr.aven.bot.Main;
 import net.explodingbush.ksoftapi.KSoftAPI;
 import net.explodingbush.ksoftapi.entities.Lyric;
 
+import java.util.List;
+
 public class KSoft
 {
     private KSoftAPI kSoftAPI = null;
@@ -11,13 +13,16 @@ public class KSoft
     public KSoftAPI getKSoftAPI()
     {
         if (kSoftAPI == null)
-            kSoftAPI = new KSoftAPI(Main.getConfiguration().getString("ksoft-api", ""));
+            kSoftAPI = new KSoftAPI(Main.getConfiguration().getString("ksoft-api", "6272b057973847dc8dca241a9ced9213d35e8963"));
 
         return kSoftAPI;
     }
 
     public Lyric getLyrics(String query)
     {
-        return getKSoftAPI().getLyrics().search(query).execute().get(0);
+        List<Lyric> lyrics = getKSoftAPI().getLyrics().search(query).execute();
+
+        if (lyrics.isEmpty()) return null;
+        return lyrics.get(0);
     }
 }

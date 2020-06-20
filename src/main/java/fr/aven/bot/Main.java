@@ -3,6 +3,7 @@ package fr.aven.bot;
 import fr.aven.bot.database.SQL;
 import fr.aven.bot.jda.JDAManager;
 import fr.aven.bot.util.Configuration;
+import fr.aven.bot.util.KSoft;
 import net.dv8tion.jda.api.entities.Activity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +19,7 @@ public class Main
     private static CommandManager commandManager;
     private static Listener listener;
     private static SQL database;
+    private static KSoft kSoft = new KSoft();
 
     public static void main(String... args) throws Exception
     {
@@ -39,6 +41,10 @@ public class Main
 
     public static CommandManager getCommandManager() {
         return commandManager;
+    }
+
+    public static KSoft getkSoft() {
+        return kSoft;
     }
 
     public static void setActivity(Activity.ActivityType type, String text) {
