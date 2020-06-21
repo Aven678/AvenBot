@@ -38,9 +38,20 @@ public class PlayCommand extends MusicCommands
             return;
         }
 
-        if (!PlayerManager.getInstance().getGuildMusicManager(event.getGuild(), event.getChannel()).scheduler.search.isEmpty())
+        if (!manager.getGuildMusicManager(event.getGuild(), event.getChannel()).scheduler.search.isEmpty())
         {
             channel.sendMessage(Main.getDatabase().getTextFor("play.confirmChoice", event.getGuild())).queue();
+            return;
+        }
+
+        if (manager.getGuildMusicManager(event.getGuild(), event.getChannel()).player.isPaused())
+        {
+            manager.getGuildMusicManager(event.getGuild(), event.getChannel()).player.setPaused(false);
+            event.getChannel().sendMessage(new EmbedBuilder()
+                    .setTitle(Main.getDatabase().getTextFor("success", event.getGuild()))
+                    .setDescription(Main.getDatabase().getTextFor("pause.playerResume", event.getGuild()))
+                    .build()).queue();
+
             return;
         }
 
