@@ -37,13 +37,12 @@ public class PlayerManager
 
     public boolean checkNullForEvent(Guild guild)
     {
-        return musicManagers.get(guild.getIdLong()) == null ? true : false;
+        return musicManagers.get(guild.getIdLong()) == null;
     }
 
     public void destroyGuildMusicManager(Guild guild)
     {
-        if (musicManagers.containsKey(guild.getIdLong()))
-            musicManagers.remove(guild.getIdLong());
+        musicManagers.remove(guild.getIdLong());
     }
 
     public synchronized GuildMusicManager getGuildMusicManager(Guild guild, TextChannel channel)
@@ -66,6 +65,7 @@ public class PlayerManager
     {
         GuildMusicManager musicManager = getGuildMusicManager(message.getGuild(), message.getTextChannel());
 
+        playerManager.setFrameBufferDuration(5000);
         playerManager.loadItemOrdered(musicManager, trackUrl, new AudioLoadResultHandler()
         {
             @Override

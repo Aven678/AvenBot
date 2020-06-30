@@ -58,7 +58,7 @@ public class PlayCommand extends MusicCommands
         String input = String.join(" ", args);
 
         if (!isUrl(input))
-            input = "ytsearch:"+input;
+            input = "ytsearch: "+input;
 
         manager.loadAndPlay(event.getMessage(), input);
     }
