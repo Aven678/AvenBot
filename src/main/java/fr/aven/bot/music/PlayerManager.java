@@ -132,6 +132,7 @@ public class PlayerManager
             @Override
             public void loadFailed(FriendlyException exception)
             {
+                exception.printStackTrace();
                 message.getChannel().sendMessage(Main.getDatabase().getTextFor("music.couldntPlay", message.getGuild()) + exception.getMessage()).queue();
             }
         });
