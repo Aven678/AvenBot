@@ -42,6 +42,7 @@ public class JoinCommand extends MusicCommands
         }
 
         audioManager.openAudioConnection(voiceChannel);
+        audioManager.setSelfDeafened(true);
     }
 
     @Override
