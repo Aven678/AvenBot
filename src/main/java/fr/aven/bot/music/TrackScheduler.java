@@ -148,6 +148,8 @@ public class TrackScheduler extends AudioEventAdapter
             msg.addReaction("\uD83D\uDD01").queue(); //repeat
             msg.addReaction("\uD83D\uDCDC").queue(); //scroll/lyrics
             msg.addReaction("❌").queue(); //stop
+
+            lastMessageStatus = msg.getIdLong();
         });
     }
 
