@@ -66,7 +66,6 @@ public class MusicReactionListener extends ListenerAdapter
                     manager.player.stopTrack();
                     manager.scheduler.purgeQueue();
                     manager.scheduler.nextTrack(track, false);
-                    event.getChannel().sendMessage(Main.getDatabase().getTextFor("stop.confirm", event.getGuild())).queue();
                 }
                 break;
         }
