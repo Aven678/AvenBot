@@ -27,7 +27,7 @@ public class QueueCommand implements ICommand
         TextChannel channel = event.getChannel();
         StringBuilder sb = new StringBuilder();
 
-        if (PlayerManager.getInstance().checkNullForEvent(event.getGuild()))
+        if (PlayerManager.getInstance().getGuildMusicManager(event.getGuild(), event.getChannel()).scheduler.getQueue().isEmpty())
         {
             channel.sendMessage(Main.getDatabase().getTextFor("queue.playerNotActive", event.getGuild())).queue();
             return;
