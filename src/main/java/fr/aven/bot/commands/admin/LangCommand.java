@@ -1,7 +1,9 @@
 package fr.aven.bot.commands.admin;
 
 import fr.aven.bot.Constants;
+import fr.aven.bot.Main;
 import fr.aven.bot.util.ICommand;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -12,7 +14,14 @@ public class LangCommand implements ICommand
 {
     @Override
     public void handle(List<String> args, GuildMessageReceivedEvent event) {
+        if (args.size() == 0 || !args.get(0).equalsIgnoreCase("en") || !args.get(0).equalsIgnoreCase("fr"))
+        {
+            event.getChannel().sendMessage(new EmbedBuilder().addField(getHelp()).build()).queue();
+            return;
+        }
 
+        Main.getDatabase().setLang(event.getGuild(), args.get(0));
+        event.getChannel().sendMessage(Main.getDatabase().getTextFor("lang.success", event.getGuild())).queue();
     }
 
     @Override
@@ -27,7 +36,7 @@ public class LangCommand implements ICommand
 
     @Override
     public MessageEmbed.Field getHelp() {
-        return new MessageEmbed.Field("Change the language of the bot.", "Usage : `"+ Constants.PREFIX + getInvoke() + "`", false);
+        return new MessageEmbed.Field("Change the language of the bot.", "Usage : `"+ Constants.PREFIX + getInvoke() + "` <en/fr>", false);
     }
 
     @Override

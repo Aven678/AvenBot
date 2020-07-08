@@ -31,7 +31,7 @@ public class Main
         commandManager = new CommandManager();
         listener = new Listener(commandManager);
         JDAManager.getShardManager().addEventListener(listener, new MusicReactionListener());
-        setActivity(Activity.ActivityType.WATCHING, "&help | avenbot.eu");
+        setActivity(Activity.ActivityType.WATCHING, "&help | justaven.xyz");
 
         configuration.save();
     }
