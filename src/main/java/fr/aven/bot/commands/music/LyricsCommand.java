@@ -38,13 +38,14 @@ public class LyricsCommand implements ICommand
 
             System.out.println(lyricsLine.length);
             int i1 = 0;
-            while (firstLyrics.length() != 2048 || i1 <= totalLine)
+            while (firstLyrics.length() != 2048)
             {
+                if (i1 > totalLine) break;
+
                 if (!firstLyrics.toString().equalsIgnoreCase(""))
                     firstLyrics.append("\n");
                     firstLyrics.append(lyricsLine[i1]);
                 i1 = i1 +1;
-                System.out.println(i1);
             }
 
             if (firstLyrics.length() > 2048){
@@ -52,8 +53,10 @@ public class LyricsCommand implements ICommand
                 firstLyrics.setLength(firstLyrics.length() - lyricsLine[i1].length());
             }
 
-            while (secondPart.length() != 2048 || i1 <= totalLine)
+            while (secondPart.length() != 2048)
             {
+                if (i1 > totalLine) break;
+
                 if (!secondPart.toString().equalsIgnoreCase(""))
                     secondPart.append("\n");
                     secondPart.append(lyricsLine[i1]);
