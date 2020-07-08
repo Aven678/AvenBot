@@ -16,7 +16,7 @@ public class MusicReactionListener extends ListenerAdapter
         if (event.getUser().isBot()) return;
         if (event.getGuild() == null) return;
 
-        System.out.println(event.getReactionEmote().getName());
+        System.out.println(emotes.contains(event.getReactionEmote().getName()));
         event.getReaction().clearReactions().queue();
     }
 }
