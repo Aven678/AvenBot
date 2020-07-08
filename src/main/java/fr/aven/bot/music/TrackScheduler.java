@@ -99,6 +99,7 @@ public class TrackScheduler extends AudioEventAdapter
         {
             //player.destroy();
             //PlayerManager.getInstance().destroyGuildMusicManager(guild);
+            channel.sendMessage(Main.getDatabase().getTextFor("stop.confirm", guild)).queue();
             guild.getAudioManager().closeAudioConnection();
             return;
         }

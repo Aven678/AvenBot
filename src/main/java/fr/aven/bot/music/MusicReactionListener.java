@@ -3,6 +3,7 @@ package fr.aven.bot.music;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import fr.aven.bot.Main;
 import fr.aven.bot.commands.music.LyricsCommand;
+import fr.aven.bot.util.ICommand;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -35,8 +36,10 @@ public class MusicReactionListener extends ListenerAdapter
         switch (event.getReactionEmote().getName())
         {
             case "⏮️": //old
-                manager.player.stopTrack();
-                manager.scheduler.nextTrack(manager.scheduler.oldTrack, true);
+                if (Main.getDatabase().checkPermission(event.getGuild(), event.getUser(), ICommand.Permission.DJ)) {
+                    manager.player.stopTrack();
+                    manager.scheduler.nextTrack(manager.scheduler.oldTrack, true);
+                }
                 break;
             case "⏯️": //playpause
                 if (manager.player.isPaused()) {
@@ -46,8 +49,10 @@ public class MusicReactionListener extends ListenerAdapter
                 }
                 break;
             case "⏭️": //skip
-                manager.player.stopTrack();
-                manager.scheduler.nextTrack(track, false);
+                if (Main.getDatabase().checkPermission(event.getGuild(), event.getUser(), ICommand.Permission.DJ)) {
+                    manager.player.stopTrack();
+                    manager.scheduler.nextTrack(track, false);
+                }
                 break;
             case "\uD83D\uDD01": //repeat
                 manager.scheduler.repeat = true;
@@ -57,10 +62,12 @@ public class MusicReactionListener extends ListenerAdapter
                 LyricsCommand.sendLyrics(event, Main.getkSoft().getLyrics(track.getInfo().title));
                 break;
             case "❌": //stop
-                manager.player.stopTrack();
-                manager.scheduler.purgeQueue();
-                manager.scheduler.nextTrack(track, false);
-                event.getChannel().sendMessage(Main.getDatabase().getTextFor("stop.confirm", event.getGuild())).queue();
+                if (Main.getDatabase().checkPermission(event.getGuild(), event.getUser(), ICommand.Permission.DJ)) {
+                    manager.player.stopTrack();
+                    manager.scheduler.purgeQueue();
+                    manager.scheduler.nextTrack(track, false);
+                    event.getChannel().sendMessage(Main.getDatabase().getTextFor("stop.confirm", event.getGuild())).queue();
+                }
                 break;
         }
 
