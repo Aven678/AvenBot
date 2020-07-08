@@ -79,14 +79,18 @@ public class TrackScheduler extends AudioEventAdapter
     {
         if (oldMusicRequested && track != null)
         {
-            player.startTrack(oldTrack.makeClone(), false);
+            AudioTrack track1 = oldTrack.makeClone();
+            usersRequest.put(track1, usersRequest.get(track));
+            player.startTrack(track1, false);
             oldUsed = true;
             return;
         }
 
         if (repeat)
         {
-            player.startTrack(track.makeClone(), false);
+            AudioTrack track1 = track.makeClone();
+            usersRequest.put(track1, usersRequest.get(track));
+            player.startTrack(track1, false);
             repeat = false;
             return;
         }
