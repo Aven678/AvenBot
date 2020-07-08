@@ -12,6 +12,8 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.GenericEvent;
+import net.dv8tion.jda.api.events.message.GenericMessageEvent;
+import net.dv8tion.jda.api.events.message.guild.GenericGuildMessageEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.explodingbush.ksoftapi.entities.Lyric;
 
@@ -21,7 +23,7 @@ import java.util.Map;
 
 public class LyricsCommand implements ICommand
 {
-    public static void sendLyrics(GuildMessageReceivedEvent event, Lyric lyrics)
+    public static void sendLyrics(GenericGuildMessageEvent event, Lyric lyrics)
     {
         EmbedBuilder builder = new EmbedBuilder();
         builder.setAuthor(Main.getDatabase().getTextFor("lyrics.title", event.getGuild()) + lyrics.getTitle(), "https://justaven.xyz", lyrics.getAlbumArtUrl());

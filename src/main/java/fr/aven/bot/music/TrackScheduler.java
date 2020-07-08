@@ -29,10 +29,10 @@ public class TrackScheduler extends AudioEventAdapter
     private Guild guild;
     private TextChannel channel;
 
-    private boolean repeat = false;
+    public boolean repeat = false;
     private boolean oldUsed = false;
 
-    private AudioTrack oldTrack;
+    public AudioTrack oldTrack = null;
 
     public long lastMessageStatus = 0;
 
@@ -77,7 +77,7 @@ public class TrackScheduler extends AudioEventAdapter
 
     public void nextTrack(AudioTrack track, boolean oldMusicRequested)
     {
-        if (oldMusicRequested)
+        if (oldMusicRequested && track != null)
         {
             player.startTrack(oldTrack, false);
             oldUsed = true;
