@@ -127,6 +127,10 @@ public class TrackScheduler extends AudioEventAdapter
 
     @Override
     public void onTrackStart(AudioPlayer player, AudioTrack track) {
+        try {
+            channel.deleteMessageById(lastMessageStatus).queue();
+        } catch (Exception ignored) {}
+
         User userRequest = guild.getJDA().getUserById(usersRequest.get(track));
 
         EmbedBuilder builder = new EmbedBuilder();
