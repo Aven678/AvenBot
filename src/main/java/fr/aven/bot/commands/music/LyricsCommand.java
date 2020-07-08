@@ -32,11 +32,33 @@ public class LyricsCommand implements ICommand
         {
             String[] lyricsLine = lyrics.getLyrics().split("\n");
             int totalLine = lyricsLine.length;
-            int middle = totalLine / 2;
+            //int middle = totalLine / 2;
             StringBuilder firstLyrics = new StringBuilder();
             StringBuilder secondPart = new StringBuilder();
 
-            for (int i = 0; i < middle; i++) {
+            int i1 = 0;
+            while (firstLyrics.length() != 2048)
+            {
+                if (!firstLyrics.toString().equalsIgnoreCase(""))
+                    firstLyrics.append("\n");
+                firstLyrics.append(lyricsLine[i1]);
+                i1++;
+            }
+
+            if (firstLyrics.length() > 2048){
+                i1 = i1 - 1;
+                firstLyrics.setLength(firstLyrics.length() - lyricsLine[i1].length());
+            }
+
+            while (secondPart.length() != 2048 || i1 != lyricsLine.length)
+            {
+                if (!firstLyrics.toString().equalsIgnoreCase(""))
+                    firstLyrics.append("\n");
+                firstLyrics.append(lyricsLine[i1]);
+                i1++;
+            }
+
+            /*for (int i = 0; i < middle; i++) {
                 if (!firstLyrics.toString().equalsIgnoreCase(""))
                     firstLyrics.append("\n");
                 firstLyrics.append(lyricsLine[i]);
@@ -46,7 +68,7 @@ public class LyricsCommand implements ICommand
                 if (!secondPart.toString().equalsIgnoreCase(""))
                     secondPart.append("\n");
                 secondPart.append(lyricsLine[i]);
-            }
+            }*/
 
             EmbedBuilder secondPartBuilder = new EmbedBuilder();
             builder.setDescription(firstLyrics.toString());
