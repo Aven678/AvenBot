@@ -76,6 +76,8 @@ public class MusicReactionListener extends ListenerAdapter
 
     public void deleteReaction(GuildMessageReactionAddEvent event)
     {
-        event.getReaction().removeReaction(event.getUser()).queue();
+        try {
+            event.getReaction().removeReaction(event.getUser()).queue();
+        } catch (Exception ignored) {}
     }
 }
