@@ -64,7 +64,6 @@ public class LyricsCommand implements ICommand
                     secondPart.append("\n");
                     secondPart.append(lyricsLine[i1]);
                 i1 = i1 + 1;
-                System.out.println(i1);
                 } else {
                     break;
                 }
