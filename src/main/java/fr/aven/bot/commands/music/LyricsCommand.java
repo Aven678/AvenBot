@@ -43,7 +43,8 @@ public class LyricsCommand implements ICommand
                 if (!firstLyrics.toString().equalsIgnoreCase(""))
                     firstLyrics.append("\n");
                     firstLyrics.append(lyricsLine[i1]);
-                i1++;
+                i1 = i1 +1;
+                System.out.println(i1);
             }
 
             if (firstLyrics.length() > 2048){
@@ -56,7 +57,8 @@ public class LyricsCommand implements ICommand
                 if (!secondPart.toString().equalsIgnoreCase(""))
                     secondPart.append("\n");
                     secondPart.append(lyricsLine[i1]);
-                i1++;
+                i1 = i1 + 1;
+                System.out.println(i1);
             }
 
             /*for (int i = 0; i < middle; i++) {
