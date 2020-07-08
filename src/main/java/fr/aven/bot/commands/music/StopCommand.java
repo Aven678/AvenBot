@@ -1,5 +1,6 @@
 package fr.aven.bot.commands.music;
 
+import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import fr.aven.bot.Constants;
 import fr.aven.bot.Main;
 import fr.aven.bot.music.PlayerManager;
@@ -35,9 +36,11 @@ public class StopCommand extends MusicCommands
         }
 
         PlayerManager manager = PlayerManager.getInstance();
+        AudioTrack track = manager.getGuildMusicManager(event.getGuild(), event.getChannel()).player.getPlayingTrack();
+
         manager.getGuildMusicManager(event.getGuild(), event.getChannel()).player.stopTrack();
         manager.getGuildMusicManager(event.getGuild(), event.getChannel()).scheduler.getQueue().clear();
-        manager.getGuildMusicManager(event.getGuild(), event.getChannel()).scheduler.nextTrack();
+        manager.getGuildMusicManager(event.getGuild(), event.getChannel()).scheduler.nextTrack(track, false);
 
         channel.sendMessage(Main.getDatabase().getTextFor("stop.confirm", event.getGuild())).queue();
     }
