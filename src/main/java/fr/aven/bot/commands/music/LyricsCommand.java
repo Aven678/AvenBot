@@ -71,10 +71,25 @@ public class LyricsCommand implements ICommand
 
             if (secondPart.length() > 2048)
             {
+                StringBuilder thirdPart = new StringBuilder();
                 i1 = i1 -1;
                 secondPart.setLength(secondPart.length() - lyricsLine[i1].length());
 
-                thirdBuilder.setDescription(lyricsLine[i1]);
+                while (thirdPart.length() < 2048)
+                {
+                    if (i1 < totalLine)
+                    {
+
+                        if (!thirdPart.toString().equalsIgnoreCase(""))
+                            thirdPart.append("\n");
+                        thirdPart.append(lyricsLine[i1]);
+                        i1 = i1 + 1;
+                    } else {
+                        break;
+                    }
+                }
+
+                thirdBuilder.setDescription(thirdPart);
                 thirdBuilder.setFooter("Lyrics by KSoft.Si");
             } else {
                 secondPartBuilder.setFooter("Lyrics by KSoft.Si");
