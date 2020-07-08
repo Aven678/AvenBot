@@ -35,7 +35,7 @@ public class PlayerManager
         AudioSourceManagers.registerRemoteSources(playerManager);
     }
 
-    public boolean checkNullForEvent(Guild guild)
+    /*public boolean checkNullForEvent(Guild guild)
     {
         return musicManagers.get(guild.getIdLong()) == null;
     }
@@ -43,7 +43,7 @@ public class PlayerManager
     public void destroyGuildMusicManager(Guild guild)
     {
         musicManagers.remove(guild.getIdLong());
-    }
+    }*/
 
     public synchronized GuildMusicManager getGuildMusicManager(Guild guild, TextChannel channel)
     {

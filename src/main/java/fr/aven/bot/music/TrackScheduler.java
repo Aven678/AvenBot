@@ -1,6 +1,5 @@
 package fr.aven.bot.music;
 
-import com.google.api.services.youtube.model.SearchResult;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
@@ -10,6 +9,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
+import net.explodingbush.ksoftapi.entities.Lyric;
 
 import java.util.*;
 import java.util.concurrent.BlockingQueue;
@@ -22,6 +22,8 @@ public class TrackScheduler extends AudioEventAdapter
     private final BlockingQueue<AudioTrack> queue;
 
     public Map<Integer, AudioTrack> search = new HashMap<>();
+    public Map<Integer, Lyric> lyrics = new HashMap<>();
+
     public Map<AudioTrack, Long> usersRequest = new HashMap<>();
 
     private Guild guild;
@@ -70,8 +72,8 @@ public class TrackScheduler extends AudioEventAdapter
     {
         if (queue.size() == 0)
         {
-            player.destroy();
-            PlayerManager.getInstance().destroyGuildMusicManager(guild);
+            //player.destroy();
+            //PlayerManager.getInstance().destroyGuildMusicManager(guild);
             guild.getAudioManager().closeAudioConnection();
             return;
         }
@@ -117,5 +119,20 @@ public class TrackScheduler extends AudioEventAdapter
         builder.setFooter(Main.getDatabase().getTextFor("music.request", guild)+userRequest.getName(), userRequest.getAvatarUrl());
 
         channel.sendMessage(builder.build()).queue();
+    }
+
+    public void clearLyricsMap()
+    {
+        lyrics.clear();
+    }
+
+    public void putLyricsMap(Integer choice, Lyric value)
+    {
+        lyrics.put(choice, value);
+    }
+
+    public Lyric getLyrics(Integer choice)
+    {
+        return lyrics.get(choice);
     }
 }

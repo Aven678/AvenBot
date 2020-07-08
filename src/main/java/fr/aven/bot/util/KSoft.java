@@ -4,7 +4,10 @@ import fr.aven.bot.Main;
 import net.explodingbush.ksoftapi.KSoftAPI;
 import net.explodingbush.ksoftapi.entities.Lyric;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class KSoft
 {
@@ -24,5 +27,14 @@ public class KSoft
 
         if (lyrics.isEmpty()) return null;
         return lyrics.get(0);
+    }
+
+    public List<Lyric> getLyricsList(String query)
+    {
+        List<Lyric> lyrics = getKSoftAPI().getLyrics().search(query).execute();
+
+        if (lyrics.isEmpty()) return new ArrayList<>();
+
+        return lyrics;
     }
 }

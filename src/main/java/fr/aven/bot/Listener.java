@@ -1,6 +1,7 @@
 package fr.aven.bot;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import fr.aven.bot.commands.music.LyricsCommand;
 import fr.aven.bot.jda.JDAManager;
 import fr.aven.bot.music.PlayerManager;
 import fr.aven.bot.util.ICommand;
@@ -13,6 +14,7 @@ import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.explodingbush.ksoftapi.entities.Lyric;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -84,11 +86,7 @@ public class Listener extends ListenerAdapter
                 {
                     manager.handleCommand(event, true);
                 } else {
-                    try {
-                        checkMusic(event);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    if (!checkMusic(event)) checkLyric(event);
                 }
             }
         }
@@ -135,27 +133,48 @@ public class Listener extends ListenerAdapter
 
         }
 
-        private void checkMusic(GuildMessageReceivedEvent e) throws Exception
+        private boolean checkMusic(GuildMessageReceivedEvent e)
         {
-            if (PlayerManager.getInstance().checkNullForEvent(e.getGuild())) return;
-
             Map<Integer, AudioTrack> search = PlayerManager.getInstance().getGuildMusicManager(e.getGuild(), e.getChannel()).scheduler.search;
-            if (search.size() == 0) return;
+            if (search.size() == 0) return false;
             if (e.getMessage().getContentDisplay().equalsIgnoreCase("cancel")) {
                 search.clear();
-                return;
+                return true;
             }
 
             try {
                 int choix = Integer.parseInt(e.getMessage().getContentDisplay());
-                if (!search.containsKey(choix)) return;
+                if (!search.containsKey(choix)) return false;
                 PlayerManager.getInstance().loadAndPlay(e.getMessage(), search.get(choix).getInfo().uri);
                 search.clear();
+                return true;
+
             } catch (NumberFormatException nfe)
             {
-                return;
             }
+
+            return false;
         }
+
+    private void checkLyric(GuildMessageReceivedEvent e)
+    {
+        Map<Integer, Lyric> lyrics = PlayerManager.getInstance().getGuildMusicManager(e.getGuild(), e.getChannel()).scheduler.lyrics;
+        if (lyrics.size() == 0) return;
+        if (e.getMessage().getContentDisplay().equalsIgnoreCase("cancel")) {
+            lyrics.clear();
+            return;
+        }
+
+        try {
+            int choix = Integer.parseInt(e.getMessage().getContentDisplay());
+            if (!lyrics.containsKey(choix)) return;
+            LyricsCommand.sendLyrics(e, lyrics.get(choix));
+            lyrics.clear();
+        } catch (NumberFormatException nfe)
+        {
+            return;
+        }
+    }
 
         private void createMutedRole(Guild guild) {
             List<Role> roles = guild.getRolesByName("Muted", true);
@@ -198,10 +217,15 @@ public class Listener extends ListenerAdapter
         //checkMusic
         if (!event.getReactionEmote().isEmoji()) return;
         if (!event.getReactionEmote().getEmoji().equalsIgnoreCase("❌")) return;
-        if (PlayerManager.getInstance().checkNullForEvent(event.getGuild())) return;
-        if (PlayerManager.getInstance().getGuildMusicManager(event.getGuild(), event.getChannel()).scheduler.search.isEmpty()) return;
+        if (!PlayerManager.getInstance().getGuildMusicManager(event.getGuild(), event.getChannel()).scheduler.search.isEmpty()) {
+            PlayerManager.getInstance().getGuildMusicManager(event.getGuild(), event.getChannel()).scheduler.search.clear();
+            event.getChannel().editMessageById(event.getMessageId(), Main.getDatabase().getTextFor("music.canceled", event.getGuild()) + event.getUser().getAsTag()).override(true).queue();
+        }
 
-        PlayerManager.getInstance().getGuildMusicManager(event.getGuild(), event.getChannel()).scheduler.search.clear();
-        event.getChannel().editMessageById(event.getMessageId(), Main.getDatabase().getTextFor("music.canceled", event.getGuild())+event.getUser().getAsTag()).override(true).queue();
+        else if (!PlayerManager.getInstance().getGuildMusicManager(event.getGuild(), event.getChannel()).scheduler.lyrics.isEmpty()) {
+            PlayerManager.getInstance().getGuildMusicManager(event.getGuild(), event.getChannel()).scheduler.clearLyricsMap();
+            event.getChannel().editMessageById(event.getMessageId(), Main.getDatabase().getTextFor("music.canceled", event.getGuild()) + event.getUser().getAsTag()).override(true).queue();
+        }
+
     }
 }
