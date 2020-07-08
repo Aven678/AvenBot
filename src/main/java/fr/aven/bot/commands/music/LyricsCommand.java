@@ -15,6 +15,7 @@ import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.explodingbush.ksoftapi.entities.Lyric;
 
+import java.awt.*;
 import java.util.List;
 import java.util.Map;
 
@@ -65,6 +66,7 @@ public class LyricsCommand implements ICommand
         for (EmbedBuilder builder :  builders)
         {
             if (builder.isEmpty()) continue;
+            builder.setColor(Color.ORANGE);
             channel.sendMessage(builder.build()).queue();
         }
     }
