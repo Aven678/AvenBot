@@ -27,7 +27,7 @@ public class TrackScheduler extends AudioEventAdapter
     public Map<AudioTrack, Long> usersRequest = new HashMap<>();
 
     private Guild guild;
-    private TextChannel channel;
+    public TextChannel channel;
 
     public boolean repeat = false;
     private boolean oldUsed = false;
@@ -48,10 +48,8 @@ public class TrackScheduler extends AudioEventAdapter
         return new LinkedHashSet<>(queue);
     }
 
-    public void queue(AudioTrack track, TextChannel channel)
+    public void queue(AudioTrack track)
     {
-        if (queue.isEmpty()) this.channel = channel;
-
         if (!player.startTrack(track, true))
         {
             queue.offer(track);

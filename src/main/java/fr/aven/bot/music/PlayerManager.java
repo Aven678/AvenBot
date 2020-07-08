@@ -85,7 +85,7 @@ public class PlayerManager
                         .setFooter("AvenBot by Aven#1000").build()).queue();
 
                 musicManager.scheduler.usersRequest.put(track, message.getAuthor().getIdLong());
-                play(musicManager, track);
+                play(musicManager, track, message.getTextChannel());
             }
 
             @Override
@@ -116,7 +116,7 @@ public class PlayerManager
 
                     message.getChannel().sendMessageFormat(Main.getDatabase().getTextFor("music.playlistAdd", message.getGuild()), firstTrack.getInfo().title, playlist.getName()).queue();
 
-                    play(musicManager, firstTrack);
+                    play(musicManager, firstTrack, message.getTextChannel());
 
                     playlist.getTracks().forEach(musicManager.scheduler::queue);
                     for (AudioTrack track : playlist.getTracks())
@@ -140,8 +140,9 @@ public class PlayerManager
 
     }
 
-    private void play(GuildMusicManager musicManager, AudioTrack track)
+    private void play(GuildMusicManager musicManager, AudioTrack track, TextChannel channel)
     {
+        if (musicManager.scheduler.getQueue().isEmpty()) musicManager.scheduler.channel = channel;
         musicManager.scheduler.queue(track);
     }
 
