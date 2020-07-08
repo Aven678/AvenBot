@@ -36,6 +36,7 @@ public class LyricsCommand implements ICommand
             StringBuilder firstLyrics = new StringBuilder();
             StringBuilder secondPart = new StringBuilder();
 
+            System.out.println(lyricsLine.length);
             int i1 = 0;
             while (firstLyrics.length() != 2048)
             {
