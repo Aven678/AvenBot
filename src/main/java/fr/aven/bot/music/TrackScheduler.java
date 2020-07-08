@@ -48,8 +48,10 @@ public class TrackScheduler extends AudioEventAdapter
         return new LinkedHashSet<>(queue);
     }
 
-    public void queue(AudioTrack track)
+    public void queue(AudioTrack track, TextChannel channel)
     {
+        if (queue.isEmpty()) this.channel = channel;
+
         if (!player.startTrack(track, true))
         {
             queue.offer(track);
@@ -132,9 +134,8 @@ public class TrackScheduler extends AudioEventAdapter
 
     @Override
     public void onTrackStart(AudioPlayer player, AudioTrack track) {
-        try {
-            channel.deleteMessageById(lastMessageStatus).queue();
-        } catch (Exception ignored) {}
+
+        if (lastMessageStatus == 0) channel.deleteMessageById(lastMessageStatus).queue();
 
         User userRequest = guild.getJDA().getUserById(usersRequest.get(track));
 

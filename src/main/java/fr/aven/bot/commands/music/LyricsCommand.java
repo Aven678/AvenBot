@@ -8,6 +8,7 @@ import fr.aven.bot.music.GuildMusicManager;
 import fr.aven.bot.music.PlayerManager;
 import fr.aven.bot.util.ICommand;
 import fr.aven.bot.util.KSoft;
+import fr.aven.bot.util.MessageTask;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -20,6 +21,8 @@ import net.explodingbush.ksoftapi.entities.Lyric;
 import java.awt.*;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class LyricsCommand implements ICommand
 {
@@ -32,22 +35,16 @@ public class LyricsCommand implements ICommand
         {
             String[] lyricsLine = lyrics.getLyrics().split("\n");
             int totalLine = lyricsLine.length;
-            //int middle = totalLine / 2;
             StringBuilder firstLyrics = new StringBuilder();
             StringBuilder secondPart = new StringBuilder();
 
             System.out.println(lyricsLine.length);
             int i1 = 0;
             while (firstLyrics.length() < 2048) {
-                //if (i1 < totalLine) {
-
-                    if (!firstLyrics.toString().equalsIgnoreCase(""))
-                        firstLyrics.append("\n");
-                    firstLyrics.append(lyricsLine[i1]);
-                    i1 = i1 + 1;
-                /*} else {
-                    break;
-                }*/
+                if (!firstLyrics.toString().equalsIgnoreCase(""))
+                    firstLyrics.append("\n");
+                firstLyrics.append(lyricsLine[i1]);
+                i1 = i1 + 1;
             }
 
             if (firstLyrics.length() > 2048){
@@ -69,30 +66,30 @@ public class LyricsCommand implements ICommand
                 }
             }
 
-            /*for (int i = 0; i < middle; i++) {
-                if (!firstLyrics.toString().equalsIgnoreCase(""))
-                    firstLyrics.append("\n");
-                firstLyrics.append(lyricsLine[i]);
+            EmbedBuilder secondPartBuilder = new EmbedBuilder();
+            EmbedBuilder thirdBuilder = new EmbedBuilder();
+
+            if (secondPart.length() > 2048)
+            {
+                i1 = i1 -1;
+                secondPart.setLength(secondPart.length() - lyricsLine[i1].length());
+
+                thirdBuilder.setDescription(lyricsLine[i1]);
+                thirdBuilder.setFooter("Lyrics by KSoft.Si");
+            } else {
+                secondPartBuilder.setFooter("Lyrics by KSoft.Si");
             }
 
-            for (int i = middle+1; i < lyricsLine.length; i++) {
-                if (!secondPart.toString().equalsIgnoreCase(""))
-                    secondPart.append("\n");
-                secondPart.append(lyricsLine[i]);
-            }*/
-
-            EmbedBuilder secondPartBuilder = new EmbedBuilder();
             builder.setDescription(firstLyrics.toString());
             secondPartBuilder.setDescription(secondPart.toString());
-            secondPartBuilder.setFooter("Lyrics by KSoft.Si");
 
-            sendLyrics(event.getChannel(), builder, secondPartBuilder);
+            sendLyrics(event.getChannel(), builder, secondPartBuilder, thirdBuilder);
 
 
         } else {
             builder.setDescription(lyrics.getLyrics());
             builder.setFooter("Lyrics by KSoft.Si");
-            sendLyrics(event.getChannel() ,builder);
+            sendLyrics(event.getChannel(), builder);
         }
     }
 
