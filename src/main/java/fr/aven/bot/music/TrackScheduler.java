@@ -29,6 +29,13 @@ public class TrackScheduler extends AudioEventAdapter
     private Guild guild;
     private TextChannel channel;
 
+    private boolean repeat = false;
+    private boolean oldUsed = false;
+
+    private AudioTrack oldTrack;
+
+    public long lastMessageStatus = 0;
+
     public TrackScheduler(AudioPlayer player, Guild guild, TextChannel channel)
     {
         this.player = player;
@@ -68,8 +75,22 @@ public class TrackScheduler extends AudioEventAdapter
         queue.clear();
     }
 
-    public void nextTrack()
+    public void nextTrack(AudioTrack track, boolean oldMusicRequested)
     {
+        if (oldMusicRequested)
+        {
+            player.startTrack(oldTrack, false);
+            oldUsed = true;
+            return;
+        }
+
+        if (repeat)
+        {
+            player.startTrack(track, false);
+            repeat = false;
+            return;
+        }
+
         if (queue.size() == 0)
         {
             //player.destroy();
@@ -79,6 +100,8 @@ public class TrackScheduler extends AudioEventAdapter
         }
         // Start the next track, regardless of if something is already playing or not. In case queue was empty, we are
         // giving null to startTrack, which is a valid argument and will simply stop the player.
+        oldTrack = track;
+        oldUsed = false;
         player.startTrack(queue.poll(), false);
     }
 
@@ -97,7 +120,7 @@ public class TrackScheduler extends AudioEventAdapter
         // Only start the next track if the end reason is suitable for it (FINISHED or LOAD_FAILED)
         if (endReason.mayStartNext)
         {
-            nextTrack();
+            nextTrack(track, false);
         }
 
     }
@@ -118,7 +141,14 @@ public class TrackScheduler extends AudioEventAdapter
 
         builder.setFooter(Main.getDatabase().getTextFor("music.request", guild)+userRequest.getName(), userRequest.getAvatarUrl());
 
-        channel.sendMessage(builder.build()).queue();
+        channel.sendMessage(builder.build()).queue(msg -> {
+            msg.addReaction("⏮️").queue();
+            msg.addReaction("⏯️").queue();
+            msg.addReaction("⏭️").queue();
+            msg.addReaction("\uD83D\uDD01").queue(); //repeat
+            msg.addReaction("\uD83D\uDCDC").queue(); //scroll/lyrics
+            msg.addReaction("❌").queue(); //stop
+        });
     }
 
     public void clearLyricsMap()

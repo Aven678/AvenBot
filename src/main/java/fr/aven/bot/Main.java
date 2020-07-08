@@ -2,6 +2,7 @@ package fr.aven.bot;
 
 import fr.aven.bot.database.SQL;
 import fr.aven.bot.jda.JDAManager;
+import fr.aven.bot.music.MusicReactionListener;
 import fr.aven.bot.util.Configuration;
 import fr.aven.bot.util.KSoft;
 import net.dv8tion.jda.api.entities.Activity;
@@ -29,7 +30,7 @@ public class Main
         database = new SQL();
         commandManager = new CommandManager();
         listener = new Listener(commandManager);
-        JDAManager.getShardManager().addEventListener(listener);
+        JDAManager.getShardManager().addEventListener(listener, new MusicReactionListener());
         setActivity(Activity.ActivityType.WATCHING, "&help | avenbot.eu");
 
         configuration.save();
