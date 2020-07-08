@@ -38,7 +38,7 @@ public class LyricsCommand implements ICommand
 
             System.out.println(lyricsLine.length);
             int i1 = 0;
-            while (firstLyrics.length() != 2048)
+            while (firstLyrics.length() != 2048 || i1 != lyricsLine.length)
             {
                 if (!firstLyrics.toString().equalsIgnoreCase(""))
                     firstLyrics.append("\n");
