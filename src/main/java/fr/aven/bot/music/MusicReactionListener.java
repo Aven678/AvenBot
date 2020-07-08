@@ -51,6 +51,7 @@ public class MusicReactionListener extends ListenerAdapter
                 break;
             case "\uD83D\uDD01": //repeat
                 manager.scheduler.repeat = true;
+                manager.scheduler.editMessageForRepeat();
                 break;
             case "\uD83D\uDCDC": //lyrics
                 LyricsCommand.sendLyrics(event, Main.getkSoft().getLyrics(track.getInfo().title));

@@ -79,14 +79,14 @@ public class TrackScheduler extends AudioEventAdapter
     {
         if (oldMusicRequested && track != null)
         {
-            player.startTrack(oldTrack, false);
+            player.startTrack(oldTrack.makeClone(), false);
             oldUsed = true;
             return;
         }
 
         if (repeat)
         {
-            player.startTrack(track, false);
+            player.startTrack(track.makeClone(), false);
             repeat = false;
             return;
         }
@@ -151,6 +151,30 @@ public class TrackScheduler extends AudioEventAdapter
 
             lastMessageStatus = msg.getIdLong();
         });
+    }
+
+    public void editMessageForRepeat()
+    {
+        AudioTrack track = PlayerManager.getInstance().getGuildMusicManager(guild, channel).player.getPlayingTrack();
+        User userRequest = guild.getJDA().getUserById(usersRequest.get(track));
+
+        EmbedBuilder builder = new EmbedBuilder();
+        builder.setAuthor(Main.getDatabase().getTextFor("music.progress", guild), track.getInfo().uri, guild.getJDA().getSelfUser().getAvatarUrl());
+        builder.setColor(guild.getMember(userRequest).getColor());
+        String finalField = "";
+
+        if (repeat)
+            finalField = "\n❱ "+ Main.getDatabase().getTextFor("music.repeatRequested", guild);
+
+        builder.addField(track.getInfo().title, "❱ "+Main.getDatabase().getTextFor("music.author", guild)
+                +" : "+ track.getInfo().author
+                +"\n❱ "+Main.getDatabase().getTextFor("music.duration", guild)+" : "+ getTimestamp(track.getInfo().length) + finalField, false);
+
+        builder.setThumbnail("https://i.ytimg.com/vi/" + track.getInfo().identifier + "/hqdefault.jpg");
+
+        builder.setFooter(Main.getDatabase().getTextFor("music.request", guild)+userRequest.getName(), userRequest.getAvatarUrl());
+
+        channel.editMessageById(lastMessageStatus, builder.build()).queue();
     }
 
     public void clearLyricsMap()
