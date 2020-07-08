@@ -20,7 +20,12 @@ public class MusicReactionListener extends ListenerAdapter
         if (event.getUser().isBot()) return;
         if (event.getGuild() == null) return;
         GuildMusicManager manager = PlayerManager.getInstance().getGuildMusicManager(event.getGuild(), event.getChannel());
-        if (event.getMessageIdLong() != manager.scheduler.lastMessageStatus) return;
+
+        if (event.getMessageIdLong() != manager.scheduler.lastMessageStatus) {
+            deleteReaction(event);
+            return;
+        }
+
         if (!emotes.contains(event.getReactionEmote().getName())) {
             deleteReaction(event);
             return;
@@ -57,6 +62,8 @@ public class MusicReactionListener extends ListenerAdapter
                 event.getChannel().sendMessage(Main.getDatabase().getTextFor("stop.confirm", event.getGuild())).queue();
                 break;
         }
+
+        deleteReaction(event);
 
     }
 
