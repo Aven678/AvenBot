@@ -14,23 +14,11 @@ import java.util.List;
 
 public class MusicReactionListener extends ListenerAdapter
 {
-    private List<String> emotes = Arrays.asList("⏮️","⏯️", "⏭️", "\uD83D\uDD01", "\uD83D\uDCDC", "❌");
-
     @Override
     public void onGuildMessageReactionAdd(@Nonnull GuildMessageReactionAddEvent event) {
         if (event.getUser().isBot()) return;
         if (event.getGuild() == null) return;
         GuildMusicManager manager = PlayerManager.getInstance().getGuildMusicManager(event.getGuild(), event.getChannel());
-
-        if (event.getMessageIdLong() != manager.scheduler.lastMessageStatus) {
-            deleteReaction(event);
-            return;
-        }
-
-        if (!emotes.contains(event.getReactionEmote().getName())) {
-            deleteReaction(event);
-            return;
-        }
 
         AudioTrack track = manager.player.getPlayingTrack();
         switch (event.getReactionEmote().getName())
