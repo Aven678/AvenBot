@@ -44,7 +44,7 @@ public class PlayCommand extends MusicCommands
             return;
         }
 
-        if (manager.getGuildMusicManager(event.getGuild(), event.getChannel()).player.isPaused())
+        /*if (manager.getGuildMusicManager(event.getGuild(), event.getChannel()).player.isPaused())
         {
             manager.getGuildMusicManager(event.getGuild(), event.getChannel()).player.setPaused(false);
             event.getChannel().sendMessage(new EmbedBuilder()
@@ -53,7 +53,7 @@ public class PlayCommand extends MusicCommands
                     .build()).queue();
 
             return;
-        }
+        }*/
 
         String input = String.join(" ", args);
 
