@@ -3,6 +3,7 @@ package fr.aven.bot;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import fr.aven.bot.commands.music.LyricsCommand;
 import fr.aven.bot.jda.JDAManager;
+import fr.aven.bot.music.GuildMusicManager;
 import fr.aven.bot.music.PlayerManager;
 import fr.aven.bot.util.ICommand;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -77,17 +78,12 @@ public class Listener extends ListenerAdapter
 
             String prefix = Main.getDatabase().getGuildPrefix(event.getGuild());//Constants.PREFIXES.computeIfAbsent(event.getGuild().getIdLong(), (l) -> Constants.PREFIX);
 
-            if (rw.startsWith(prefix))
+            if (rw.startsWith(prefix) || rw.startsWith(Constants.PREFIX))
             {
-                manager.handleCommand(event, false);
-
+                manager.handleCommand(event, rw.startsWith(Constants.PREFIX));
+                event.getMessage().delete().queue();
             } else {
-                if (rw.startsWith(Constants.PREFIX))
-                {
-                    manager.handleCommand(event, true);
-                } else {
-                    if (!checkMusic(event)) checkLyric(event);
-                }
+                if (!checkMusic(event)) checkLyric(event);
             }
         }
 
@@ -135,6 +131,7 @@ public class Listener extends ListenerAdapter
 
         private boolean checkMusic(GuildMessageReceivedEvent e)
         {
+            GuildMusicManager musicManager = PlayerManager.getInstance().getGuildMusicManager(e.getGuild(), e.getChannel());
             Map<Integer, AudioTrack> search = PlayerManager.getInstance().getGuildMusicManager(e.getGuild(), e.getChannel()).scheduler.search;
             if (search.size() == 0) return false;
             if (e.getMessage().getContentDisplay().equalsIgnoreCase("cancel")) {
@@ -147,6 +144,8 @@ public class Listener extends ListenerAdapter
                 if (!search.containsKey(choix)) return false;
                 PlayerManager.getInstance().loadAndPlay(e.getMessage(), search.get(choix).getInfo().uri);
                 search.clear();
+                if (musicManager.scheduler.lastMessageSearch != 0) e.getChannel().deleteMessageById(musicManager.scheduler.lastMessageSearch).queue();
+                e.getMessage().delete().queue();
                 return true;
 
             } catch (NumberFormatException nfe)
@@ -158,7 +157,8 @@ public class Listener extends ListenerAdapter
 
     private void checkLyric(GuildMessageReceivedEvent e)
     {
-        Map<Integer, Lyric> lyrics = PlayerManager.getInstance().getGuildMusicManager(e.getGuild(), e.getChannel()).scheduler.lyrics;
+        GuildMusicManager musicManager = PlayerManager.getInstance().getGuildMusicManager(e.getGuild(), e.getChannel());
+        Map<Integer, Lyric> lyrics = musicManager.scheduler.lyrics;
         if (lyrics.size() == 0) return;
         if (e.getMessage().getContentDisplay().equalsIgnoreCase("cancel")) {
             lyrics.clear();
@@ -170,6 +170,8 @@ public class Listener extends ListenerAdapter
             if (!lyrics.containsKey(choix)) return;
             LyricsCommand.sendLyrics(e, lyrics.get(choix));
             lyrics.clear();
+            if (musicManager.scheduler.lastMessageLyrics != 0) e.getChannel().deleteMessageById(musicManager.scheduler.lastMessageLyrics).queue();
+            e.getMessage().delete().queue();
         } catch (NumberFormatException nfe)
         {
             return;

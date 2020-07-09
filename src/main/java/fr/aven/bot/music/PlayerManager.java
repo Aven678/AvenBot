@@ -106,7 +106,10 @@ public class PlayerManager
                         musicManager.scheduler.search.put(nbTrack, track);
                     }
 
-                    message.getTextChannel().sendMessage(builder.build()).queue(msg -> msg.addReaction("❌").queue());
+                    message.getTextChannel().sendMessage(builder.build()).queue(msg -> {
+                        msg.addReaction("❌").queue();
+                        musicManager.scheduler.lastMessageSearch = msg.getIdLong();
+                    });
                 } else {
                     AudioTrack firstTrack = playlist.getSelectedTrack();
 

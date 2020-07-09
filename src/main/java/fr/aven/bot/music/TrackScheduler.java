@@ -35,6 +35,8 @@ public class TrackScheduler extends AudioEventAdapter
     public AudioTrack oldTrack = null;
 
     public long lastMessageStatus = 0;
+    public long lastMessageLyrics = 0;
+    public long lastMessageSearch = 0;
 
     public TrackScheduler(AudioPlayer player, Guild guild, TextChannel channel)
     {

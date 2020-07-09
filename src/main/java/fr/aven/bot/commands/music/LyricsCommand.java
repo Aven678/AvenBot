@@ -150,7 +150,10 @@ public class LyricsCommand implements ICommand
             manager.scheduler.putLyricsMap(nbTrack, lyric);
         }
 
-        event.getChannel().sendMessage(builder.build()).queue(msg -> msg.addReaction("❌").queue());
+        event.getChannel().sendMessage(builder.build()).queue(msg -> {
+            msg.addReaction("❌").queue();
+            manager.scheduler.lastMessageLyrics = msg.getIdLong();
+        });
     }
 
     @Override
