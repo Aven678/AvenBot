@@ -9,6 +9,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 import fr.aven.bot.Main;
+import fr.aven.bot.util.MessageTask;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.Guild;
@@ -20,6 +21,7 @@ import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Timer;
 
 public class PlayerManager
 {
@@ -82,7 +84,9 @@ public class PlayerManager
                 message.getChannel().sendMessage(builder.setAuthor(Main.getDatabase().getTextFor("music.add", message.getGuild()), track.getInfo().uri, message.getJDA().getSelfUser().getAvatarUrl())
                         .addField("❱ "+Main.getDatabase().getTextFor("music.author", message.getGuild())+" : "+author, "❱ "+title, false)
                         .setColor(new Color(0, 255, 151))
-                        .setFooter("AvenBot by Aven#1000").build()).queue();
+                        .setFooter("AvenBot by Aven#1000").build()).queue(msg -> {
+                            new Timer().schedule(new MessageTask(msg), 10000);
+                });
 
                 musicManager.scheduler.usersRequest.put(track, message.getAuthor().getIdLong());
                 play(musicManager, track, message.getTextChannel());

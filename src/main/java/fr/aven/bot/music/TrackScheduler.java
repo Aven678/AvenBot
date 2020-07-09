@@ -5,6 +5,7 @@ import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import fr.aven.bot.Main;
+import fr.aven.bot.util.MessageTask;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -101,7 +102,8 @@ public class TrackScheduler extends AudioEventAdapter
         {
             //player.destroy();
             //PlayerManager.getInstance().destroyGuildMusicManager(guild);
-            channel.sendMessage(Main.getDatabase().getTextFor("stop.confirm", guild)).queue();
+            channel.sendMessage(Main.getDatabase().getTextFor("stop.confirm", guild)).queue(msg -> new Timer().schedule(new MessageTask(msg), 10000));
+            channel.deleteMessageById(lastMessageStatus).queue();
             guild.getAudioManager().closeAudioConnection();
             return;
         }
