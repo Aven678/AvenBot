@@ -152,7 +152,7 @@ public class LyricsCommand implements ICommand
 
         event.getChannel().sendMessage(builder.build()).queue(msg -> {
             msg.addReaction("❌").queue();
-            manager.scheduler.lastMessageLyrics = msg.getIdLong();
+            manager.scheduler.lastMessageLyrics = msg;
         });
     }
 

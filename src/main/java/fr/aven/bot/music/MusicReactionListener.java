@@ -22,7 +22,7 @@ public class MusicReactionListener extends ListenerAdapter
         if (event.getGuild() == null) return;
         GuildMusicManager manager = PlayerManager.getInstance().getGuildMusicManager(event.getGuild(), event.getChannel());
 
-        if (event.getMessageIdLong() != manager.scheduler.lastMessageStatus)
+        if (event.getMessageIdLong() != manager.scheduler.lastMessageStatus.getIdLong())
             return;
 
         if (!emotes.contains(event.getReactionEmote().getName())) {

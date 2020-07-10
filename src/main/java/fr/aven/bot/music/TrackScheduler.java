@@ -8,6 +8,7 @@ import fr.aven.bot.Main;
 import fr.aven.bot.util.MessageTask;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.explodingbush.ksoftapi.entities.Lyric;
@@ -35,9 +36,9 @@ public class TrackScheduler extends AudioEventAdapter
 
     public AudioTrack oldTrack = null;
 
-    public long lastMessageStatus = 0;
-    public long lastMessageLyrics = 0;
-    public long lastMessageSearch = 0;
+    public Message lastMessageStatus = null;
+    public Message lastMessageLyrics = null;
+    public Message lastMessageSearch = null;
 
     public TrackScheduler(AudioPlayer player, Guild guild, TextChannel channel)
     {
@@ -103,7 +104,7 @@ public class TrackScheduler extends AudioEventAdapter
             //player.destroy();
             //PlayerManager.getInstance().destroyGuildMusicManager(guild);
             channel.sendMessage(Main.getDatabase().getTextFor("stop.confirm", guild)).queue(msg -> new Timer().schedule(new MessageTask(msg), 10000));
-            channel.deleteMessageById(lastMessageStatus).queue();
+            lastMessageStatus.delete().queue();
             guild.getAudioManager().closeAudioConnection();
             return;
         }
@@ -137,7 +138,7 @@ public class TrackScheduler extends AudioEventAdapter
     @Override
     public void onTrackStart(AudioPlayer player, AudioTrack track) {
 
-        if (lastMessageStatus == 0) channel.deleteMessageById(lastMessageStatus).queue();
+        if (lastMessageStatus != null) lastMessageStatus.delete().queue();
 
         User userRequest = guild.getJDA().getUserById(usersRequest.get(track));
 
@@ -161,7 +162,7 @@ public class TrackScheduler extends AudioEventAdapter
             msg.addReaction("\uD83D\uDCDC").queue(); //scroll/lyrics
             msg.addReaction("❌").queue(); //stop
 
-            lastMessageStatus = msg.getIdLong();
+            lastMessageStatus = msg;
         });
     }
 
@@ -186,7 +187,7 @@ public class TrackScheduler extends AudioEventAdapter
 
         builder.setFooter(Main.getDatabase().getTextFor("music.request", guild)+userRequest.getName(), userRequest.getAvatarUrl());
 
-        channel.editMessageById(lastMessageStatus, builder.build()).queue();
+        channel.editMessageById(lastMessageStatus.getId(), builder.build()).queue();
     }
 
     public void clearLyricsMap()

@@ -112,7 +112,7 @@ public class PlayerManager
 
                     message.getTextChannel().sendMessage(builder.build()).queue(msg -> {
                         msg.addReaction("❌").queue();
-                        musicManager.scheduler.lastMessageSearch = msg.getIdLong();
+                        musicManager.scheduler.lastMessageSearch = msg;
                     });
                 } else {
                     AudioTrack firstTrack = playlist.getSelectedTrack();

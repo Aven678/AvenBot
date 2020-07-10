@@ -144,7 +144,7 @@ public class Listener extends ListenerAdapter
                 if (!search.containsKey(choix)) return false;
                 PlayerManager.getInstance().loadAndPlay(e.getMessage(), search.get(choix).getInfo().uri);
                 search.clear();
-                if (musicManager.scheduler.lastMessageSearch != 0) e.getChannel().deleteMessageById(musicManager.scheduler.lastMessageSearch).queue();
+                if (musicManager.scheduler.lastMessageSearch != null) e.getChannel().deleteMessageById(musicManager.scheduler.lastMessageSearch.getId()).queue();
                 e.getMessage().delete().queue();
                 return true;
 
@@ -170,7 +170,7 @@ public class Listener extends ListenerAdapter
             if (!lyrics.containsKey(choix)) return;
             LyricsCommand.sendLyrics(e, lyrics.get(choix));
             lyrics.clear();
-            if (musicManager.scheduler.lastMessageLyrics != 0) e.getChannel().deleteMessageById(musicManager.scheduler.lastMessageLyrics).queue();
+            if (musicManager.scheduler.lastMessageLyrics != null) e.getChannel().deleteMessageById(musicManager.scheduler.lastMessageLyrics.getId()).queue();
             e.getMessage().delete().queue();
         } catch (NumberFormatException nfe)
         {
