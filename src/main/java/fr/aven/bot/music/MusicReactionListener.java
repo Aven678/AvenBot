@@ -20,6 +20,7 @@ public class MusicReactionListener extends ListenerAdapter
     public void onGuildMessageReactionAdd(@Nonnull GuildMessageReactionAddEvent event) {
         if (event.getUser().isBot()) return;
         if (event.getGuild() == null) return;
+        if (!event.getGuild().getAudioManager().isConnected()) return;
         GuildMusicManager manager = PlayerManager.getInstance().getGuildMusicManager(event.getGuild(), event.getChannel());
 
         if (event.getMessageIdLong() != manager.scheduler.lastMessageStatus.getIdLong())
