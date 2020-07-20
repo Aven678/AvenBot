@@ -453,4 +453,14 @@ public class SQL
             LOGGER.error(throwables.getMessage());
         }
     }
+
+    public void setMuteRole(Role mutedRole)
+    {
+        String SQL = "UPDATE guild SET muteRole = '" + mutedRole.getId() + "' WHERE guildID = '" + mutedRole.getGuild().getId() + "'";
+        try {
+            getConnection().createStatement().executeUpdate(SQL);
+        } catch (SQLException e) {
+            LOGGER.error(e.getMessage());
+        }
+    }
 }

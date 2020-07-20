@@ -28,7 +28,7 @@ import java.util.Map;
 public class Listener extends ListenerAdapter
 {
         private final CommandManager manager;
-        private final Logger logger = LoggerFactory.getLogger(Listener.class);
+        private static final Logger logger = LoggerFactory.getLogger(Listener.class);
         private TextChannel channel;
 
         Listener(CommandManager manager)
@@ -178,7 +178,7 @@ public class Listener extends ListenerAdapter
         }
     }
 
-        private void createMutedRole(Guild guild) {
+        public static void createMutedRole(Guild guild) {
             List<Role> roles = guild.getRolesByName("Muted", true);
             if (roles.size() != 0)
                 Main.getDatabase().insertGuild(guild, roles.get(0).getId());

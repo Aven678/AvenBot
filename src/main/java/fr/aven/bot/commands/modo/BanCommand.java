@@ -2,12 +2,15 @@ package fr.aven.bot.commands.modo;
 
 import fr.aven.bot.Constants;
 import fr.aven.bot.Main;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
+import java.awt.*;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -17,6 +20,18 @@ public class BanCommand extends ModoCommands {
     public void handle(List<String> args, GuildMessageReceivedEvent event) {
         TextChannel channel = event.getChannel();
         Message message = event.getMessage();
+
+        if (!message.getGuild().getSelfMember().hasPermission(net.dv8tion.jda.api.Permission.BAN_MEMBERS))
+        {
+            channel.sendMessage(new EmbedBuilder()
+                    .setTitle(Main.getDatabase().getTextFor("error", event.getGuild()))
+                    .setDescription(Main.getDatabase().getTextFor("hasNotPermission", event.getGuild()))
+                    .setColor(Color.RED)
+                    .setFooter("Command executed by "+event.getAuthor().getAsTag())
+                    .build()
+            ).queue();
+            return;
+        }
 
         if (args.isEmpty())
         {

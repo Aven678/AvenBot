@@ -1,11 +1,15 @@
 package fr.aven.bot.commands.modo;
 
 import fr.aven.bot.Constants;
+import fr.aven.bot.Listener;
 import fr.aven.bot.Main;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
+import java.awt.*;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Timer;
@@ -23,7 +27,24 @@ public class MuteCommand extends ModoCommands {
         TextChannel channel = event.getChannel();
         Message message = event.getMessage();
         Guild guild = event.getGuild();
-        mutedRole = guild.getRolesByName("Muted", true).get(0);
+
+        if (!guild.getSelfMember().hasPermission(net.dv8tion.jda.api.Permission.MANAGE_ROLES))
+        {
+            channel.sendMessage(new EmbedBuilder()
+                    .setTitle(Main.getDatabase().getTextFor("error", event.getGuild()))
+                    .setDescription(Main.getDatabase().getTextFor("hasNotPermission", event.getGuild()))
+                    .setColor(Color.RED)
+                    .setFooter("Command executed by "+event.getAuthor().getAsTag())
+                    .build()
+            ).queue();
+            return;
+        }
+
+        if (guild.getRoleById(Main.getDatabase().getMuteRole(guild)) == null) {
+            createRoleMute(event.getGuild());
+        }
+
+        mutedRole = guild.getRoleById(Main.getDatabase().getMuteRole(guild));
 
         if (args.isEmpty()) {
             channel.sendMessage(Main.getDatabase().getTextFor("argsNotFound", event.getGuild())).queue();
@@ -53,6 +74,36 @@ public class MuteCommand extends ModoCommands {
             channel.sendMessage(Main.getDatabase().getTextFor("mute.confirm", event.getGuild())).queue();
 
         }
+    }
+
+    public void createRoleMute(Guild guild)
+    {
+        guild.createRole()
+                .setColor(Color.GRAY)
+                .setName("Muted")
+                .setMentionable(false)
+                .setPermissions(net.dv8tion.jda.api.Permission.EMPTY_PERMISSIONS) //put off all perms
+                .setPermissions(net.dv8tion.jda.api.Permission.MESSAGE_READ, net.dv8tion.jda.api.Permission.VIEW_CHANNEL)
+                .queue(mutedRole -> {
+
+                            for (TextChannel channel : guild.getTextChannels()) {
+
+                                channel.createPermissionOverride(mutedRole)
+                                        .setAllow(
+                                                net.dv8tion.jda.api.Permission.VIEW_CHANNEL,
+                                                net.dv8tion.jda.api.Permission.MESSAGE_READ
+                                        ).setDeny(
+                                        net.dv8tion.jda.api.Permission.MESSAGE_WRITE,
+                                        net.dv8tion.jda.api.Permission.MESSAGE_ADD_REACTION,
+                                        net.dv8tion.jda.api.Permission.ADMINISTRATOR
+                                ).reason("Establishing Muted Role")
+                                        .queue();
+                            }
+
+                            Main.getDatabase().setMuteRole(mutedRole);
+                            Main.LOGGER.info("Muted Role created on server: " + guild.getName());
+                        }
+                );
     }
 
     @Override
