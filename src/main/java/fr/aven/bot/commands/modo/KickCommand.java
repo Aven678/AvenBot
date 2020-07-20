@@ -55,6 +55,7 @@ public class KickCommand extends ModoCommands {
             StringBuilder reasonBuilder = new StringBuilder();
             for (int i = 1; i < args.size(); i++)
             {
+                if (!reasonBuilder.toString().equalsIgnoreCase("")) reasonBuilder.append("\n");
                 reasonBuilder.append(args.get(i));
             }
 

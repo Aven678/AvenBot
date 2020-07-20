@@ -63,6 +63,7 @@ public class MuteCommand extends ModoCommands {
 
             StringBuilder reasonBuilder = new StringBuilder();
             for (int i = 1; i < args.size(); i++) {
+                if (!reasonBuilder.toString().equalsIgnoreCase("")) reasonBuilder.append("\n");
                 reasonBuilder.append(args.get(i));
             }
             reason = reasonBuilder.toString();
@@ -71,7 +72,7 @@ public class MuteCommand extends ModoCommands {
 
             MODOLOGGER.info(event.getAuthor().getName() + " muted " + message.getMentionedMembers().get(0).getEffectiveName() + " for: " + reason);
 
-            channel.sendMessage(Main.getDatabase().getTextFor("mute.confirm", event.getGuild())).queue();
+            channel.sendMessage(Main.getDatabase().getTextFor("mute.confirm", event.getGuild()) + " : "+message.getMentionedMembers().get(0).getUser().getAsTag()).queue();
 
         }
     }

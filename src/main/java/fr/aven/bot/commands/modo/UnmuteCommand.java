@@ -50,7 +50,7 @@ public class UnmuteCommand extends ModoCommands {
 
         MODOLOGGER.info(event.getAuthor().getName() + " unmuted " + message.getMentionedMembers().get(0).getEffectiveName());
 
-        channel.sendMessage(Main.getDatabase().getTextFor("unmute.confirm", event.getGuild())).queue();
+        channel.sendMessage(Main.getDatabase().getTextFor("unmute.confirm", event.getGuild()) + " : "+message.getMentionedMembers().get(0).getUser().getAsTag()).queue();
 
     }
 
