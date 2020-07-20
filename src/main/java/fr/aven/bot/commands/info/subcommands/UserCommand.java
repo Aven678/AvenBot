@@ -27,8 +27,7 @@ public class UserCommand extends InfoSubCommands {
         _guild = guild;
         //STATUS
         if (!message.getMentionedUsers().isEmpty() || args.size() < 3) {
-            System.out.println(args.toString());
-            User target = message.getMentionedUsers().isEmpty() ? ( args.isEmpty() ? message.getAuthor() : event.getJDA().getUserById(args.get(0))) : message.getMentionedUsers().get(0);
+            User target = message.getMentionedUsers().isEmpty() ? ( args.get(0).isEmpty() ? message.getAuthor() : event.getJDA().getUserById(args.get(0))) : message.getMentionedUsers().get(0);
             _target = target;
             String status;
 
