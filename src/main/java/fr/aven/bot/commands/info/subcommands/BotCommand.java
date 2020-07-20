@@ -23,15 +23,15 @@ public class BotCommand extends InfoSubCommands {
         Runtime rt = Runtime.getRuntime();
         long usedMB = (rt.totalMemory() - rt.freeMemory()) / 1024 / 1024;
 
-        int users = 0;
+        int users = event.getJDA().getUsers().size();
 
-        for (Guild server : event.getJDA().getGuilds()) {
+        /*for (Guild server : event.getJDA().getGuilds()) {
             for (Member member : server.getMembers()) {
                 if (!member.getUser().isBot()) {
                     users++;
                 }
             }
-        }
+        }*/
 
         EmbedBuilder botBuilder = new EmbedBuilder();
         botBuilder.setAuthor(event.getJDA().getSelfUser().getName(), "https://www.avenbot.xyz", event.getJDA().getSelfUser().getAvatarUrl());
@@ -50,7 +50,7 @@ public class BotCommand extends InfoSubCommands {
                 false);
         botBuilder.addField("Links: ",
                 "Support Server ❱ " + "https://discord.gg/ntbdKjv" +
-                        "\nInvite Link ❱ " + "https://bit.ly/2EQBaiw",
+                        "\nInvite Link ❱ " + "http://invite.justaven.xyz",
                 false);
         event.getChannel().sendMessage(botBuilder.build()).queue();
     }
