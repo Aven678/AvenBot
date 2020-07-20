@@ -187,7 +187,7 @@ public class TrackScheduler extends AudioEventAdapter
 
         builder.setFooter(Main.getDatabase().getTextFor("music.request", guild)+userRequest.getName(), userRequest.getAvatarUrl());
 
-        channel.editMessageById(lastMessageStatus.getId(), builder.build()).queue();
+        lastMessageStatus.getChannel().editMessageById(lastMessageStatus.getId(), builder.build()).queue();
     }
 
     public void clearLyricsMap()

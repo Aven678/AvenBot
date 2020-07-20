@@ -44,7 +44,7 @@ public class SQL
         try {
             Class.forName("com.mysql.jdbc.Driver");
 
-            connection1 = DriverManager.getConnection(Main.getConfiguration().getString("sql.host", "jdbc:mysql://localhost/AvenBot"),
+            connection1 = DriverManager.getConnection(Main.getConfiguration().getString("sql.host", "jdbc:mysql://localhost/AvenBot?autoReconnect=true"),
                     //user
                     Main.getConfiguration().getString("sql.user", "root"),
 
