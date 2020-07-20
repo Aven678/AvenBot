@@ -31,7 +31,7 @@ public class Main
         commandManager = new CommandManager();
         listener = new Listener(commandManager);
         JDAManager.getShardManager().addEventListener(listener, new MusicReactionListener());
-        setActivity(Activity.ActivityType.WATCHING, "&help | justaven.xyz");
+        setActivity(Activity.ActivityType.WATCHING, configuration.getString("game",Constants.PREFIX+"help | justaven.xyz"));
 
         configuration.save();
     }
