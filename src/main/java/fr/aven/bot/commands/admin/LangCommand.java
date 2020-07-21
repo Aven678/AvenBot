@@ -21,10 +21,11 @@ public class LangCommand implements ICommand
         }
 
 
-        String choice = String.join(" ", args);
+        String choice = args.get(0);
 
         if (!choice.equalsIgnoreCase("en") || !choice.equalsIgnoreCase("fr"))
         {
+            System.out.println(choice);
             event.getChannel().sendMessage(new EmbedBuilder().addField(getHelp()).build()).queue();
             return;
         }
