@@ -25,7 +25,6 @@ public class PlayCommand extends MusicCommands
     {
         if (!event.getGuild().getAudioManager().isConnected()) {
                 JoinCommand.joinChannel(event);
-                return;
         }
 
         TextChannel channel = event.getChannel();
