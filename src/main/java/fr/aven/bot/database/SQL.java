@@ -305,7 +305,7 @@ public class SQL
     public boolean setLang(Guild guild, String newLang)
     {
         try {
-            getConnection().createStatement().executeUpdate("UPDATE guild SET lang="+newLang+" WHERE guildID="+guild.getId());
+            getConnection().createStatement().executeUpdate("UPDATE guild SET lang = '"+newLang+"' WHERE guildID = '"+guild.getId()+"'");
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
             return false;
