@@ -151,7 +151,7 @@ public class SQL
         try {
             PreparedStatement preparedStatement = getConnection().prepareStatement(SQL);
             preparedStatement.setString(1, guild.getId());
-            preparedStatement.setString(2, "fr");
+            preparedStatement.setString(2, "en");
             preparedStatement.setString(3, Constants.PREFIX);
             preparedStatement.setInt(4, 3);
             preparedStatement.setString(5, "kick");
