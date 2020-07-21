@@ -21,6 +21,7 @@ import fr.aven.bot.commands.music.*;
 /*import fr.aven.bot.commands.util.HelpCommand;
 import fr.aven.bot.commands.util.LmgtfyCommand;
 import fr.aven.bot.commands.util.search.subcommands.SearchSubCommands;*/
+import fr.aven.bot.commands.util.InviteCommand;
 import fr.aven.bot.util.ICommand;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -53,6 +54,7 @@ public class CommandManager {
         //INFO COMMANDS
         addCommands(new InfoCommand(), new HelpCommand());
         //UTIL COMMANDS
+        addCommands(new InviteCommand());
         //addCommands(new LmgtfyCommand(), new HelpCommand(this), new SearchCommand());
         //FUN COMMANDS
         //addCommands(new CatCommand(), new DogCommand());

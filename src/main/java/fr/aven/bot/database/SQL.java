@@ -1,5 +1,6 @@
 package fr.aven.bot.database;
 
+import fr.aven.bot.Constants;
 import fr.aven.bot.Main;
 import fr.aven.bot.entity.Warn;
 import fr.aven.bot.util.ICommand;
@@ -151,7 +152,7 @@ public class SQL
             PreparedStatement preparedStatement = getConnection().prepareStatement(SQL);
             preparedStatement.setString(1, guild.getId());
             preparedStatement.setString(2, "fr");
-            preparedStatement.setString(3, "&");
+            preparedStatement.setString(3, Constants.PREFIX);
             preparedStatement.setInt(4, 3);
             preparedStatement.setString(5, "kick");
             preparedStatement.setString(6, mutedRole);

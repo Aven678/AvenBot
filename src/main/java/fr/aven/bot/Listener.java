@@ -183,7 +183,8 @@ public class Listener extends ListenerAdapter
             if (roles.size() != 0)
                 Main.getDatabase().insertGuild(guild, roles.get(0).getId());
             else
-                guild.createRole()
+                if (guild.getSelfMember().hasPermission(Permission.MANAGE_ROLES))
+                    guild.createRole()
                     .setColor(Color.GRAY)
                     .setName("Muted")
                     .setMentionable(false)
