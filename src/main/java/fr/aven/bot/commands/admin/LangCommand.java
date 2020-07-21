@@ -14,6 +14,7 @@ public class LangCommand implements ICommand
 {
     @Override
     public void handle(List<String> args, GuildMessageReceivedEvent event) {
+        System.out.println(args.toString());
         if (args.size() == 0 || !args.get(0).equalsIgnoreCase("en") || !args.get(0).equalsIgnoreCase("fr"))
         {
             event.getChannel().sendMessage(new EmbedBuilder().addField(getHelp()).build()).queue();
