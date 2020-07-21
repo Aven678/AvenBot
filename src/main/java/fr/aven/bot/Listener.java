@@ -183,33 +183,35 @@ public class Listener extends ListenerAdapter
             if (roles.size() != 0)
                 Main.getDatabase().insertGuild(guild, roles.get(0).getId());
             else
-                if (guild.getSelfMember().hasPermission(Permission.MANAGE_ROLES))
+                if (guild.getSelfMember().hasPermission(Permission.MANAGE_ROLES) && guild.getRoles().size() <= 249)
+                {
                     guild.createRole()
-                    .setColor(Color.GRAY)
-                    .setName("Muted")
-                    .setMentionable(false)
-                    .setPermissions(Permission.EMPTY_PERMISSIONS) //put off all perms
-                    .setPermissions(Permission.MESSAGE_READ, Permission.VIEW_CHANNEL)
-                    .queue(mutedRole -> {
+                            .setColor(Color.GRAY)
+                            .setName("Muted")
+                            .setMentionable(false)
+                            .setPermissions(Permission.EMPTY_PERMISSIONS) //put off all perms
+                            .setPermissions(Permission.MESSAGE_READ, Permission.VIEW_CHANNEL)
+                            .queue(mutedRole -> {
 
-                                for (TextChannel channel : guild.getTextChannels()) {
+                                        for (TextChannel channel : guild.getTextChannels()) {
 
-                                    channel.createPermissionOverride(mutedRole)
-                                            .setAllow(
-                                                    Permission.VIEW_CHANNEL,
-                                                    Permission.MESSAGE_READ
-                                            ).setDeny(
-                                            Permission.MESSAGE_WRITE,
-                                            Permission.MESSAGE_ADD_REACTION,
-                                            Permission.ADMINISTRATOR
-                                    ).reason("Establishing Muted Role")
-                                    .queue();
-                                }
+                                            channel.createPermissionOverride(mutedRole)
+                                                    .setAllow(
+                                                            Permission.VIEW_CHANNEL,
+                                                            Permission.MESSAGE_READ
+                                                    ).setDeny(
+                                                    Permission.MESSAGE_WRITE,
+                                                    Permission.MESSAGE_ADD_REACTION,
+                                                    Permission.ADMINISTRATOR
+                                            ).reason("Establishing Muted Role")
+                                                    .queue();
+                                        }
 
-                                Main.getDatabase().checkGuild(guild, mutedRole.getId());
-                        logger.info("Muted Role created on server: " + guild.getName());
-                    }
-            );
+                                        Main.getDatabase().checkGuild(guild, mutedRole.getId());
+                                        logger.info("Muted Role created on server: " + guild.getName());
+                                    }
+                            );
+                }
 
         }
 
