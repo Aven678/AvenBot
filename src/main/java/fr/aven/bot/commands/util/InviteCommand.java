@@ -1,6 +1,7 @@
 package fr.aven.bot.commands.util;
 
 import fr.aven.bot.Constants;
+import fr.aven.bot.Main;
 import fr.aven.bot.util.ICommand;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.GenericEvent;
@@ -14,7 +15,7 @@ public class InviteCommand implements ICommand
     public void handle(List<String> args, GuildMessageReceivedEvent event) {
         String URL = "http://invite.justaven.xyz";
 
-        event.getChannel().sendMessage(URL).queue();
+        event.getChannel().sendMessage(Main.getDatabase().getTextFor("invite.text", event.getGuild()) + URL).queue();
     }
 
     @Override
