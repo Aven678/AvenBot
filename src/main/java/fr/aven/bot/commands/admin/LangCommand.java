@@ -21,7 +21,7 @@ public class LangCommand implements ICommand
         }
 
 
-        String choice = args.get(0);
+        String choice = args.get(0).replaceAll(" ", "");
 
         if (!choice.equalsIgnoreCase("en") || !choice.equalsIgnoreCase("fr"))
         {
