@@ -31,6 +31,8 @@ public class MusicReactionListener extends ListenerAdapter
             return;
         }
 
+        deleteReaction(event);
+
         AudioTrack track = manager.player.getPlayingTrack();
         switch (event.getReactionEmote().getName())
         {
@@ -68,8 +70,6 @@ public class MusicReactionListener extends ListenerAdapter
                 }
                 break;
         }
-
-        deleteReaction(event);
 
     }
 

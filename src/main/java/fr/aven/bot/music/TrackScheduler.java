@@ -57,6 +57,8 @@ public class TrackScheduler extends AudioEventAdapter
         if (!player.startTrack(track, true))
         {
             queue.offer(track);
+        } else {
+            player.setPaused(false);
         }
     }
 
@@ -112,6 +114,8 @@ public class TrackScheduler extends AudioEventAdapter
         // giving null to startTrack, which is a valid argument and will simply stop the player.
         oldTrack = track;
         oldUsed = false;
+
+        player.setPaused(false);
         player.startTrack(queue.poll(), false);
     }
 
