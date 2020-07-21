@@ -20,15 +20,12 @@ public class LangCommand implements ICommand
             return;
         }
 
-
-        String choice = args.get(0).replaceAll(" ", "");
-
-        if (!choice.equalsIgnoreCase("en") || !choice.equalsIgnoreCase("fr"))
-        {
-            System.out.println(choice);
-            event.getChannel().sendMessage(new EmbedBuilder().addField(getHelp()).build()).queue();
-            return;
-        }
+        if (!args.get(0).equalsIgnoreCase("en"))
+            if (!args.get(0).equalsIgnoreCase("fr"))
+            {
+                event.getChannel().sendMessage(new EmbedBuilder().addField(getHelp()).build()).queue();
+                return;
+            }
 
         Main.getDatabase().setLang(event.getGuild(), args.get(0));
         event.getChannel().sendMessage(Main.getDatabase().getTextFor("lang.success", event.getGuild())).queue();
