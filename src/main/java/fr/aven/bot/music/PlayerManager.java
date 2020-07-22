@@ -133,6 +133,7 @@ public class PlayerManager
                         new Timer().schedule(new MessageTask(msg), 10000);
                     });
 
+                    musicManager.scheduler.usersRequest.put(firstTrack, message.getAuthor().getIdLong());
                     for (AudioTrack track : playlist.getTracks())
                         musicManager.scheduler.usersRequest.put(track, message.getAuthor().getIdLong());
 
