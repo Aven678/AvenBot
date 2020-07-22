@@ -84,6 +84,7 @@ public class HelpCommand implements ICommand
         if (!utilCommands.toString().equalsIgnoreCase(""))
             builder.addField("Utils commands", utilCommands.toString(), false);
 
+        builder.addField("For more informations about a command", "Do `-help` after a command : =help -help", false);
         builder.setFooter("AvenBot by Aven#1000", event.getJDA().getSelfUser().getAvatarUrl());
 
         event.getChannel().sendMessage(builder.build()).queue();
