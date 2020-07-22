@@ -127,7 +127,7 @@ public class PlayerManager
                     builder.setAuthor(Main.getDatabase().getTextFor("playlist.title", message.getGuild()));
                     builder.addField("❱ "+playlist.getName() + " (" + playlist.getTracks().size() + " tracks)",
                             "❱ "+ Main.getDatabase().getTextFor("playlist.firstTrack", message.getGuild()) + " : " + playlist.getTracks().get(0).getInfo().title,
-                            false).setFooter("AvenBot by Aven#1000").setColor(new Color(0, 255, 151));
+                            false).setFooter("AvenBot by Aven#1000").setColor(new Color(255, 127, 0));
 
                     message.getChannel().sendMessage(builder.build()).queue(msg -> {
                         new Timer().schedule(new MessageTask(msg), 10000);
