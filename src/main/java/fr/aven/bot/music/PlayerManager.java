@@ -125,16 +125,17 @@ public class PlayerManager
 
                     EmbedBuilder builder = new EmbedBuilder();
                     builder.setAuthor(Main.getDatabase().getTextFor("playlist.title", message.getGuild()));
-                    builder.addField("❱ "+playlist.getName() + "(" + playlist.getTracks().size() + " tracks)",
-                            "❱ "+ Main.getDatabase().getTextFor("playlist.firstTrack", message.getGuild()) + " : " + playlist.getSelectedTrack().getInfo().title,
+                    builder.addField("❱ "+playlist.getName() + " (" + playlist.getTracks().size() + " tracks)",
+                            "❱ "+ Main.getDatabase().getTextFor("playlist.firstTrack", message.getGuild()) + " : " + playlist.getTracks().get(0).getInfo().title,
                             false);
 
                     message.getChannel().sendMessage(builder.build()).queue();
-                    play(musicManager, firstTrack, message.getTextChannel());
 
                     playlist.getTracks().forEach(musicManager.scheduler::queue);
                     for (AudioTrack track : playlist.getTracks())
                         musicManager.scheduler.usersRequest.put(track, message.getAuthor().getIdLong());
+
+                    play(musicManager, firstTrack, message.getTextChannel());
                 }
 
             }
