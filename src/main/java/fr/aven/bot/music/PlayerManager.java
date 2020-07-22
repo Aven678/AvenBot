@@ -127,15 +127,18 @@ public class PlayerManager
                     builder.setAuthor(Main.getDatabase().getTextFor("playlist.title", message.getGuild()));
                     builder.addField("❱ "+playlist.getName() + " (" + playlist.getTracks().size() + " tracks)",
                             "❱ "+ Main.getDatabase().getTextFor("playlist.firstTrack", message.getGuild()) + " : " + playlist.getTracks().get(0).getInfo().title,
-                            false);
+                            false).setFooter("AvenBot by Aven#1000").setColor(new Color(0, 255, 151));
 
-                    message.getChannel().sendMessage(builder.build()).queue();
+                    message.getChannel().sendMessage(builder.build()).queue(msg -> {
+                        new Timer().schedule(new MessageTask(msg), 10000);
+                    });
 
-                    playlist.getTracks().forEach(musicManager.scheduler::queue);
                     for (AudioTrack track : playlist.getTracks())
                         musicManager.scheduler.usersRequest.put(track, message.getAuthor().getIdLong());
 
                     play(musicManager, firstTrack, message.getTextChannel());
+                    playlist.getTracks().forEach(musicManager.scheduler::queue);
+
                 }
 
             }
