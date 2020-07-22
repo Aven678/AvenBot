@@ -125,7 +125,7 @@ public class PlayerManager
 
                     EmbedBuilder builder = new EmbedBuilder();
                     builder.setAuthor(Main.getDatabase().getTextFor("playlist.title", message.getGuild()));
-                    builder.addField("❱ "+Main.getDatabase().getTextFor("playlist.added", message.getGuild())+" : "+playlist.getName() + "(" + playlist.getTracks().size() + " tracks)",
+                    builder.addField("❱ "+playlist.getName() + "(" + playlist.getTracks().size() + " tracks)",
                             "❱ "+ Main.getDatabase().getTextFor("playlist.firstTrack", message.getGuild()) + " : " + playlist.getSelectedTrack().getInfo().title,
                             false);
 
