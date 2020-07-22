@@ -121,8 +121,15 @@ public class PlayerManager
                         firstTrack = playlist.getTracks().remove(0);
                     }
 
-                    message.getChannel().sendMessageFormat(Main.getDatabase().getTextFor("music.playlistAdd", message.getGuild()), firstTrack.getInfo().title, playlist.getName()).queue();
+                    //message.getChannel().sendMessageFormat(Main.getDatabase().getTextFor("music.playlistAdd", message.getGuild()), firstTrack.getInfo().title, playlist.getName()).queue();
 
+                    EmbedBuilder builder = new EmbedBuilder();
+                    builder.setAuthor(Main.getDatabase().getTextFor("playlist.title", message.getGuild()));
+                    builder.addField("❱ "+Main.getDatabase().getTextFor("playlist.added", message.getGuild())+" : "+playlist.getName() + "(" + playlist.getTracks().size() + " tracks)",
+                            "❱ "+ Main.getDatabase().getTextFor("playlist.firstTrack", message.getGuild()) + " : " + playlist.getSelectedTrack().getInfo().title,
+                            false);
+
+                    message.getChannel().sendMessage(builder.build()).queue();
                     play(musicManager, firstTrack, message.getTextChannel());
 
                     playlist.getTracks().forEach(musicManager.scheduler::queue);

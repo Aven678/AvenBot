@@ -101,7 +101,7 @@ public class UserCommand extends InfoSubCommands {
                             "\nID ❱ " + target.getId() +
                             "\nAccount Type ❱ " + (target.isBot() ? "Bot" : "Human"),
                     true);
-            Emote rpEmote = event.getJDA().getGuildById("403193778233409536").getEmoteById("603529803609407499");
+            Emote rpEmote = event.getJDA().getGuildById("361564193226489861").getEmoteById("735623685922095184");
             userBuilder.addField("Status: ",
                     "Status ❱ " + status +
                             "\n" + finalActivity +
