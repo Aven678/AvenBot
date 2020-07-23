@@ -20,8 +20,8 @@ public class MemberActivityEvent extends ListenerAdapter
         if (channelID.equalsIgnoreCase("")) return;
         if (text.equalsIgnoreCase("")) return;
 
-        text.replace("[guild]", event.getGuild().getName());
-        text.replace("[member]", event.getUser().getAsMention());
+        text.replaceAll("[guild]", event.getGuild().getName());
+        text.replaceAll("[member]", event.getUser().getAsMention());
         event.getGuild().getTextChannelById(channelID).sendMessage(text).queue();
 
         super.onGuildMemberJoin(event);
@@ -42,8 +42,8 @@ public class MemberActivityEvent extends ListenerAdapter
             }
         });
 
-        text.replace("[guild]", event.getGuild().getName());
-        text.replace("[member]", event.getUser().getAsTag());
+        text.replaceAll("[guild]", event.getGuild().getName());
+        text.replaceAll("[member]", event.getUser().getAsTag());
         event.getGuild().getTextChannelById(channelID).sendMessage(text).queue();
 
         super.onGuildMemberRemove(event);
@@ -57,8 +57,8 @@ public class MemberActivityEvent extends ListenerAdapter
         if (channelID.equalsIgnoreCase("")) return;
         if (text.equalsIgnoreCase("")) return;
 
-        text.replace("[guild]", event.getGuild().getName());
-        text.replace("[member]", event.getUser().getAsTag());
+        text.replaceAll("[guild]", event.getGuild().getName());
+        text.replaceAll("[member]", event.getUser().getAsTag());
         event.getGuild().getTextChannelById(channelID).sendMessage(text).queue();
 
         super.onGuildBan(event);
