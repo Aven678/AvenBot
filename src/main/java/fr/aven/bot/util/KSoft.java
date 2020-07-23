@@ -52,7 +52,7 @@ public class KSoft
 
     public String getDogPicture()
     {
-        return kSoftAPI.getTaggedImage(ImageTag.DOG)
+        return getKSoftAPI().getTaggedImage(ImageTag.DOG)
                 .execute()
                 .getUrl();
     }
