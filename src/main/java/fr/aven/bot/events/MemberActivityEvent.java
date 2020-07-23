@@ -1,6 +1,7 @@
 package fr.aven.bot.events;
 
 import fr.aven.bot.Main;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.audit.ActionType;
 import net.dv8tion.jda.api.audit.AuditLogEntry;
 import net.dv8tion.jda.api.entities.Guild;
@@ -11,6 +12,8 @@ import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MemberActivityEvent extends ListenerAdapter
 {
@@ -42,14 +45,12 @@ public class MemberActivityEvent extends ListenerAdapter
         if (channelID.equalsIgnoreCase("")) return;
         if (text.equalsIgnoreCase("")) return;
 
-        event.getGuild().retrieveBanList().queue(bans -> {
-            for (Guild.Ban ban : bans)
-            {
-                if (ban.getUser().getId().equalsIgnoreCase(event.getUser().getId()))
-                    System.out.println("yes");
-            }
-        });
+        if (event.getGuild().getSelfMember().hasPermission(Permission.BAN_MEMBERS)) {
+            List<Guild.Ban> bansList = event.getGuild().retrieveBanList().complete();
 
+            for (Guild.Ban ban : bansList)
+                if (ban.getUser().getId().equalsIgnoreCase(event.getUser().getId())) return;
+        }
         /*event.getGuild().retrieveAuditLogs().type(ActionType.BAN).queue(auditLogEntries -> {
             for (AuditLogEntry auditLogEntry : auditLogEntries)
             {
