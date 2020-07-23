@@ -60,8 +60,10 @@ public class MusicReactionListener extends ListenerAdapter
                 manager.scheduler.editMessageForRepeat();
                 break;
             case "\uD83D\uDCDC": //lyrics
-                if (manager.scheduler.lastMessageLyrics == null)
+                if (!manager.scheduler.lyricsAlwaysRequested){
                     LyricsCommand.sendLyrics(event, Main.getkSoft().getLyrics(track.getInfo().title));
+                    manager.scheduler.lyricsAlwaysRequested = true;
+                }
                 break;
             case "❌": //stop
                 if (Main.getDatabase().checkPermission(event.getGuild(), event.getUser(), ICommand.Permission.DJ)) {

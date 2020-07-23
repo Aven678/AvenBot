@@ -27,6 +27,7 @@ public class TrackScheduler extends AudioEventAdapter
     public Map<Integer, Lyric> lyrics = new HashMap<>();
 
     public Map<AudioTrack, Long> usersRequest = new HashMap<>();
+    public boolean lyricsAlwaysRequested = false;
 
     private Guild guild;
     public TextChannel channel;
@@ -83,7 +84,7 @@ public class TrackScheduler extends AudioEventAdapter
 
     public void nextTrack(AudioTrack track, boolean oldMusicRequested)
     {
-        lastMessageLyrics = null;
+        lyricsAlwaysRequested = false;
 
         if (oldMusicRequested && track != null)
         {
