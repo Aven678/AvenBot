@@ -17,12 +17,14 @@ public class MemberActivityEvent extends ListenerAdapter
         String text = Main.getDatabase().getTextJLB(event.getGuild().getId(), "textJoin");
         String channelID = String.valueOf(Main.getDatabase().queryId(event.getGuild(), "announceChannelID"));
 
+        String textFinal = "";
+
         if (channelID.equalsIgnoreCase("")) return;
         if (text.equalsIgnoreCase("")) return;
 
-        text = text.replace("[guild]", event.getGuild().getName());
-        text = text.replace("[member]", event.getUser().getAsMention());
-        event.getGuild().getTextChannelById(channelID).sendMessage(text).queue();
+        textFinal = text.replace("[guild]", event.getGuild().getName()).replace("[member]", event.getUser().getAsTag());;
+
+        event.getGuild().getTextChannelById(channelID).sendMessage(textFinal).queue();
 
         super.onGuildMemberJoin(event);
     }
@@ -31,6 +33,8 @@ public class MemberActivityEvent extends ListenerAdapter
     public void onGuildMemberRemove(@Nonnull GuildMemberRemoveEvent event) {
         String text = Main.getDatabase().getTextJLB(event.getGuild().getId(), "textLeave");
         String channelID = String.valueOf(Main.getDatabase().queryId(event.getGuild(), "announceChannelID"));
+
+        String textFinal = "";
 
         if (channelID.equalsIgnoreCase("")) return;
         if (text.equalsIgnoreCase("")) return;
@@ -42,9 +46,9 @@ public class MemberActivityEvent extends ListenerAdapter
             }
         });
 
-        text = text.replace("[guild]", event.getGuild().getName());
-        text = text.replace("[member]", event.getUser().getAsTag());
-        event.getGuild().getTextChannelById(channelID).sendMessage(text).queue();
+        textFinal = text.replace("[guild]", event.getGuild().getName()).replace("[member]", event.getUser().getAsTag());;
+
+        event.getGuild().getTextChannelById(channelID).sendMessage(textFinal).queue();
 
         super.onGuildMemberRemove(event);
     }
@@ -54,12 +58,14 @@ public class MemberActivityEvent extends ListenerAdapter
         String text = Main.getDatabase().getTextJLB(event.getGuild().getId(), "textBan");
         String channelID = String.valueOf(Main.getDatabase().queryId(event.getGuild(), "announceChannelID"));
 
+        String textFinal = "";
+
         if (channelID.equalsIgnoreCase("")) return;
         if (text.equalsIgnoreCase("")) return;
 
-        text = text.replace("[guild]", event.getGuild().getName());
-        text = text.replace("[member]", event.getUser().getAsTag());
-        event.getGuild().getTextChannelById(channelID).sendMessage(text).queue();
+        textFinal = text.replace("[guild]", event.getGuild().getName()).replace("[member]", event.getUser().getAsTag());;
+
+        event.getGuild().getTextChannelById(channelID).sendMessage(textFinal).queue();
 
         super.onGuildBan(event);
     }
