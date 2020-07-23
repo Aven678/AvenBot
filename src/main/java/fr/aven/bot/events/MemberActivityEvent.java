@@ -39,12 +39,17 @@ public class MemberActivityEvent extends ListenerAdapter
         if (channelID.equalsIgnoreCase("")) return;
         if (text.equalsIgnoreCase("")) return;
 
+        final boolean[] isBanned = {false};
+
         event.getGuild().retrieveBanList().queue(list -> {
             for (Guild.Ban bans : list)
             {
-                if (bans.getUser() == event.getUser()) return;
+                if (bans.getUser() == event.getUser())
+                    isBanned[0] = true;
             }
         });
+
+        if (isBanned[0]) return;
 
         textFinal = text.replaceAll("<guild>", event.getGuild().getName()).replaceAll("<member>", event.getUser().getAsTag());;
 
