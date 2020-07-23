@@ -1,9 +1,12 @@
 package fr.aven.bot.events;
 
 import fr.aven.bot.Main;
+import net.dv8tion.jda.api.audit.ActionType;
+import net.dv8tion.jda.api.audit.AuditLogEntry;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.guild.GuildBanEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
+import net.dv8tion.jda.api.events.guild.member.GuildMemberLeaveEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
@@ -39,17 +42,20 @@ public class MemberActivityEvent extends ListenerAdapter
         if (channelID.equalsIgnoreCase("")) return;
         if (text.equalsIgnoreCase("")) return;
 
-        final boolean[] isBanned = {false};
-
-        event.getGuild().retrieveBanList().queue(list -> {
-            for (Guild.Ban bans : list)
+        event.getGuild().retrieveBanList().queue(bans -> {
+            for (Guild.Ban ban : bans)
             {
-                if (bans.getUser() == event.getUser())
-                    isBanned[0] = true;
+                if (ban.getUser().getId().equalsIgnoreCase(event.getUser().getId()))
+                    System.out.println("yes");
             }
         });
 
-        if (isBanned[0]) return;
+        /*event.getGuild().retrieveAuditLogs().type(ActionType.BAN).queue(auditLogEntries -> {
+            for (AuditLogEntry auditLogEntry : auditLogEntries)
+            {
+                if (auditLogEntry.getTargetId() == event.getUser().getId()) return;
+            }
+        });*/
 
         textFinal = text.replaceAll("<guild>", event.getGuild().getName()).replaceAll("<member>", event.getUser().getAsTag());;
 
