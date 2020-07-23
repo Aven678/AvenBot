@@ -84,7 +84,7 @@ public class Listener extends ListenerAdapter
             if (rw.startsWith(prefix) || rw.startsWith(Constants.PREFIX))
             {
                 manager.handleCommand(event, rw.startsWith(Constants.PREFIX));
-                event.getMessage().delete().queue();
+                //event.getMessage().delete().queue();
             } else {
                 if (!checkMusic(event)) checkLyric(event);
             }
