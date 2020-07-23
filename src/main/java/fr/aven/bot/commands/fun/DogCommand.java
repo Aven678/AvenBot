@@ -13,7 +13,7 @@ public class DogCommand implements ICommand
 {
     @Override
     public void handle(List<String> args, GuildMessageReceivedEvent event) {
-        event.getChannel().sendMessage(Main.getkSoft().getDogPicture()).queue();
+        event.getChannel().sendMessage("Woof :dog: \n"+Main.getkSoft().getDogPicture()).queue();
     }
 
     @Override
