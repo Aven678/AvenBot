@@ -5,6 +5,7 @@ import net.explodingbush.ksoftapi.KSoftAPI;
 import net.explodingbush.ksoftapi.entities.Lyric;
 import net.explodingbush.ksoftapi.entities.impl.TaggedImageImpl;
 import net.explodingbush.ksoftapi.enums.ImageTag;
+import net.explodingbush.ksoftapi.enums.ImageType;
 import net.explodingbush.ksoftapi.enums.Routes;
 import net.explodingbush.ksoftapi.utils.JSONBuilder;
 import org.json.JSONObject;
@@ -55,5 +56,12 @@ public class KSoft
         return getKSoftAPI().getTaggedImage(ImageTag.DOG)
                 .execute()
                 .getUrl();
+    }
+
+    public String getNsfwPicture()
+    {
+        return getKSoftAPI().getRedditImage(ImageType.RANDOM_NSFW)
+                .execute()
+                .getImageUrl();
     }
 }

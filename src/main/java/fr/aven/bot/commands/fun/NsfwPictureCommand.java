@@ -10,11 +10,11 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.util.List;
 
-public class DogCommand implements ICommand
+public class NsfwPictureCommand implements ICommand
 {
     @Override
     public void handle(List<String> args, GuildMessageReceivedEvent event) {
-        event.getChannel().sendMessage(new EmbedBuilder().setAuthor("Woof :dog:").setImage(Main.getkSoft().getDogPicture()).build()).queue();
+        event.getChannel().sendMessage(new EmbedBuilder().setImage(Main.getkSoft().getNsfwPicture()).build()).queue();
     }
 
     @Override
@@ -29,12 +29,12 @@ public class DogCommand implements ICommand
 
     @Override
     public MessageEmbed.Field getHelp() {
-        return new MessageEmbed.Field("Sends a beautiful picture of dogs", "Usage: `" + Constants.PREFIX + getInvoke() + "`", false);
+        return new MessageEmbed.Field("Sends a NSWF picture (oof)", "Usage: `" + Constants.PREFIX + getInvoke() + "`", false);
     }
 
     @Override
     public String getInvoke() {
-        return "dog";
+        return "nsfw";
     }
 
     @Override

@@ -3,6 +3,7 @@ package fr.aven.bot.commands.fun;
 import fr.aven.bot.Constants;
 import fr.aven.bot.Main;
 import fr.aven.bot.util.ICommand;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -13,7 +14,7 @@ public class CatCommand implements ICommand
 {
     @Override
     public void handle(List<String> args, GuildMessageReceivedEvent event) {
-        event.getChannel().sendMessage("Meow :cat: \n"+ Main.getkSoft().getCatPicture()).queue();
+        event.getChannel().sendMessage(new EmbedBuilder().setAuthor("Meow :cat:").setImage(Main.getkSoft().getCatPicture()).build()).queue();
     }
 
     @Override
