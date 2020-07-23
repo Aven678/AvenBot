@@ -10,16 +10,18 @@ import fr.aven.bot.commands.admin.ClearConfigCommand;
 import fr.aven.bot.commands.admin.DJRoleCommand;
 import fr.aven.bot.commands.admin.LangCommand;
 import fr.aven.bot.commands.admin.Prefix;
+import fr.aven.bot.commands.admin.announce.AnnounceChannel;
+import fr.aven.bot.commands.admin.announce.AnnounceCommand;
+import fr.aven.bot.commands.fun.CatCommand;
+import fr.aven.bot.commands.fun.DogCommand;
 import fr.aven.bot.commands.info.HelpCommand;
 import fr.aven.bot.commands.info.InfoCommand;
-import fr.aven.bot.commands.info.InfoCommands;
 import fr.aven.bot.commands.modo.BanCommand;
 import fr.aven.bot.commands.modo.KickCommand;
 import fr.aven.bot.commands.modo.MuteCommand;
 import fr.aven.bot.commands.modo.UnmuteCommand;
 import fr.aven.bot.commands.music.*;
-/*import fr.aven.bot.commands.util.HelpCommand;
-import fr.aven.bot.commands.util.LmgtfyCommand;
+/*import fr.aven.bot.commands.util.LmgtfyCommand;
 import fr.aven.bot.commands.util.search.subcommands.SearchSubCommands;*/
 import fr.aven.bot.commands.util.InviteCommand;
 import fr.aven.bot.util.ICommand;
@@ -45,19 +47,19 @@ public class CommandManager {
         COMMANDLOGGER.info("Loading commands");
 
         //ADMIN COMMANDS
-        addCommands(new DJRoleCommand(), new Prefix(), new ClearConfigCommand(), new LangCommand());
+        addCommands(new AnnounceChannel(), new AnnounceCommand(), new ClearConfigCommand(), new DJRoleCommand(), new LangCommand(), new Prefix());
 
         //MUSIC COMMANDS
-        addCommands(new JoinCommand(), new LyricsCommand(), new StopCommand(), new PlayCommand(), new PauseCommand(), new QueueCommand(), new ShuffleCommand(), new SkipCommand(), new VolumeCommand());
+        addCommands(new JoinCommand(), new LyricsCommand(), new PlayCommand(), new PauseCommand(), new QueueCommand(), new SkipCommand(), new ShuffleCommand(), new StopCommand(), new VolumeCommand());
         //MODO COMMANDS
         addCommands(new BanCommand(), new KickCommand(), new MuteCommand(), new UnmuteCommand());
         //INFO COMMANDS
-        addCommands(new InfoCommand(), new HelpCommand());
+        addCommands(new HelpCommand(), new InfoCommand());
         //UTIL COMMANDS
         addCommands(new InviteCommand());
         //addCommands(new LmgtfyCommand(), new HelpCommand(this), new SearchCommand());
         //FUN COMMANDS
-        //addCommands(new CatCommand(), new DogCommand());
+        addCommands(new CatCommand(), new DogCommand());
     }
 
     private void addCommand(ICommand command) {

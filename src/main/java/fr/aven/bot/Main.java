@@ -22,10 +22,11 @@ public class Main
     private static CommandManager commandManager;
     private static Listener listener;
     private static SQL database;
-    private static KSoft kSoft = new KSoft();
+    private static KSoft kSoft;
 
     public static void main(String... args) throws Exception
     {
+        kSoft = new KSoft();
         lastRestart = new Date();
         System.setProperty("AvenBot", "");
         configuration = new Configuration("config.json");

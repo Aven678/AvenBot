@@ -2,17 +2,14 @@ package fr.aven.bot.events;
 
 import fr.aven.bot.Main;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.audit.ActionType;
-import net.dv8tion.jda.api.audit.AuditLogEntry;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.guild.GuildBanEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
-import net.dv8tion.jda.api.events.guild.member.GuildMemberLeaveEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
 import java.util.List;
 
 public class MemberActivityEvent extends ListenerAdapter
@@ -30,7 +27,9 @@ public class MemberActivityEvent extends ListenerAdapter
 
         textFinal = text.replaceAll("<guild>", event.getGuild().getName()).replaceAll("<member>", event.getUser().getAsTag());;
 
-        event.getGuild().getTextChannelById(channelID).sendMessage(textFinal).queue();
+        TextChannel textChannel = event.getGuild().getTextChannelById(channelID);
+        if (event.getGuild().getSelfMember().hasPermission(textChannel, Permission.MESSAGE_WRITE))
+            textChannel.sendMessage(textFinal).queue();
 
         super.onGuildMemberJoin(event);
     }
@@ -60,7 +59,9 @@ public class MemberActivityEvent extends ListenerAdapter
 
         textFinal = text.replaceAll("<guild>", event.getGuild().getName()).replaceAll("<member>", event.getUser().getAsTag());;
 
-        event.getGuild().getTextChannelById(channelID).sendMessage(textFinal).queue();
+        TextChannel textChannel = event.getGuild().getTextChannelById(channelID);
+        if (event.getGuild().getSelfMember().hasPermission(textChannel, Permission.MESSAGE_WRITE))
+            textChannel.sendMessage(textFinal).queue();
 
         super.onGuildMemberRemove(event);
     }
@@ -77,7 +78,9 @@ public class MemberActivityEvent extends ListenerAdapter
 
         textFinal = text.replaceAll("<guild>", event.getGuild().getName()).replaceAll("<member>", event.getUser().getAsTag());;
 
-        event.getGuild().getTextChannelById(channelID).sendMessage(textFinal).queue();
+        TextChannel textChannel = event.getGuild().getTextChannelById(channelID);
+        if (event.getGuild().getSelfMember().hasPermission(textChannel, Permission.MESSAGE_WRITE))
+            textChannel.sendMessage(textFinal).queue();
 
         super.onGuildBan(event);
     }

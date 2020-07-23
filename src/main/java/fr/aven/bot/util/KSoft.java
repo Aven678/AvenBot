@@ -3,6 +3,11 @@ package fr.aven.bot.util;
 import fr.aven.bot.Main;
 import net.explodingbush.ksoftapi.KSoftAPI;
 import net.explodingbush.ksoftapi.entities.Lyric;
+import net.explodingbush.ksoftapi.entities.impl.TaggedImageImpl;
+import net.explodingbush.ksoftapi.enums.ImageTag;
+import net.explodingbush.ksoftapi.enums.Routes;
+import net.explodingbush.ksoftapi.utils.JSONBuilder;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,6 +17,7 @@ import java.util.Map;
 public class KSoft
 {
     private KSoftAPI kSoftAPI = null;
+    private JSONObject json;
 
     public KSoftAPI getKSoftAPI()
     {
@@ -36,5 +42,16 @@ public class KSoft
         if (lyrics.isEmpty()) return new ArrayList<>();
 
         return lyrics;
+    }
+
+    public String getCatPicture()
+    {
+        this.json = (new JSONBuilder()).requestKsoft(String.format(Routes.IMAGE.toString(), "cat", "false"), Main.getConfiguration().getString("ksoft-api"));
+        return new TaggedImageImpl(this.json).getUrl();
+    }
+
+    public String getDogPicture()
+    {
+        return kSoftAPI.getTaggedImage(ImageTag.DOG).execute().getUrl();
     }
 }

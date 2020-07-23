@@ -4,10 +4,7 @@ import fr.aven.bot.Constants;
 import fr.aven.bot.Main;
 import fr.aven.bot.entity.Warn;
 import fr.aven.bot.util.ICommand;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -451,7 +448,7 @@ public class SQL
 
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next())
-                return resultSet.getString(1);
+                return resultSet.getString(1) == null ? "": resultSet.getString(1);
         } catch (SQLException sqlException)
         {
         }
@@ -459,23 +456,30 @@ public class SQL
         return "";
     }
 
-    public void setTextJLB(String guildID, String newMessage, String type)
+    public void setTextJLB(String guildID, String newMessage, String type) throws SQLException
     {
-        try {
             String sql = "UPDATE guild SET ? = ? WHERE guildID=?";
             PreparedStatement preparedStatement = getConnection().prepareStatement(sql);
 
             preparedStatement.setString(1, type);
             preparedStatement.setString(2, newMessage);
             preparedStatement.setString(3, guildID);
-        } catch (SQLException throwables) {
-            LOGGER.error(throwables.getMessage());
-        }
+
+            preparedStatement.executeUpdate();
     }
 
     public void setMuteRole(Role mutedRole)
     {
         String SQL = "UPDATE guild SET muteRole = '" + mutedRole.getId() + "' WHERE guildID = '" + mutedRole.getGuild().getId() + "'";
+        try {
+            getConnection().createStatement().executeUpdate(SQL);
+        } catch (SQLException e) {
+            LOGGER.error(e.getMessage());
+        }
+    }
+
+    public void setAnnounceChannel(TextChannel channel, Guild guild) {
+        String SQL = "UPDATE guild SET announceChannelID = '" + channel.getId() + "' WHERE guildID = '" + guild.getId() + "'";
         try {
             getConnection().createStatement().executeUpdate(SQL);
         } catch (SQLException e) {
