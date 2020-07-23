@@ -441,6 +441,24 @@ public class SQL
         }
     }
 
+    public String getTextJLB(String guildID, String type)
+    {
+        try {
+            String SQL = "SELECT " + type + " FROM guild WHERE guildID = ?";
+
+            PreparedStatement preparedStatement = getConnection().prepareStatement(SQL);
+            preparedStatement.setString(1, guildID);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next())
+                return resultSet.getString(1);
+        } catch (SQLException sqlException)
+        {
+        }
+
+        return "";
+    }
+
     public void setTextJLB(String guildID, String newMessage, String type)
     {
         try {

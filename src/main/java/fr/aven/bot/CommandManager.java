@@ -85,7 +85,7 @@ public class CommandManager {
         return commands.get(name);
     }
 
-    void handleCommand(GuildMessageReceivedEvent event, boolean prefixDefaultUsed) {
+    public void handleCommand(GuildMessageReceivedEvent event, boolean prefixDefaultUsed) {
         //final String prefix = "&";
         String prefix = Constants.PREFIX;
         if (!prefixDefaultUsed)

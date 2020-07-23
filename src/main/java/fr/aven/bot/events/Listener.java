@@ -1,6 +1,9 @@
-package fr.aven.bot;
+package fr.aven.bot.events;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import fr.aven.bot.CommandManager;
+import fr.aven.bot.Constants;
+import fr.aven.bot.Main;
 import fr.aven.bot.commands.music.LyricsCommand;
 import fr.aven.bot.jda.JDAManager;
 import fr.aven.bot.music.GuildMusicManager;
@@ -31,7 +34,7 @@ public class Listener extends ListenerAdapter
         private static final Logger logger = LoggerFactory.getLogger(Listener.class);
         private TextChannel channel;
 
-        Listener(CommandManager manager)
+        public Listener(CommandManager manager)
         {
             this.manager = manager;
         }

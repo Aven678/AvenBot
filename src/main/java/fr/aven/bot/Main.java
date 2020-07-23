@@ -1,8 +1,10 @@
 package fr.aven.bot;
 
 import fr.aven.bot.database.SQL;
+import fr.aven.bot.events.Listener;
+import fr.aven.bot.events.MemberActivityEvent;
 import fr.aven.bot.jda.JDAManager;
-import fr.aven.bot.music.MusicReactionListener;
+import fr.aven.bot.events.MusicReactionListener;
 import fr.aven.bot.util.Configuration;
 import fr.aven.bot.util.KSoft;
 import net.dv8tion.jda.api.entities.Activity;
@@ -30,7 +32,7 @@ public class Main
         database = new SQL();
         commandManager = new CommandManager();
         listener = new Listener(commandManager);
-        JDAManager.getShardManager().addEventListener(listener, new MusicReactionListener());
+        JDAManager.getShardManager().addEventListener(listener, new MusicReactionListener(), new MemberActivityEvent());
         setActivity(Activity.ActivityType.WATCHING, configuration.getString("game",Constants.PREFIX+"help | justaven.xyz"));
 
         configuration.save();

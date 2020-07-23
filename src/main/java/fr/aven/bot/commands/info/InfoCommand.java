@@ -1,8 +1,6 @@
 package fr.aven.bot.commands.info;
 
 import fr.aven.bot.Constants;
-import fr.aven.bot.Listener;
-import fr.aven.bot.Main;
 import fr.aven.bot.commands.info.subcommands.BotCommand;
 import fr.aven.bot.commands.info.subcommands.InfoSubCommands;
 import fr.aven.bot.commands.info.subcommands.ServerCommand;
