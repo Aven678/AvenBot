@@ -83,6 +83,8 @@ public class TrackScheduler extends AudioEventAdapter
 
     public void nextTrack(AudioTrack track, boolean oldMusicRequested)
     {
+        lastMessageLyrics = null;
+
         if (oldMusicRequested && track != null)
         {
             AudioTrack track1 = oldTrack.makeClone();
