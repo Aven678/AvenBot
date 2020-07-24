@@ -14,6 +14,12 @@ public class NsfwPictureCommand implements ICommand
 {
     @Override
     public void handle(List<String> args, GuildMessageReceivedEvent event) {
+        if (!event.getChannel().isNSFW())
+        {
+            event.getChannel().sendMessage(Main.getDatabase().getTextFor("isNotNSFW", event.getGuild())).queue();
+            return;
+        }
+
         event.getChannel().sendMessage(new EmbedBuilder().setImage(Main.getkSoft().getNsfwPicture()).build()).queue();
     }
 
