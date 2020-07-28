@@ -83,7 +83,7 @@ public class AnnounceCommand implements ICommand
 
     @Override
     public String getInvoke() {
-        return null;
+        return "announce";
     }
 
     @Override
