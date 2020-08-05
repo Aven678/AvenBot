@@ -56,8 +56,8 @@ public class Listener extends ListenerAdapter
 
             for (Guild guild : JDAManager.getShardManager().getGuilds())
             {
-                addOwnerInDb(guild);
-                //checkInDB(guild);
+                //addOwnerInDb(guild);
+                checkInDB(guild);
             }
 
             //event.getJDA().getTextChannelById(704766888407990282L).sendMessage("tes blagues sont pas drôles meemerde").queue();
