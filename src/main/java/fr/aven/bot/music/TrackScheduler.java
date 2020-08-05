@@ -59,7 +59,8 @@ public class TrackScheduler extends AudioEventAdapter
         {
             queue.offer(track);
         } else {
-            player.setPaused(false);
+            if (player.isPaused()) player.setPaused(false);
+            player.setVolume(100);
         }
     }
 

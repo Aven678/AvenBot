@@ -12,6 +12,8 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.awt.*;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 public class BanCommand extends ModoCommands {
@@ -86,5 +88,10 @@ public class BanCommand extends ModoCommands {
     @Override
     public Type getType() {
         return super.getType();
+    }
+
+    @Override
+    public Collection<net.dv8tion.jda.api.Permission> requiredDiscordPermission() {
+        return Arrays.asList(net.dv8tion.jda.api.Permission.BAN_MEMBERS, net.dv8tion.jda.api.Permission.MESSAGE_EMBED_LINKS);
     }
 }

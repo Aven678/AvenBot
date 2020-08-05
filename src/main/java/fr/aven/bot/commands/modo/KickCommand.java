@@ -12,6 +12,8 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.awt.*;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -88,5 +90,10 @@ public class KickCommand extends ModoCommands {
     public String getInvoke()
     {
         return "kick";
+    }
+
+    @Override
+    public Collection<net.dv8tion.jda.api.Permission> requiredDiscordPermission() {
+        return Arrays.asList(net.dv8tion.jda.api.Permission.KICK_MEMBERS, net.dv8tion.jda.api.Permission.MESSAGE_EMBED_LINKS);
     }
 }

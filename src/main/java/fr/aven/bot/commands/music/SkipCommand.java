@@ -4,9 +4,12 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import fr.aven.bot.Constants;
 import fr.aven.bot.Main;
 import fr.aven.bot.music.PlayerManager;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 public class SkipCommand extends MusicCommands
@@ -38,5 +41,10 @@ public class SkipCommand extends MusicCommands
     public Permission getPermission()
     {
         return Permission.DJ;
+    }
+
+    @Override
+    public Collection<net.dv8tion.jda.api.Permission> requiredDiscordPermission() {
+        return Arrays.asList(net.dv8tion.jda.api.Permission.MESSAGE_WRITE, net.dv8tion.jda.api.Permission.MESSAGE_EMBED_LINKS);
     }
 }

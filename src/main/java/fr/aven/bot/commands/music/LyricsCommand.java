@@ -10,6 +10,7 @@ import fr.aven.bot.util.ICommand;
 import fr.aven.bot.util.KSoft;
 import fr.aven.bot.util.MessageTask;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.GenericEvent;
@@ -19,10 +20,8 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.explodingbush.ksoftapi.entities.Lyric;
 
 import java.awt.*;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class LyricsCommand implements ICommand
 {
@@ -184,5 +183,10 @@ public class LyricsCommand implements ICommand
     @Override
     public void onEvent(GenericEvent event) {
 
+    }
+
+    @Override
+    public Collection<net.dv8tion.jda.api.Permission> requiredDiscordPermission() {
+        return Arrays.asList(net.dv8tion.jda.api.Permission.MESSAGE_WRITE, net.dv8tion.jda.api.Permission.MESSAGE_EMBED_LINKS);
     }
 }

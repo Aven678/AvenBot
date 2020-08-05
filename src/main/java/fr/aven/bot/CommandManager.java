@@ -110,8 +110,10 @@ public class CommandManager {
             if (args.size() != 0 && args.get(0).equals("-help")) {
                 event.getChannel().sendMessage(new EmbedBuilder().addField(commands.get(invoke).getHelp()).build()).queue();
             } else {
-                event.getChannel().sendTyping().queue();
-                commands.get(invoke).handle(args, event);
+                if (event.getGuild().getSelfMember().hasPermission(commands.get(invoke).requiredDiscordPermission()))
+                    commands.get(invoke).handle(args, event);
+                else
+                    event.getChannel().sendMessage(Main.getDatabase().getTextFor("missingPermissions", event.getGuild())).queue();
             }
         }
     }

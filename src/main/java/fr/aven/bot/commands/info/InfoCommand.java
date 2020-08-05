@@ -7,11 +7,13 @@ import fr.aven.bot.commands.info.subcommands.ServerCommand;
 import fr.aven.bot.commands.info.subcommands.UserCommand;
 import fr.aven.bot.util.ICommand;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 public class InfoCommand extends InfoCommands {
@@ -106,5 +108,10 @@ public class InfoCommand extends InfoCommands {
     @Override
     public Type getType() {
         return super.getType();
+    }
+
+    @Override
+    public Collection<net.dv8tion.jda.api.Permission> requiredDiscordPermission() {
+        return null;
     }
 }

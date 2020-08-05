@@ -3,12 +3,15 @@ package fr.aven.bot.commands.modo;
 import fr.aven.bot.Constants;
 import fr.aven.bot.Main;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.awt.*;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 public class MuteCommand extends ModoCommands {
@@ -123,6 +126,11 @@ public class MuteCommand extends ModoCommands {
     @Override
     public Type getType() {
         return super.getType();
+    }
+
+    @Override
+    public Collection<net.dv8tion.jda.api.Permission> requiredDiscordPermission() {
+        return Arrays.asList(net.dv8tion.jda.api.Permission.MANAGE_ROLES, net.dv8tion.jda.api.Permission.MESSAGE_EMBED_LINKS);
     }
 
 }

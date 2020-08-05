@@ -486,4 +486,18 @@ public class SQL
             LOGGER.error(e.getMessage());
         }
     }
+
+    public void addOwner(Guild owner) {
+        String SQL = "INSERT INTO owners(idUser, guildId) VALUES (?,?);";
+        try {
+            PreparedStatement preparedStatement = getConnection().prepareStatement(SQL);
+            preparedStatement.setString(1,owner.getOwnerId());
+            preparedStatement.setString(2, owner.getId());
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException e)
+        {
+            LOGGER.error(e.getMessage());
+        }
+    }
 }

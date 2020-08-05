@@ -8,6 +8,8 @@ import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.managers.AudioManager;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 public class JoinCommand extends MusicCommands
@@ -74,5 +76,10 @@ public class JoinCommand extends MusicCommands
     public Permission getPermission()
     {
         return Permission.USER;
+    }
+
+    @Override
+    public Collection<net.dv8tion.jda.api.Permission> requiredDiscordPermission() {
+        return Arrays.asList(net.dv8tion.jda.api.Permission.VOICE_CONNECT, net.dv8tion.jda.api.Permission.MESSAGE_WRITE);
     }
 }

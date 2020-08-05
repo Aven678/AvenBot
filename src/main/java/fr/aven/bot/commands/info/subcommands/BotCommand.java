@@ -93,4 +93,5 @@ public class BotCommand extends InfoSubCommands {
     public Type getType() {
         return super.getType();
     }
+
 }

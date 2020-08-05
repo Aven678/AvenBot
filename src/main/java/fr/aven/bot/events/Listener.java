@@ -52,12 +52,20 @@ public class Listener extends ListenerAdapter
             logger.info(String.format("Logged in as %#s", event.getJDA().getSelfUser()));
             channel = event.getJDA().getTextChannelById(412908508590243840L);
 
+
+
             for (Guild guild : JDAManager.getShardManager().getGuilds())
             {
-                checkInDB(guild);
+                addOwnerInDb(guild);
+                //checkInDB(guild);
             }
 
             //event.getJDA().getTextChannelById(704766888407990282L).sendMessage("tes blagues sont pas drôles meemerde").queue();
+        }
+
+        private void addOwnerInDb(Guild guild)
+        {
+            Main.getDatabase().addOwner(guild);
         }
 
     private void checkInDB(Guild guild) {
@@ -83,7 +91,9 @@ public class Listener extends ListenerAdapter
 
             if (rw.startsWith(prefix) || rw.startsWith(Constants.PREFIX))
             {
-                manager.handleCommand(event, rw.startsWith(Constants.PREFIX));
+                new Thread(() -> {
+                    manager.handleCommand(event, rw.startsWith(Constants.PREFIX));
+                }).start();
                 //event.getMessage().delete().queue();
             } else {
                 if (!checkMusic(event)) checkLyric(event);
