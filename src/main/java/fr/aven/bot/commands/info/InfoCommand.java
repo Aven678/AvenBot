@@ -112,6 +112,6 @@ public class InfoCommand extends InfoCommands {
 
     @Override
     public Collection<net.dv8tion.jda.api.Permission> requiredDiscordPermission() {
-        return null;
+        return Arrays.asList(net.dv8tion.jda.api.Permission.MESSAGE_WRITE, net.dv8tion.jda.api.Permission.MESSAGE_EMBED_LINKS);
     }
 }

@@ -27,6 +27,7 @@ import fr.aven.bot.commands.util.search.subcommands.SearchSubCommands;*/
 import fr.aven.bot.commands.util.InviteCommand;
 import fr.aven.bot.util.ICommand;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -113,6 +114,8 @@ public class CommandManager {
                 if (event.getGuild().getSelfMember().hasPermission(commands.get(invoke).requiredDiscordPermission()))
                     commands.get(invoke).handle(args, event);
                 else
+                    if (event.getGuild().getSelfMember().hasPermission(Permission.ADMINISTRATOR))
+                        commands.get(invoke).handle(args, event);
                     event.getChannel().sendMessage(Main.getDatabase().getTextFor("missingPermissions", event.getGuild())).queue();
             }
         }
