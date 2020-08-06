@@ -15,6 +15,7 @@ import fr.aven.bot.commands.admin.announce.AnnounceCommand;
 import fr.aven.bot.commands.fun.CatCommand;
 import fr.aven.bot.commands.fun.DogCommand;
 import fr.aven.bot.commands.fun.NsfwPictureCommand;
+import fr.aven.bot.commands.fun.SayCommand;
 import fr.aven.bot.commands.info.HelpCommand;
 import fr.aven.bot.commands.info.InfoCommand;
 import fr.aven.bot.commands.modo.BanCommand;
@@ -61,7 +62,7 @@ public class CommandManager {
         addCommands(new InviteCommand());
         //addCommands(new LmgtfyCommand(), new HelpCommand(this), new SearchCommand());
         //FUN COMMANDS
-        addCommands(new CatCommand(), new DogCommand(), new NsfwPictureCommand());
+        addCommands(new CatCommand(), new DogCommand(), new NsfwPictureCommand(), new SayCommand());
     }
 
     private void addCommand(ICommand command) {
