@@ -24,6 +24,7 @@ public class SayCommand implements ICommand
 
         String request = event.getMessage().getContentRaw().replaceFirst(Constants.PREFIX + getInvoke(), "");
 
+        if (event.getGuild().getSelfMember().hasPermission(event.getChannel(), net.dv8tion.jda.api.Permission.MESSAGE_MANAGE)) event.getMessage().delete().queue();
         event.getChannel().sendMessage(new EmbedBuilder().setDescription(request).setColor(event.getMember().getColor()).build()).queue();
 
     }
