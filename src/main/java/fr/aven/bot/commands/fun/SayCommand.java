@@ -22,7 +22,7 @@ public class SayCommand implements ICommand
             return;
         }
 
-        String request = String.join(" ", args);
+        String request = event.getMessage().getContentRaw().replaceFirst(Constants.PREFIX + getInvoke(), "");
 
         event.getChannel().sendMessage(new EmbedBuilder().setDescription(request).setColor(event.getMember().getColor()).build()).queue();
 
@@ -40,7 +40,7 @@ public class SayCommand implements ICommand
 
     @Override
     public MessageEmbed.Field getHelp() {
-        return new MessageEmbed.Field("Repeats your text", "Example: `" + Constants.PREFIX + getInvoke() + "` i love AvenBot", false);
+        return new MessageEmbed.Field("Repeats your text", "Example: `" + Constants.PREFIX + getInvoke() + " i love AvenBot`", false);
     }
 
     @Override
