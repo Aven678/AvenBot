@@ -117,7 +117,8 @@ public class CommandManager {
                 else
                     if (event.getGuild().getSelfMember().hasPermission(Permission.ADMINISTRATOR))
                         commands.get(invoke).handle(args, event);
-                    event.getChannel().sendMessage(Main.getDatabase().getTextFor("missingPermissions", event.getGuild())).queue();
+                    else
+                        event.getChannel().sendMessage(Main.getDatabase().getTextFor("missingPermissions", event.getGuild())).queue();
             }
         }
     }
