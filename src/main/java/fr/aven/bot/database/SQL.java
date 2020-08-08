@@ -498,32 +498,32 @@ public class SQL
         {
             numCase++;
             User mod = guild.getJDA().getUserById(ban.getModeratorID());
-            builder.addField("Case "+numCase+": Moderator: "+mod.getName()+"#"+mod.getDiscriminator(), "Resaon: "+ban.getReason()+"\nDate: "+ban.getDateTime(), false);
+            builder.addField("Case "+numCase+": Ban", "Moderator: "+mod.getName()+"#"+mod.getDiscriminator() + "\n Resaon: "+ban.getReason()+"\nDate: "+ban.getDateTime(), false);
         }
 
         for (Kick kick : listKicks(user.getId(), guild.getId()))
         {
             numCase++;
             User mod = guild.getJDA().getUserById(kick.getModeratorID());
-            builder.addField("Case "+numCase+": Moderator: "+mod.getName()+"#"+mod.getDiscriminator(), "Reason: "+kick.getReason()+"\nDate: "+kick.getDateTime(), false);
+            builder.addField("Case "+numCase+": Kick", "Moderator: "+mod.getName()+"#"+mod.getDiscriminator() + "\n Reason: "+kick.getReason()+"\nDate: "+kick.getDateTime(), false);
         }
 
         for (Mute mute : listMutes(user.getId(), guild.getId()))
         {
             numCase++;
             User mod = guild.getJDA().getUserById(mute.getModeratorID());
-            builder.addField("Case "+numCase+": Moderator: "+mod.getName()+"#"+mod.getDiscriminator(), "Reason: "+mute.getReason()+"\nDate: "+mute.getDateTime(), false);
+            builder.addField("Case "+numCase+": Mute", "Moderator: "+mod.getName()+"#"+mod.getDiscriminator() +"\nReason: "+mute.getReason()+"\nDate: "+mute.getDateTime(), false);
         }
 
         for (Warn warn : listWarns(user.getId(), guild.getId()))
         {
             numCase++;;
             User mod = guild.getJDA().getUserById(warn.getModeratorID());
-            builder.addField("Case "+numCase+": Moderator: "+mod.getName()+"#"+mod.getDiscriminator(), "Reason: "+warn.getReason()+"\nDate: "+warn.getDateTime(), false);
+            builder.addField("Case "+numCase+": Warn", "Moderator: "+mod.getName()+"#"+mod.getDiscriminator() +"\nReason: "+warn.getReason()+"\nDate: "+warn.getDateTime(), false);
         }
 
         builder.setAuthor("ModLogs : "+user.getName()+"#"+user.getDiscriminator(), "https://justaven.xyz", user.getAvatarUrl());
-        builder.setFooter("AvenBot ©");
+        builder.setFooter("AvenBot by Aven#1000");
 
         return builder;
     }
