@@ -494,6 +494,7 @@ public class SQL
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next())
             {
+                System.out.println(resultSet.toString());
                 mutesList.add(new Mute(idUser, guildID, resultSet.getString("moderatorID"), resultSet.getString("reason"), resultSet.getString("dateTime")));
             }
 
