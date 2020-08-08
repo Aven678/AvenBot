@@ -412,7 +412,7 @@ public class SQL
     public List<Warn> listWarns(String idUser, String guildID)
     {
         List<Warn> warnList = new ArrayList<>();
-        String SQL = "SELECT * FROM warns WHERE idUser=? AND guildID=?";
+        String SQL = "SELECT * FROM warns WHERE idUser=? AND guildId=?";
 
         try {
             PreparedStatement preparedStatement = getConnection().prepareStatement(SQL);
@@ -436,7 +436,7 @@ public class SQL
     public List<Ban> listBan(String idUser, String guildID)
     {
         List<Ban> banList = new ArrayList<>();
-        String SQL = "SELECT * FROM bans WHERE idUser=? AND guildID=?";
+        String SQL = "SELECT * FROM bans WHERE idUser=? AND guildId=?";
 
         try {
             PreparedStatement preparedStatement = getConnection().prepareStatement(SQL);
@@ -460,7 +460,7 @@ public class SQL
     public List<Kick> listKicks(String idUser, String guildID)
     {
         List<Kick> kickList = new ArrayList<>();
-        String SQL = "SELECT * FROM kicks WHERE idUser=? AND guildID=?";
+        String SQL = "SELECT * FROM kicks WHERE idUser=? AND guildId=?";
 
         try {
             PreparedStatement preparedStatement = getConnection().prepareStatement(SQL);
@@ -484,7 +484,7 @@ public class SQL
     public List<Mute> listMutes(String idUser, String guildID)
     {
         List<Mute> mutesList = new ArrayList<>();
-        String SQL = "SELECT * FROM mutes WHERE idUser=? AND guildID=?";
+        String SQL = "SELECT * FROM mutes WHERE idUser=? AND guildId=?";
 
         try {
             PreparedStatement preparedStatement = getConnection().prepareStatement(SQL);
@@ -492,7 +492,6 @@ public class SQL
             preparedStatement.setString(2, idUser);
 
             ResultSet resultSet = preparedStatement.executeQuery();
-            System.out.println(resultSet.toString());
             while (resultSet.next())
             {
                 mutesList.add(new Mute(idUser, guildID, resultSet.getString("moderatorID"), resultSet.getString("reason"), resultSet.getString("dateTime")));
