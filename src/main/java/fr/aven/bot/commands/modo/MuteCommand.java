@@ -65,7 +65,7 @@ public class MuteCommand extends ModoCommands {
                 reasonBuilder.append(args.get(i));
             }
             reason = reasonBuilder.toString();
-            Main.getDatabase().addMute(message.getMentionedUsers().get(0).getId(), event.getGuild().getId(), message.getTimeCreated().format(DateTimeFormatter.RFC_1123_DATE_TIME), reason);
+            Main.getDatabase().addMute(message.getMentionedUsers().get(0).getId(), event.getGuild().getId(), message.getAuthor().getId(), message.getTimeCreated().format(DateTimeFormatter.RFC_1123_DATE_TIME), reason);
             guild.addRoleToMember(mutedMember, mutedRole).reason(reason).queue();
 
             MODOLOGGER.info(event.getAuthor().getName() + " muted " + message.getMentionedMembers().get(0).getEffectiveName() + " for: " + reason);

@@ -18,10 +18,7 @@ import fr.aven.bot.commands.fun.NsfwPictureCommand;
 import fr.aven.bot.commands.fun.SayCommand;
 import fr.aven.bot.commands.info.HelpCommand;
 import fr.aven.bot.commands.info.InfoCommand;
-import fr.aven.bot.commands.modo.BanCommand;
-import fr.aven.bot.commands.modo.KickCommand;
-import fr.aven.bot.commands.modo.MuteCommand;
-import fr.aven.bot.commands.modo.UnmuteCommand;
+import fr.aven.bot.commands.modo.*;
 import fr.aven.bot.commands.music.*;
 /*import fr.aven.bot.commands.util.LmgtfyCommand;
 import fr.aven.bot.commands.util.search.subcommands.SearchSubCommands;*/
@@ -55,7 +52,7 @@ public class CommandManager {
         //MUSIC COMMANDS
         addCommands(new JoinCommand(), new LyricsCommand(), new PlayCommand(), new PauseCommand(), new QueueCommand(), new SkipCommand(), new ShuffleCommand(), new StopCommand(), new VolumeCommand());
         //MODO COMMANDS
-        addCommands(new BanCommand(), new KickCommand(), new MuteCommand(), new UnmuteCommand());
+        addCommands(new BanCommand(), new KickCommand(), new ModlogsCommand(), new MuteCommand(), new UnmuteCommand());
         //INFO COMMANDS
         addCommands(new HelpCommand(), new InfoCommand());
         //UTIL COMMANDS

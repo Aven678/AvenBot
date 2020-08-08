@@ -1,6 +1,6 @@
 package fr.aven.bot.entity;
 
-public class Warn
+public class Kick
 {
     private final String idUser;
     private final String guildID;
@@ -8,7 +8,7 @@ public class Warn
     private final String reason;
     private final String dateTime;
 
-    public Warn(String idUser, String guildID, String moderatorID, String reason, String dateTime) {
+    public Kick(String idUser, String guildID, String moderatorID, String reason, String dateTime) {
         this.idUser = idUser;
         this.guildID = guildID;
         this.moderatorID = moderatorID;

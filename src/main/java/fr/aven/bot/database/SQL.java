@@ -2,8 +2,12 @@ package fr.aven.bot.database;
 
 import fr.aven.bot.Constants;
 import fr.aven.bot.Main;
+import fr.aven.bot.entity.Ban;
+import fr.aven.bot.entity.Kick;
+import fr.aven.bot.entity.Mute;
 import fr.aven.bot.entity.Warn;
 import fr.aven.bot.util.ICommand;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -367,15 +371,16 @@ public class SQL
         }
     }
 
-    private void addMod(String table, String idUser, String guildID, String dateTime, String reason)
+    private void addMod(String table, String idUser, String guildID, String moderatorID, String dateTime, String reason)
     {
-        String SQL = "INSERT INTO "+table+"(idUser, guildId, dateTime, reason) VALUES (?,?,?,?);";
+        String SQL = "INSERT INTO "+table+"(idUser, guildId, moderatorID, dateTime, reason) VALUES (?,?,?,?,?);";
         try {
             PreparedStatement preparedStatement = getConnection().prepareStatement(SQL);
             preparedStatement.setString(1,idUser);
             preparedStatement.setString(2, guildID);
-            preparedStatement.setString(3, dateTime);
-            preparedStatement.setString(4, reason);
+            preparedStatement.setString(3, moderatorID);
+            preparedStatement.setString(4, dateTime);
+            preparedStatement.setString(5, reason);
 
             preparedStatement.executeUpdate();
         } catch (SQLException e)
@@ -384,24 +389,24 @@ public class SQL
         }
     }
 
-    public void addKick(String idUser, String guildID, String dateTime, String reason)
+    public void addKick(String idUser, String guildID, String moderatorID, String dateTime, String reason)
     {
-        addMod("kicks", idUser, guildID, dateTime, reason);
+        addMod("kicks", idUser, guildID, moderatorID, dateTime, reason);
     }
 
-    public void addBan(String idUser, String guildID, String dateTime, String reason)
+    public void addBan(String idUser, String guildID, String moderatorID, String dateTime, String reason)
     {
-        addMod("bans", idUser, guildID, dateTime, reason);
+        addMod("bans", idUser, guildID, moderatorID, dateTime, reason);
     }
 
-    public void addMute(String idUser, String guildID, String dateTime, String reason)
+    public void addMute(String idUser, String guildID, String moderatorID, String dateTime, String reason)
     {
-        addMod("mutes", idUser, guildID, dateTime, reason);
+        addMod("mutes", idUser, guildID, moderatorID, dateTime, reason);
     }
 
     public void addWarn(Warn warn)
     {
-        addMod("warns", warn.getIdUser(), warn.getGuildID(), warn.getDateTime(), warn.getReason());
+        addMod("warns", warn.getIdUser(), warn.getGuildID(), warn.getModeratorID(), warn.getDateTime(), warn.getReason());
     }
 
     public List<Warn> listWarns(String idUser, String guildID)
@@ -417,7 +422,7 @@ public class SQL
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next())
             {
-                warnList.add(new Warn(idUser, guildID, resultSet.getString("reason"), resultSet.getString("dateTime")));
+                warnList.add(new Warn(idUser, guildID, resultSet.getString("moderatorID"), resultSet.getString("reason"), resultSet.getString("dateTime")));
             }
 
         } catch (SQLException e)
@@ -426,6 +431,117 @@ public class SQL
         }
 
         return warnList;
+    }
+
+    public List<Ban> listBan(String idUser, String guildID)
+    {
+        List<Ban> banList = new ArrayList<>();
+        String SQL = "SELECT * FROM bans WHERE idUser=? AND guildID=?";
+
+        try {
+            PreparedStatement preparedStatement = getConnection().prepareStatement(SQL);
+            preparedStatement.setString(1, idUser);
+            preparedStatement.setString(2, idUser);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next())
+            {
+                banList.add(new Ban(idUser, guildID, resultSet.getString("moderatorID"), resultSet.getString("reason"), resultSet.getString("dateTime")));
+            }
+
+        } catch (SQLException e)
+        {
+            LOGGER.error(e.getMessage());
+        }
+
+        return banList;
+    }
+
+    public List<Kick> listKicks(String idUser, String guildID)
+    {
+        List<Kick> kickList = new ArrayList<>();
+        String SQL = "SELECT * FROM kicks WHERE idUser=? AND guildID=?";
+
+        try {
+            PreparedStatement preparedStatement = getConnection().prepareStatement(SQL);
+            preparedStatement.setString(1, idUser);
+            preparedStatement.setString(2, idUser);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next())
+            {
+                kickList.add(new Kick(idUser, guildID, resultSet.getString("moderatorID"), resultSet.getString("reason"), resultSet.getString("dateTime")));
+            }
+
+        } catch (SQLException e)
+        {
+            LOGGER.error(e.getMessage());
+        }
+
+        return kickList;
+    }
+
+    public List<Mute> listMutes(String idUser, String guildID)
+    {
+        List<Mute> mutesList = new ArrayList<>();
+        String SQL = "SELECT * FROM mutes WHERE idUser=? AND guildID=?";
+
+        try {
+            PreparedStatement preparedStatement = getConnection().prepareStatement(SQL);
+            preparedStatement.setString(1, idUser);
+            preparedStatement.setString(2, idUser);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next())
+            {
+                mutesList.add(new Mute(idUser, guildID, resultSet.getString("moderatorID"), resultSet.getString("reason"), resultSet.getString("dateTime")));
+            }
+
+        } catch (SQLException e)
+        {
+            LOGGER.error(e.getMessage());
+        }
+
+        return mutesList;
+    }
+
+    public EmbedBuilder getModLogs(User user, Guild guild)
+    {
+        EmbedBuilder builder = new EmbedBuilder();
+        int numCase = 0;
+
+        for (Ban ban : listBan(user.getId(), guild.getId()))
+        {
+            numCase++;
+            User mod = guild.getJDA().getUserById(ban.getModeratorID());
+            builder.addField("Case "+numCase+": Moderator: "+mod.getName()+"#"+mod.getDiscriminator(), "Resaon: "+ban.getReason()+"\nDate: "+ban.getDateTime(), false);
+        }
+
+        for (Kick kick : listKicks(user.getId(), guild.getId()))
+        {
+            numCase++;
+            User mod = guild.getJDA().getUserById(kick.getModeratorID());
+            builder.addField("Case "+numCase+": Moderator: "+mod.getName()+"#"+mod.getDiscriminator(), "Reason: "+kick.getReason()+"\nDate: "+kick.getDateTime(), false);
+        }
+
+        for (Mute mute : listMutes(user.getId(), guild.getId()))
+        {
+            numCase++;
+            User mod = guild.getJDA().getUserById(mute.getModeratorID());
+            builder.addField("Case "+numCase+": Moderator: "+mod.getName()+"#"+mod.getDiscriminator(), "Reason: "+mute.getReason()+"\nDate: "+mute.getDateTime(), false);
+        }
+
+        for (Warn warn : listWarns(user.getId(), guild.getId()))
+        {
+            numCase++;;
+            User mod = guild.getJDA().getUserById(warn.getModeratorID());
+            builder.addField("Case "+numCase+": Moderator: "+mod.getName()+"#"+mod.getDiscriminator(), "Reason: "+warn.getReason()+"\nDate: "+warn.getDateTime(), false);
+        }
+
+        builder.setAuthor("ModLogs : "+user.getName()+"#"+user.getDiscriminator(), "https://justaven.xyz", user.getAvatarUrl());
+        builder.setFooter("AvenBot ©");
+
+        return builder;
     }
 
     public void setDjRole(Role role)

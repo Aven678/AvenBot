@@ -58,7 +58,7 @@ public class BanCommand extends ModoCommands {
             }
 
             reason = reasonBuilder.toString();
-            Main.getDatabase().addBan(message.getMentionedUsers().get(0).getId(), event.getGuild().getId(), message.getTimeCreated().format(DateTimeFormatter.RFC_1123_DATE_TIME), reason);
+            Main.getDatabase().addBan(message.getMentionedUsers().get(0).getId(), event.getGuild().getId(), message.getAuthor().getId(), message.getTimeCreated().format(DateTimeFormatter.RFC_1123_DATE_TIME), reason);
             event.getGuild().ban(message.getMentionedMembers().get(0), 0, reason).queue();
 
             channel.sendMessage(Main.getDatabase().getTextFor("ban.confirm", event.getGuild())).queue();

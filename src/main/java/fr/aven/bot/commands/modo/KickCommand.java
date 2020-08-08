@@ -62,7 +62,7 @@ public class KickCommand extends ModoCommands {
             }
 
             reason = reasonBuilder.toString();
-            Main.getDatabase().addKick(message.getMentionedUsers().get(0).getId(), event.getGuild().getId(), message.getTimeCreated().format(DateTimeFormatter.RFC_1123_DATE_TIME), reason);
+            Main.getDatabase().addKick(message.getMentionedUsers().get(0).getId(), event.getGuild().getId(), message.getAuthor().getId(), message.getTimeCreated().format(DateTimeFormatter.RFC_1123_DATE_TIME), reason);
             event.getGuild().kick(message.getMentionedMembers().get(0), reason).queue();
 
             channel.sendMessage(Main.getDatabase().getTextFor("kick.confirm", event.getGuild())).queue();
