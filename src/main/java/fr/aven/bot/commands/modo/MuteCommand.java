@@ -87,11 +87,7 @@ public class MuteCommand extends ModoCommands {
 
                             for (TextChannel channel : guild.getTextChannels()) {
 
-                                channel.createPermissionOverride(mutedRole)
-                                        .setAllow(
-                                                net.dv8tion.jda.api.Permission.VIEW_CHANNEL,
-                                                net.dv8tion.jda.api.Permission.MESSAGE_READ
-                                        ).setDeny(
+                                channel.createPermissionOverride(mutedRole).setDeny(
                                         net.dv8tion.jda.api.Permission.MESSAGE_WRITE,
                                         net.dv8tion.jda.api.Permission.MESSAGE_ADD_REACTION,
                                         net.dv8tion.jda.api.Permission.ADMINISTRATOR
