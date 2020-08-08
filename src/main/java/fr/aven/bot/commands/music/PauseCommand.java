@@ -35,12 +35,14 @@ public class PauseCommand implements ICommand
 
         if (!musicManager.player.isPaused()) {
             manager.getGuildMusicManager(event.getGuild(), event.getChannel()).player.setPaused(true);
+            manager.getGuildMusicManager(event.getGuild(), event.getChannel()).scheduler.editMessage();
 
             event.getChannel().sendMessage(new EmbedBuilder()
                     .setTitle(Main.getDatabase().getTextFor("success", event.getGuild()))
                     .setDescription(Main.getDatabase().getTextFor("pause.playerPaused", event.getGuild()))
                     .build()).queue();
         } else {
+            manager.getGuildMusicManager(event.getGuild(), event.getChannel()).scheduler.editMessage();
             manager.getGuildMusicManager(event.getGuild(), event.getChannel()).player.setPaused(false);
 
             event.getChannel().sendMessage(new EmbedBuilder()

@@ -50,6 +50,8 @@ public class MusicReactionListener extends ListenerAdapter
                 } else {
                     manager.player.setPaused(true);
                 }
+
+                manager.scheduler.editMessage();
                 break;
             case "⏭️": //skip
                 if (Main.getDatabase().checkPermission(event.getGuild(), event.getUser(), ICommand.Permission.DJ)) {
