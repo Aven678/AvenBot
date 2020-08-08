@@ -412,14 +412,10 @@ public class SQL
     public List<Warn> listWarns(String idUser, String guildID)
     {
         List<Warn> warnList = new ArrayList<>();
-        String SQL = "SELECT * FROM warns WHERE idUser=? AND guildId=?";
+        String SQL = "SELECT * FROM warns WHERE idUser='"+idUser+"' AND guildId='"+guildID+"'";
 
         try {
-            PreparedStatement preparedStatement = getConnection().prepareStatement(SQL);
-            preparedStatement.setString(1, idUser);
-            preparedStatement.setString(2, idUser);
-
-            ResultSet resultSet = preparedStatement.executeQuery();
+            ResultSet resultSet = getConnection().createStatement().executeQuery(SQL);
             while (resultSet.next())
             {
                 warnList.add(new Warn(idUser, guildID, resultSet.getString("moderatorID"), resultSet.getString("reason"), resultSet.getString("dateTime")));
@@ -436,14 +432,10 @@ public class SQL
     public List<Ban> listBan(String idUser, String guildID)
     {
         List<Ban> banList = new ArrayList<>();
-        String SQL = "SELECT * FROM bans WHERE idUser=? AND guildId=?";
+        String SQL = "SELECT * FROM bans WHERE idUser='"+idUser+"' AND guildId='"+guildID+"'";
 
         try {
-            PreparedStatement preparedStatement = getConnection().prepareStatement(SQL);
-            preparedStatement.setString(1, idUser);
-            preparedStatement.setString(2, idUser);
-
-            ResultSet resultSet = preparedStatement.executeQuery();
+            ResultSet resultSet = getConnection().createStatement().executeQuery(SQL);
             while (resultSet.next())
             {
                 banList.add(new Ban(idUser, guildID, resultSet.getString("moderatorID"), resultSet.getString("reason"), resultSet.getString("dateTime")));
@@ -460,14 +452,10 @@ public class SQL
     public List<Kick> listKicks(String idUser, String guildID)
     {
         List<Kick> kickList = new ArrayList<>();
-        String SQL = "SELECT * FROM kicks WHERE idUser=? AND guildId=?";
+        String SQL = "SELECT * FROM kicks WHERE idUser='"+idUser+"' AND guildId='"+guildID+"'";
 
         try {
-            PreparedStatement preparedStatement = getConnection().prepareStatement(SQL);
-            preparedStatement.setString(1, idUser);
-            preparedStatement.setString(2, idUser);
-
-            ResultSet resultSet = preparedStatement.executeQuery();
+            ResultSet resultSet = getConnection().createStatement().executeQuery(SQL);
             while (resultSet.next())
             {
                 kickList.add(new Kick(idUser, guildID, resultSet.getString("moderatorID"), resultSet.getString("reason"), resultSet.getString("dateTime")));
@@ -484,14 +472,10 @@ public class SQL
     public List<Mute> listMutes(String idUser, String guildID)
     {
         List<Mute> mutesList = new ArrayList<>();
-        String SQL = "SELECT * FROM mutes WHERE idUser=? AND guildId=?";
+        String SQL = "SELECT * FROM mutes WHERE idUser='"+idUser+"' AND guildId='"+guildID+"'";
 
         try {
-            PreparedStatement preparedStatement = getConnection().prepareStatement(SQL);
-            preparedStatement.setString(1, idUser);
-            preparedStatement.setString(2, idUser);
-
-            ResultSet resultSet = preparedStatement.executeQuery();
+            ResultSet resultSet = getConnection().createStatement().executeQuery(SQL);
             while (resultSet.next())
             {
                 mutesList.add(new Mute(idUser, guildID, resultSet.getString("moderatorID"), resultSet.getString("reason"), resultSet.getString("dateTime")));
