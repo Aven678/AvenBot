@@ -59,7 +59,7 @@ public class MusicReactionListener extends ListenerAdapter
                 break;
             case "\uD83D\uDD01": //repeat
                 manager.scheduler.repeat = true;
-                manager.scheduler.editMessageForRepeat();
+                manager.scheduler.editMessage();
                 break;
             case "\uD83D\uDCDC": //lyrics
                 if (!manager.scheduler.lyricsAlwaysRequested){

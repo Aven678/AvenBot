@@ -174,13 +174,13 @@ public class TrackScheduler extends AudioEventAdapter
         });
     }
 
-    public void editMessageForRepeat()
+    public void editMessage()
     {
         AudioTrack track = PlayerManager.getInstance().getGuildMusicManager(guild, channel).player.getPlayingTrack();
         User userRequest = guild.getJDA().getUserById(usersRequest.get(track));
 
         EmbedBuilder builder = new EmbedBuilder();
-        builder.setAuthor(Main.getDatabase().getTextFor("music.progress", guild), track.getInfo().uri, guild.getJDA().getSelfUser().getAvatarUrl());
+        builder.setAuthor(Main.getDatabase().getTextFor(player.isPaused() ? "player.paused" : "music.progress", guild), track.getInfo().uri, guild.getJDA().getSelfUser().getAvatarUrl());
         builder.setColor(guild.getMember(userRequest).getColor());
         String finalField = "";
 
