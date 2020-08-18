@@ -38,7 +38,7 @@ public class StonksCommand implements ICommand
 
     @Override
     public String getInvoke() {
-        return null;
+        return "stonks";
     }
 
     @Override
