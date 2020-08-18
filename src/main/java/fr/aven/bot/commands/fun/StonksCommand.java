@@ -9,6 +9,7 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -53,6 +54,6 @@ public class StonksCommand implements ICommand
 
     @Override
     public Collection<net.dv8tion.jda.api.Permission> requiredDiscordPermission() {
-        return null;
+        return Arrays.asList(net.dv8tion.jda.api.Permission.MESSAGE_WRITE, net.dv8tion.jda.api.Permission.MESSAGE_EMBED_LINKS);
     }
 }
