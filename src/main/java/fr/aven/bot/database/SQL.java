@@ -6,6 +6,8 @@ import fr.aven.bot.entity.Ban;
 import fr.aven.bot.entity.Kick;
 import fr.aven.bot.entity.Mute;
 import fr.aven.bot.entity.Warn;
+import fr.aven.bot.music.GuildMusicManager;
+import fr.aven.bot.music.PlayerManager;
 import fr.aven.bot.util.ICommand;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
@@ -203,11 +205,13 @@ public class SQL
         return false;
     }
 
-    public boolean isDJ (Member member)
+    public boolean isDJ (Member member, TextChannel channel)
     {
         if (member.isOwner()) return true;
         if (member.hasPermission(net.dv8tion.jda.api.Permission.ADMINISTRATOR)) return true;
         if (Main.owner == (member.getUser().getIdLong())) { return true; }
+        GuildMusicManager musicManager = PlayerManager.getInstance().getGuildMusicManager(member.getGuild(), channel);
+        if (member.getUser().getIdLong() == musicManager.scheduler.usersRequest.get(musicManager.player.getPlayingTrack())) return true;
 
         Object object = queryId(member.getGuild(), "djRole");
         if(object == null) return false;
@@ -234,7 +238,7 @@ public class SQL
         return false;
     }
 
-    public boolean checkPermission(Guild guild, User user, ICommand.Permission permission)
+    public boolean checkPermission(Guild guild, User user, ICommand.Permission permission, TextChannel channel)
     {
         List adminRoles = rolesInDatabase("mod", guild);
         List modRoles = rolesInDatabase("admin", guild);
@@ -242,7 +246,7 @@ public class SQL
 
         switch (permission) {
             case ADMIN: return isAdmin(member, adminRoles);
-            case DJ: return isDJ(member);
+            case DJ: return isDJ(member, channel);
             case MODO: return isModerator(member, modRoles, adminRoles);
             case USER: return true;
             case OWNER: return isBotOwner(member);

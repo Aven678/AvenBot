@@ -103,7 +103,7 @@ public class MuteCommand extends ModoCommands {
 
     @Override
     public MessageEmbed.Field getHelp() {
-        return new MessageEmbed.Field("Mute a member\n", "Usage: `" + Constants.PREFIX + getInvoke() + " <@user> [reason]`", false);
+        return new MessageEmbed.Field("Mute a member", "Usage: `" + Constants.PREFIX + getInvoke() + " <@user> [reason]`", false);
     }
 
     @Override

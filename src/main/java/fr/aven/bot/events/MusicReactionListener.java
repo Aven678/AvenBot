@@ -6,13 +6,17 @@ import fr.aven.bot.commands.music.LyricsCommand;
 import fr.aven.bot.music.GuildMusicManager;
 import fr.aven.bot.music.PlayerManager;
 import fr.aven.bot.util.ICommand;
+import fr.aven.bot.util.MessageTask;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import javax.annotation.Nonnull;
+import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Timer;
 
 public class MusicReactionListener extends ListenerAdapter
 {
@@ -39,10 +43,11 @@ public class MusicReactionListener extends ListenerAdapter
         switch (event.getReactionEmote().getName())
         {
             case "⏮️": //old
-                if (Main.getDatabase().checkPermission(event.getGuild(), event.getUser(), ICommand.Permission.DJ)) {
+                if (Main.getDatabase().checkPermission(event.getGuild(), event.getUser(), ICommand.Permission.DJ, event.getChannel())) {
                     manager.player.stopTrack();
                     manager.scheduler.nextTrack(manager.scheduler.oldTrack, true);
-                }
+                } else
+                    missingPermission(event);
                 break;
             case "⏯️": //playpause
                 if (manager.player.isPaused()) {
@@ -54,10 +59,11 @@ public class MusicReactionListener extends ListenerAdapter
                 manager.scheduler.editMessage();
                 break;
             case "⏭️": //skip
-                if (Main.getDatabase().checkPermission(event.getGuild(), event.getUser(), ICommand.Permission.DJ)) {
+                if (Main.getDatabase().checkPermission(event.getGuild(), event.getUser(), ICommand.Permission.DJ, event.getChannel())) {
                     manager.player.stopTrack();
                     manager.scheduler.nextTrack(track, false);
-                }
+                } else
+                    missingPermission(event);
                 break;
             case "\uD83D\uDD01": //repeat
                 manager.scheduler.repeat = true;
@@ -70,11 +76,12 @@ public class MusicReactionListener extends ListenerAdapter
                 }
                 break;
             case "❌": //stop
-                if (Main.getDatabase().checkPermission(event.getGuild(), event.getUser(), ICommand.Permission.DJ)) {
+                if (Main.getDatabase().checkPermission(event.getGuild(), event.getUser(), ICommand.Permission.DJ, event.getChannel())) {
                     manager.player.stopTrack();
                     manager.scheduler.purgeQueue();
                     manager.scheduler.nextTrack(track, false);
-                }
+                } else
+                    missingPermission(event);
                 break;
         }
 
@@ -85,5 +92,14 @@ public class MusicReactionListener extends ListenerAdapter
         try {
             event.getReaction().removeReaction(event.getUser()).queue();
         } catch (Exception ignored) {}
+    }
+
+    public void missingPermission(GuildMessageReactionAddEvent event)
+    {
+        event.getChannel().sendMessage(new EmbedBuilder().setColor(Color.RED).setTitle("Error")
+                .setDescription("You don't have the permission to execute this command.")
+                .setFooter("Command executed by " + event.getUser().getAsTag()).build())
+                .queue(msg -> new Timer().schedule(new MessageTask(msg), 5000));
+        return;
     }
 }

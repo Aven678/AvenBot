@@ -52,7 +52,7 @@ public class CommandManager {
         //MUSIC COMMANDS
         addCommands(new JoinCommand(), new LyricsCommand(), new PlayCommand(), new PauseCommand(), new QueueCommand(), new SkipCommand(), new ShuffleCommand(), new StopCommand(), new VolumeCommand());
         //MODO COMMANDS
-        addCommands(new BanCommand(), new KickCommand(), new ModlogsCommand(), new MuteCommand(), new UnmuteCommand());
+        addCommands(new BanCommand(), new KickCommand(), new ModlogsCommand(), new MuteCommand(), new UnbanCommand(), new UnmuteCommand());
         //INFO COMMANDS
         addCommands(new HelpCommand(), new InfoCommand());
         //UTIL COMMANDS
@@ -97,26 +97,27 @@ public class CommandManager {
                 "(?i)" + Pattern.quote(prefix), "").split("\\s+");
         final String invoke = split[0].toLowerCase();
 
-        if (commands.containsKey(invoke)) {
-            if (!Main.getDatabase().checkPermission(event.getGuild(), event.getAuthor(), commands.get(invoke).getPermission()))
-            {
-                event.getChannel().sendMessage(new EmbedBuilder().setColor(Color.RED).setTitle("Error").setDescription("You don't have the permission to execute this command.").setFooter("Command executed by "+event.getAuthor().getAsTag()).build()).queue();
-                return;
-            }
+        if (!commands.containsKey(invoke)) return;
 
-            final List<String> args = Arrays.asList(split).subList(1, split.length);
+        if (!Main.getDatabase().checkPermission(event.getGuild(), event.getAuthor(), commands.get(invoke).getPermission(), event.getChannel())) {
+            event.getChannel().sendMessage(new EmbedBuilder().setColor(Color.RED).setTitle("Error").setDescription("You don't have the permission to execute this command.").setFooter("Command executed by " + event.getAuthor().getAsTag()).build()).queue();
+            return;
+        }
 
-            if (args.size() != 0 && args.get(0).equals("-help")) {
-                event.getChannel().sendMessage(new EmbedBuilder().addField(commands.get(invoke).getHelp()).build()).queue();
-            } else {
-                if (event.getGuild().getSelfMember().hasPermission(commands.get(invoke).requiredDiscordPermission()))
-                    commands.get(invoke).handle(args, event);
-                else
-                    if (event.getGuild().getSelfMember().hasPermission(Permission.ADMINISTRATOR))
-                        commands.get(invoke).handle(args, event);
-                    else
+        final List<String> args = Arrays.asList(split).subList(1, split.length);
+
+        if (args.size() != 0 && args.get(0).equals("-help")) {
+            event.getChannel().sendMessage(new EmbedBuilder().addField(commands.get(invoke).getHelp()).build()).queue();
+        } else {
+            if (event.getGuild().getSelfMember().hasPermission(event.getChannel(), Permission.MESSAGE_WRITE)) {
+                if (!event.getGuild().getSelfMember().hasPermission(commands.get(invoke).requiredDiscordPermission()))
+                    if (!event.getGuild().getSelfMember().hasPermission(Permission.ADMINISTRATOR)) {
                         event.getChannel().sendMessage(Main.getDatabase().getTextFor("missingPermissions", event.getGuild())).queue();
+                        return;
+                    }
             }
+
+            commands.get(invoke).handle(args, event);
         }
     }
 
