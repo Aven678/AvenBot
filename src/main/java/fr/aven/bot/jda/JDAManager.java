@@ -19,7 +19,7 @@ public class JDAManager
         try
         {
             return DefaultShardManagerBuilder.createDefault(Main.getConfiguration().getString("token", "Insert your token here."))
-                    //.setMemberCachePolicy(MemberCachePolicy.ALL)
+                    .setMemberCachePolicy(MemberCachePolicy.ALL)
                     .setShardsTotal(1)
                     .enableIntents(EnumSet.allOf(GatewayIntent.class))
                     .build();
