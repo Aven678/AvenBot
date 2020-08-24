@@ -1,5 +1,6 @@
 package fr.aven.bot.jda;
 
+import com.sedmelluq.discord.lavaplayer.jdaudp.NativeAudioSendFactory;
 import fr.aven.bot.Main;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
@@ -20,8 +21,8 @@ public class JDAManager
         {
             return DefaultShardManagerBuilder.createDefault(Main.getConfiguration().getString("token", "Insert your token here."))
                     .setMemberCachePolicy(MemberCachePolicy.ALL)
-                    .setShardsTotal(1)
                     .enableIntents(EnumSet.allOf(GatewayIntent.class))
+                    .setAudioSendFactory(new NativeAudioSendFactory())
                     .build();
         } catch (Exception e)
         {
