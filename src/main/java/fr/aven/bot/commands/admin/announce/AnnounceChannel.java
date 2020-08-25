@@ -19,6 +19,12 @@ public class AnnounceChannel implements ICommand
 {
     @Override
     public void handle(List<String> args, GuildMessageReceivedEvent event) {
+        if (args.isEmpty())
+        {
+            event.getChannel().sendMessage(new EmbedBuilder().addField(getHelp()).build()).queue();
+            return;
+        }
+
         if (event.getMessage().getMentionedChannels().size() == 0)
         {
             event.getChannel().sendMessage(new EmbedBuilder().addField(getHelp()).build()).queue();
