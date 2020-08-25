@@ -6,6 +6,7 @@ import fr.aven.bot.util.ICommand;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
@@ -24,6 +25,20 @@ public class AnnounceCommand implements ICommand
         {
             event.getChannel().sendMessage(new EmbedBuilder().addField(getHelp()).build()).queue();
             return;
+        }
+
+        if (args.get(0).equalsIgnoreCase("channel"))
+        {
+            if (event.getMessage().getMentionedChannels().size() == 0)
+            {
+                event.getChannel().sendMessage(new EmbedBuilder().addField(getHelp()).build()).queue();
+                return;
+            }
+
+            TextChannel channel = event.getMessage().getMentionedChannels().get(0);
+            Main.getDatabase().setAnnounceChannel(channel, event.getGuild());
+
+            event.getMessage().addReaction("\uD83D\uDC4C").queue();
         }
 
         if (!possibility.contains(args.get(0)))
@@ -94,6 +109,7 @@ public class AnnounceCommand implements ICommand
     @Override
     public MessageEmbed.Field getHelp() {
         return new MessageEmbed.Field("Set the announce message for member activity (join, leave, ban).", "Usage: `" + Constants.PREFIX + getInvoke() + "` <ban/join/leave> <remove/your message> " +
+                "\nFor set the channel: use "+ Constants.PREFIX + getInvoke() + " channel #channel" +
                 "\nWarning:" +
                 "\n❱ To tag the member: use <member>"+
                 "\n❱ To add the server name: use <guild>"+
