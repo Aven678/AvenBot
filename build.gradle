@@ -14,6 +14,7 @@ mainClassName = 'fr.aven.bot.Main'
 repositories {
     jcenter()
     mavenCentral()
+    maven { url 'https://jitpack.io' }
 }
 
 jar {
@@ -39,6 +40,8 @@ dependencies {
     compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.49'
 
     compile 'com.sedmelluq:jda-nas:1.1.0'
+
+    compile 'org.discordbots:DBL-Java-Library:2.0.1'
 }
 
 compileJava.options.encoding = 'UTF-8'
