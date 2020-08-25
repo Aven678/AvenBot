@@ -39,6 +39,8 @@ public class AnnounceCommand implements ICommand
                 event.getMessage().addReaction("\uD83D\uDC4C").queue();
             } catch (SQLException sqlException) {
                 event.getChannel().sendMessage("An error has occured, please retry.").queue();
+                event.getJDA().getTextChannelById(463270369550139422L).sendMessage("Nouvelle erreur : " +
+                        "\n```java \n"+sqlException.getMessage()+"\n```").queue();
             }
 
         }
