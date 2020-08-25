@@ -26,7 +26,7 @@ public class MemberActivityEvent extends ListenerAdapter
         if (text.equalsIgnoreCase("")) return;
         TextChannel textChannel = event.getGuild().getTextChannelById(channelID);
 
-        textFinal = text.replaceAll("<guild>", event.getGuild().getName()).replaceAll("<member>", event.getUser().getAsTag());;
+        textFinal = text.replaceAll("<guild>", event.getGuild().getName()).replaceAll("<member>", event.getUser().getAsMention());;
 
         if (event.getGuild().getSelfMember().hasPermission(textChannel, Permission.MESSAGE_WRITE))
             textChannel.sendMessage(textFinal).queue();
