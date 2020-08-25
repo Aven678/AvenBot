@@ -562,14 +562,11 @@ public class SQL
 
     public void setTextJLB(String guildID, String newMessage, String type) throws SQLException
     {
-            String sql = "UPDATE guild SET ? = ? WHERE guildID=?";
-            PreparedStatement preparedStatement = getConnection().prepareStatement(sql);
+        String sql = "UPDATE guild SET '"+type+"' = '"+newMessage+"' WHERE 'guildID' = '"+guildID+"'";
+        Statement statement1 = getConnection().createStatement();
 
-            preparedStatement.setString(1, type);
-            preparedStatement.setString(2, newMessage);
-            preparedStatement.setString(3, guildID);
-
-            preparedStatement.executeUpdate();
+        statement1.executeUpdate(sql);
+        statement1.close();
     }
 
     public void setMuteRole(Role mutedRole)
