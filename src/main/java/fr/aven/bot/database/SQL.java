@@ -78,11 +78,6 @@ public class SQL
         return connection;
     }
 
-    public Statement getStatement()
-    {
-        return statement;
-    }
-
     public void checkCmd(ICommand command) {
         String sql = "SELECT * FROM cmd_list WHERE cmdname=?";
 
