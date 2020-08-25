@@ -52,8 +52,23 @@ public class AnnounceCommand implements ICommand
             builder.append(args.get(i));
         }
 
+        String type = "";
+
+        switch (args.get(0))
+        {
+            case "join":
+                type = "textJoin";
+                break;
+            case "leave":
+                type = "textLeave";
+                break;
+            case "ban":
+                type = "textBan";
+                break;
+        }
+
         try {
-            Main.getDatabase().setTextJLB(event.getGuild().getId(), builder.toString(), args.get(0));
+            Main.getDatabase().setTextJLB(event.getGuild().getId(), builder.toString(), type);
 
             String text = builder.toString().replaceAll("<guild>", event.getGuild().getName()).replaceAll("<member>", event.getAuthor().getAsMention());
 

@@ -78,6 +78,11 @@ public class SQL
         return connection;
     }
 
+    public Statement getStatement()
+    {
+        return statement;
+    }
+
     public void checkCmd(ICommand command) {
         String sql = "SELECT * FROM cmd_list WHERE cmdname=?";
 
@@ -557,12 +562,14 @@ public class SQL
 
     public void setTextJLB(String guildID, String newMessage, String type) throws SQLException
     {
-        String sql = "UPDATE guild SET " +
-                type+" = \""+newMessage+"\" WHERE guildID = "+guildID;
-        Statement statement1 = getConnection().createStatement();
+        String sql = "UPDATE guild SET ? = ? WHERE guildID=?";
+        PreparedStatement preparedStatement = getConnection().prepareStatement(sql);
 
-        statement1.executeUpdate(sql);
-        statement1.close();
+        preparedStatement.setString(1, type);
+        preparedStatement.setString(2, newMessage);
+        preparedStatement.setString(3, guildID);
+
+        preparedStatement.executeUpdate();
     }
 
     public void setMuteRole(Role mutedRole)
