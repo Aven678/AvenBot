@@ -558,7 +558,7 @@ public class SQL
     public void setTextJLB(String guildID, String newMessage, String type) throws SQLException
     {
         String sql = "UPDATE guild SET " +
-                "'"+type+"' = \""+newMessage+"\" WHERE 'guildID' = '"+guildID+"'";
+                type+" = \""+newMessage+"\" WHERE guildID = "+guildID;
         Statement statement1 = getConnection().createStatement();
 
         statement1.executeUpdate(sql);
