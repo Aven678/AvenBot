@@ -39,6 +39,8 @@ public class AnnounceCommand implements ICommand
             Main.getDatabase().setAnnounceChannel(channel, event.getGuild());
 
             event.getMessage().addReaction("\uD83D\uDC4C").queue();
+
+            return;
         }
 
         if (!possibility.contains(args.get(0)))
