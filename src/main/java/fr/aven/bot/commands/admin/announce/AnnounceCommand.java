@@ -87,8 +87,8 @@ public class AnnounceCommand implements ICommand
         try {
             Main.getDatabase().setTextJLB(event.getGuild().getId(), builder.toString(), type);
 
-            String text = builder.toString().replaceAll("[guild]", event.getGuild().getName()).replaceAll("[member]", event.getAuthor().getAsMention())
-                    .replaceAll("[number]", String.valueOf(event.getGuild().getMembers().size()));
+            String text = builder.toString().replaceAll("<guild>", event.getGuild().getName()).replaceAll("<member>", event.getAuthor().getAsMention())
+                    .replaceAll("<number>", String.valueOf(event.getGuild().getMembers().size()));
 
             event.getChannel().sendMessage("Example : \n"+ text).queue();
         } catch (SQLException sqlException) {
@@ -114,9 +114,9 @@ public class AnnounceCommand implements ICommand
         return new MessageEmbed.Field("Set the announce message for member activity (join, leave, ban).", "Usage: `" + Constants.PREFIX + getInvoke() + "` <ban/join/leave> <remove/your message> " +
                 "\nFor set the channel: use "+ Constants.PREFIX + getInvoke() + " channel #channel" +
                 "\nWarning:" +
-                "\n❱ To tag the member: use [member]"+
-                "\n❱ To add the server name: use [guild]"+
-                "\n❱ To add the total number of members: use [number]"+
+                "\n❱ To tag the member: use <member>"+
+                "\n❱ To add the server name: use <guild>"+
+                "\n❱ To add the total number of members: use <number>"+
                 "\nExample: "+Constants.PREFIX + getInvoke()+ " ban Oops, <member> has been banned in <guild> server !", false);
     }
 

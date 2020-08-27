@@ -26,7 +26,7 @@ public class MemberActivityEvent extends ListenerAdapter
         if (text.equalsIgnoreCase("")) return;
         TextChannel textChannel = event.getGuild().getTextChannelById(channelID);
 
-        textFinal = text.replaceAll("[guild]", event.getGuild().getName()).replaceAll("[member]", event.getUser().getAsMention()).replaceAll("[number]", String.valueOf(event.getGuild().getMembers().size()));
+        textFinal = text.replaceAll("<guild>", event.getGuild().getName()).replaceAll("<member>", event.getUser().getAsMention()).replaceAll("<number>", String.valueOf(event.getGuild().getMembers().size()));
 
         if (event.getGuild().getSelfMember().hasPermission(textChannel, Permission.MESSAGE_WRITE))
             textChannel.sendMessage(textFinal).queue();
@@ -57,7 +57,7 @@ public class MemberActivityEvent extends ListenerAdapter
             }
         });*/
 
-        textFinal = text.replaceAll("[guild]", event.getGuild().getName()).replaceAll("[member]", event.getUser().getAsTag()).replaceAll("[number]", String.valueOf(event.getGuild().getMembers().size()));
+        textFinal = text.replaceAll("<guild>", event.getGuild().getName()).replaceAll("<member>", event.getUser().getAsTag()).replaceAll("<number>", String.valueOf(event.getGuild().getMembers().size()));
 
         TextChannel textChannel = event.getGuild().getTextChannelById(channelID);
         if (event.getGuild().getSelfMember().hasPermission(textChannel, Permission.MESSAGE_WRITE))
@@ -76,7 +76,7 @@ public class MemberActivityEvent extends ListenerAdapter
         if (channelID.equalsIgnoreCase("")) return;
         if (text.equalsIgnoreCase("")) return;
 
-        textFinal = text.replaceAll("[guild]", event.getGuild().getName()).replaceAll("[member]", event.getUser().getAsTag()).replaceAll("[number]", String.valueOf(event.getGuild().getMembers().size()));
+        textFinal = text.replaceAll("<guild>", event.getGuild().getName()).replaceAll("<member>", event.getUser().getAsTag()).replaceAll("<number>", String.valueOf(event.getGuild().getMembers().size()));
 
         TextChannel textChannel = event.getGuild().getTextChannelById(channelID);
         if (event.getGuild().getSelfMember().hasPermission(textChannel, Permission.MESSAGE_WRITE))
