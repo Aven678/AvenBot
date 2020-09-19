@@ -15,10 +15,12 @@ import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
+import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.explodingbush.ksoftapi.entities.Lyric;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -124,7 +126,12 @@ public class Listener extends ListenerAdapter
             status("join", event.getGuild());
         }
 
-        private void status(String nameEvent, Guild guild)
+    @Override
+    public void onGuildLeave(@NotNull GuildLeaveEvent event) {
+        status("leave", event.getGuild());
+    }
+
+    private void status(String nameEvent, Guild guild)
         {
             String owner = guild.getOwner().getUser().getAsTag();
 
