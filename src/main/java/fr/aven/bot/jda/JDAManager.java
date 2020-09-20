@@ -22,7 +22,7 @@ public class JDAManager
             System.out.println(Main.getConfiguration().getString("token", "Insert your token here."));
             return DefaultShardManagerBuilder.createDefault(Main.getConfiguration().getString("token", "Insert your token here."))
                     .setMemberCachePolicy(MemberCachePolicy.ALL)
-                    //.enableIntents(EnumSet.allOf(GatewayIntent.class))
+                    .enableIntents(EnumSet.allOf(GatewayIntent.class))
                     .setAudioSendFactory(new NativeAudioSendFactory())
                     .build();
         } catch (Exception e)
