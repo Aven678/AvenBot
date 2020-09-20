@@ -30,7 +30,9 @@ public class WarnConfig implements ICommand
 
     @Override
     public MessageEmbed.Field getHelp() {
-        return new MessageEmbed.Field("Change the configuration for warns.", "Usage : `"+ Constants.PREFIX+ getInvoke()+"`", false);
+        return new MessageEmbed.Field("Config automod warns.", "Usage : `"+ Constants.PREFIX+ getInvoke()+" <limit/type/disable>`"
+                +"\nLimit = Automod enabled when the user has (limit) warns." +
+                "\nType: kick/ban", false);
     }
 
     @Override

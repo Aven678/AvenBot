@@ -131,49 +131,46 @@ public class Listener extends ListenerAdapter
         status("leave", event.getGuild());
     }
 
-    private void status(String nameEvent, Guild guild)
-        {
-            String owner = guild.getOwner().getUser().getAsTag();
+    private void status(String nameEvent, Guild guild) {
+        String owner = guild.getOwner().getUser().getAsTag();
 
-            switch (nameEvent)
-            {
-                case "join":
-                    channel.sendMessage("New guild joined : "+guild.getName()+" ("+guild.getMembers().size()+" members) owned by "+owner).queue();
-                    break;
+        switch (nameEvent) {
+            case "join":
+                channel.sendMessage("New guild joined : " + guild.getName() + " (" + guild.getMembers().size() + " members) owned by " + owner).queue();
+                break;
 
-                case "leave":
-                    channel.sendMessage("Guild leave : "+guild.getName()).queue();
-                    break;
-            }
-
-
+            case "leave":
+                channel.sendMessage("Guild leave : " + guild.getName()).queue();
+                break;
         }
 
-        private boolean checkMusic(GuildMessageReceivedEvent e)
-        {
-            GuildMusicManager musicManager = PlayerManager.getInstance().getGuildMusicManager(e.getGuild(), e.getChannel());
-            Map<Integer, AudioTrack> search = PlayerManager.getInstance().getGuildMusicManager(e.getGuild(), e.getChannel()).scheduler.search;
-            if (search.size() == 0) return false;
-            if (e.getMessage().getContentDisplay().equalsIgnoreCase("cancel")) {
-                search.clear();
-                return true;
-            }
 
-            try {
-                int choix = Integer.parseInt(e.getMessage().getContentDisplay());
-                if (!search.containsKey(choix)) return false;
-                PlayerManager.getInstance().loadAndPlay(e.getMessage(), search.get(choix).getInfo().uri);
-                search.clear();
-                if (musicManager.scheduler.lastMessageSearch != null) e.getChannel().deleteMessageById(musicManager.scheduler.lastMessageSearch.getId()).queue();
-                e.getMessage().delete().queue();
-                return true;
+    }
 
-            } catch (NumberFormatException nfe)
-            {
-            }
-
-            return false;
+    private boolean checkMusic(GuildMessageReceivedEvent e) {
+        GuildMusicManager musicManager = PlayerManager.getInstance().getGuildMusicManager(e.getGuild(), e.getChannel());
+        Map<Integer, AudioTrack> search = PlayerManager.getInstance().getGuildMusicManager(e.getGuild(), e.getChannel()).scheduler.search;
+        if (search.size() == 0) return false;
+        if (e.getMessage().getContentDisplay().equalsIgnoreCase("cancel")) {
+            search.clear();
+            return true;
         }
+
+        try {
+            int choix = Integer.parseInt(e.getMessage().getContentDisplay());
+            if (!search.containsKey(choix)) return false;
+            PlayerManager.getInstance().loadAndPlay(e.getMessage(), search.get(choix).getInfo().uri);
+            search.clear();
+            if (musicManager.scheduler.lastMessageSearch != null)
+                e.getChannel().deleteMessageById(musicManager.scheduler.lastMessageSearch.getId()).queue();
+            e.getMessage().delete().queue();
+            return true;
+
+        } catch (NumberFormatException nfe) {
+        }
+
+        return false;
+    }
 
     private void checkLyric(GuildMessageReceivedEvent e)
     {

@@ -366,6 +366,34 @@ public class SQL
         }
     }
 
+    public Integer getWarnLimit(Guild guild) {
+        String SQL = "SELECT warnsLimit FROM guild WHERE guildID = '" + guild.getId() + "'";
+        try {
+            ResultSet result = getConnection().createStatement().executeQuery(SQL);
+            if (result.next()) {
+                return result.getInt(1);
+            }
+        } catch (SQLException e) {
+            LOGGER.error(e.getMessage());
+        }
+
+        return 0;
+    }
+
+    public String getWarnLimitType(Guild guild) {
+        String SQL = "SELECT warnsLimitType FROM guild WHERE guildID = '" + guild.getId() + "'";
+        try {
+            ResultSet result = getConnection().createStatement().executeQuery(SQL);
+            if (result.next()) {
+                return result.getString(1);
+            }
+        } catch (SQLException e) {
+            LOGGER.error(e.getMessage());
+        }
+
+        return null;
+    }
+
     public void setPrefix(Guild guild, String prefix) {
         String SQL = "UPDATE guild SET prefix = '" + prefix + "' WHERE guildID = '" + guild.getId() + "'";
         try {
@@ -598,6 +626,18 @@ public class SQL
         } catch (SQLException e)
         {
             LOGGER.error(e.getMessage());
+        }
+    }
+
+    public void clearWarns(Guild guild, User user)
+    {
+        try {
+            String SQL = "DELETE FROM warns WHERE idUser = \""+user.getId()+" \" AND guildId = \""+guild.getId()+"\"";
+            Statement statement1 = getConnection().createStatement();
+
+            statement1.executeUpdate(SQL);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
     }
 }

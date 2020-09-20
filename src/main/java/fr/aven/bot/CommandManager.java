@@ -6,10 +6,7 @@ import fr.aven.bot.commands.util.search.SearchCommand;
 import fr.aven.bot.commands.util.search.subcommands.CountryCommand;
 import fr.aven.bot.commands.util.search.subcommands.ImdbCommand;*/
 //import fr.aven.bot.commands.info.InfoCommand;
-import fr.aven.bot.commands.admin.ClearConfigCommand;
-import fr.aven.bot.commands.admin.DJRoleCommand;
-import fr.aven.bot.commands.admin.LangCommand;
-import fr.aven.bot.commands.admin.Prefix;
+import fr.aven.bot.commands.admin.*;
 import fr.aven.bot.commands.admin.announce.AnnounceCommand;
 import fr.aven.bot.commands.fun.*;
 import fr.aven.bot.commands.info.HelpCommand;
@@ -43,12 +40,12 @@ public class CommandManager {
         COMMANDLOGGER.info("Loading commands");
 
         //ADMIN COMMANDS
-        addCommands(new AnnounceCommand(), new ClearConfigCommand(), new DJRoleCommand(), new LangCommand(), new Prefix());
+        addCommands(new AnnounceCommand(), new ClearConfigCommand(), new DJRoleCommand(), new LangCommand(), new Prefix(), new WarnConfig());
 
         //MUSIC COMMANDS
         addCommands(new JoinCommand(), new LyricsCommand(), new PlayCommand(), new PauseCommand(), new QueueCommand(), new SkipCommand(), new ShuffleCommand(), new StopCommand(), new VolumeCommand());
         //MODO COMMANDS
-        addCommands(new BanCommand(), new KickCommand(), new ModlogsCommand(), new MuteCommand(), new UnbanCommand(), new UnmuteCommand());
+        addCommands(new BanCommand(), new KickCommand(), new ModlogsCommand(), new MuteCommand(), new UnbanCommand(), new UnmuteCommand(), new WarnCommand(), new WarnsCommand());
         //INFO COMMANDS
         addCommands(new HelpCommand(), new InfoCommand());
         //UTIL COMMANDS
