@@ -171,6 +171,11 @@ public class SQL
         }
     }
 
+    public void insertModRole(Guild guild, Role role)
+    {
+        String SQL = "INSERT INTO "
+    }
+
     public String getTextFor(String request, Guild guild)
     {
         try {

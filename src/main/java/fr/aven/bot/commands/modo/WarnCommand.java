@@ -69,7 +69,7 @@ public class WarnCommand implements ICommand
                         event.getGuild().ban(user, 7, "Automod (Warn)").queue();
                         break;
                     case "kick":
-                        event.getGuild().kick(event.getGuild().getMember(user), "Automod (warn)").queue();
+                        event.getGuild().retrieveMember(user).queue(member -> event.getGuild().kick(member, "Automod (warn)").queue());
                         break;
                 }
     }

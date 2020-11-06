@@ -8,6 +8,7 @@ import fr.aven.bot.commands.music.LyricsCommand;
 import fr.aven.bot.jda.JDAManager;
 import fr.aven.bot.music.GuildMusicManager;
 import fr.aven.bot.music.PlayerManager;
+import fr.aven.bot.util.DBList;
 import fr.aven.bot.util.ICommand;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
@@ -53,6 +54,8 @@ public class Listener extends ListenerAdapter
         {
             logger.info(String.format("Logged in as %#s", event.getJDA().getSelfUser()));
             channel = event.getJDA().getTextChannelById(412908508590243840L);
+
+            Main.getDbl().createDBL(event.getJDA().getSelfUser().getId(), Main.getConfiguration().getString("dblToken", "default"));
 
 
 
@@ -144,7 +147,7 @@ public class Listener extends ListenerAdapter
                 break;
         }
 
-
+        Main.getDbl().setServerNumber();
     }
 
     private boolean checkMusic(GuildMessageReceivedEvent e) {

@@ -6,6 +6,7 @@ import fr.aven.bot.events.MemberActivityEvent;
 import fr.aven.bot.jda.JDAManager;
 import fr.aven.bot.events.MusicReactionListener;
 import fr.aven.bot.util.Configuration;
+import fr.aven.bot.util.DBList;
 import fr.aven.bot.util.KSoft;
 import net.dv8tion.jda.api.entities.Activity;
 import org.slf4j.Logger;
@@ -23,6 +24,8 @@ public class Main
     private static Listener listener;
     private static SQL database;
     private static KSoft kSoft;
+
+    private static DBList dbl = new DBList();
 
     public static void main(String... args) throws Exception
     {
@@ -49,6 +52,10 @@ public class Main
 
     public static KSoft getkSoft() {
         return kSoft;
+    }
+
+    public static DBList getDbl() {
+        return dbl;
     }
 
     public static void setActivity(Activity.ActivityType type, String text) {
