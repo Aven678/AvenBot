@@ -43,6 +43,8 @@ dependencies {
     compile 'com.sedmelluq:jda-nas:1.1.0'
 
     compile 'org.discordbots:DBL-Java-Library:2.0.1'
+
+    compile 'se.michaelthelin.spotify:spotify-web-api-java:6.4.1'
 }
 
 compileJava.options.encoding = 'UTF-8'

@@ -9,6 +9,8 @@ public class DBList
 
     public void createDBL(String botId, String token)
     {
+        if (token.equalsIgnoreCase("default")) return;
+
         this.dblAPI = new DiscordBotListAPI.Builder()
             .token(token)
             .botId(botId)
@@ -22,6 +24,8 @@ public class DBList
 
     public void setServerNumber()
     {
-        getDblAPI().setStats(JDAManager.getShardManager().getGuilds().size());
+        if (dblAPI == null) {
+            getDblAPI().setStats(JDAManager.getShardManager().getGuilds().size());
+        }
     }
 }
