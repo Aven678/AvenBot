@@ -37,13 +37,7 @@ public class BotCommand extends InfoSubCommands {
         botBuilder.setAuthor(event.getJDA().getSelfUser().getName(), "https://www.avenbot.xyz", event.getJDA().getSelfUser().getAvatarUrl());
         botBuilder.setThumbnail(event.getJDA().getSelfUser().getAvatarUrl());
         botBuilder.addField("Bot Informations: ",
-                "Creators ❱ " + event.
-                        getJDA().
-                        getUserById(Constants.OWNER).
-                        getAsMention() + " with the help of " + event.
-                        getJDA().
-                        getUserById(Constants.COOWNER).
-                        getAsMention() +
+                "Creators ❱ " + event.getJDA().getUserById(Constants.OWNER).getAsMention()+
                         "\nUptime ❱ " + getTimeDiff(new Date(), Main.lastRestart) +
                         "\nVersion ❱ " + Constants.VERSION +
                         "\nLibraries used ❱ " + "JDA, OMDB, restcountries.eu",
