@@ -29,7 +29,7 @@ public class UserCommand extends InfoSubCommands {
         if (!message.getMentionedUsers().isEmpty() || args.size() < 3) {
             User target = message.getMentionedUsers().isEmpty() ? ( args.get(0).isEmpty() ? message.getAuthor() : event.getJDA().getUserById(args.get(0))) : message.getMentionedUsers().get(0);
             _target = target;
-            String status;
+            /*String status;
 
             switch (guild.getMember(target).getOnlineStatus()) {
                 case ONLINE:
@@ -48,6 +48,7 @@ public class UserCommand extends InfoSubCommands {
                     status = "Offline";
                     break;
             }
+
 
             //GAME
             String activityTypeS;
@@ -80,7 +81,7 @@ public class UserCommand extends InfoSubCommands {
                 }
             } else {
                 finalActivity = "Activity ❱ Playing Nothing";
-            }
+            }*/
 
             //NICKNAME
             String nickname = guild.getMember(target).getNickname();
@@ -102,11 +103,11 @@ public class UserCommand extends InfoSubCommands {
                             "\nAccount Type ❱ " + (target.isBot() ? "Bot" : "Human"),
                     true);
             Emote rpEmote = event.getJDA().getGuildById("361564193226489861").getEmoteById("735623685922095184");
-            userBuilder.addField("Status: ",
+            /*userBuilder.addField("Status: ",
                     "Status ❱ " + status +
                             "\n" + finalActivity +
                             (guild.getMember(target).getActivities() == null || guild.getMember(target).getActivities().isEmpty() ? "" : (guild.getMember(target).getActivities().get(0).isRich() ? "\n*Click the " + rpEmote.getAsMention() + " emote for more informations*" : "")),
-                    false);
+                    false);*/
             userBuilder.addField("Dates: ",
                     "Creation Date ❱ " + target.getTimeCreated().format(Constants.FORMATTER) +
                             "\nJoin Date ❱ " + guild.getMember(target).getTimeJoined().format(Constants.FORMATTER),
