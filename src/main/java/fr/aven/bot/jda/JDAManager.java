@@ -23,7 +23,8 @@ public class JDAManager
         {
             System.out.println(Main.getConfiguration().getString("token", "Insert your token here."));
             return DefaultShardManagerBuilder.createDefault(Main.getConfiguration().getString("token", "Insert your token here."))
-                    .setMemberCachePolicy(MemberCachePolicy.ALL)
+                    //.setMemberCachePolicy(MemberCachePolicy.ALL)
+                    .setChunkingFilter(ChunkingFilter.ALL)
                     .enableIntents(GatewayIntent.DIRECT_MESSAGE_REACTIONS,
                             GatewayIntent.DIRECT_MESSAGE_TYPING,
                             GatewayIntent.DIRECT_MESSAGES,
