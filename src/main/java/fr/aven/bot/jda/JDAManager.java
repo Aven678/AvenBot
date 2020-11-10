@@ -19,24 +19,22 @@ public class JDAManager
 
     private static ShardManager createShardManager()
     {
-        Collection<GatewayIntent> collection = Arrays.asList(GatewayIntent.DIRECT_MESSAGE_REACTIONS,
-                GatewayIntent.DIRECT_MESSAGE_TYPING,
-                GatewayIntent.DIRECT_MESSAGES,
-                GatewayIntent.GUILD_BANS,
-                GatewayIntent.GUILD_EMOJIS,
-                GatewayIntent.GUILD_INVITES,
-                GatewayIntent.GUILD_MEMBERS,
-                GatewayIntent.GUILD_MESSAGE_REACTIONS,
-                GatewayIntent.GUILD_MESSAGE_TYPING,
-                GatewayIntent.GUILD_MESSAGES,
-                GatewayIntent.GUILD_VOICE_STATES);
-
         try
         {
             System.out.println(Main.getConfiguration().getString("token", "Insert your token here."));
             return DefaultShardManagerBuilder.createDefault(Main.getConfiguration().getString("token", "Insert your token here."))
                     .setMemberCachePolicy(MemberCachePolicy.ALL)
-                    .enableIntents(collection)
+                    .enableIntents(GatewayIntent.DIRECT_MESSAGE_REACTIONS,
+                            GatewayIntent.DIRECT_MESSAGE_TYPING,
+                            GatewayIntent.DIRECT_MESSAGES,
+                            GatewayIntent.GUILD_BANS,
+                            GatewayIntent.GUILD_EMOJIS,
+                            GatewayIntent.GUILD_INVITES,
+                            GatewayIntent.GUILD_MEMBERS,
+                            GatewayIntent.GUILD_MESSAGE_REACTIONS,
+                            GatewayIntent.GUILD_MESSAGE_TYPING,
+                            GatewayIntent.GUILD_MESSAGES,
+                            GatewayIntent.GUILD_VOICE_STATES)
                     .setAudioSendFactory(new NativeAudioSendFactory())
                     .build();
         } catch (Exception e)
