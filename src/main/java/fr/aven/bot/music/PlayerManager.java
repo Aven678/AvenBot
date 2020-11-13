@@ -137,6 +137,7 @@ public class PlayerManager
                         });
 
                         play(musicManager, audioTrack, message.getTextChannel());
+                        musicManager.scheduler.usersRequest.put(audioTrack, message.getAuthor().getIdLong());
                     } else {
 
                         EmbedBuilder builder = new EmbedBuilder();

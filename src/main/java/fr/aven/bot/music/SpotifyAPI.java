@@ -13,6 +13,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class SpotifyAPI
 {
@@ -72,10 +76,10 @@ public class SpotifyAPI
 
     public Paging<PlaylistTrack> getPlaylistTracks(String url)
     {
-        String playlist = url.replace("https://open.spotify.com/playlist/","");
-        if (playlist.contains("?")) StringUtils.substringBefore(playlist, "?");
-
         try {
+            Path path = Paths.get(new URL(url).getPath());
+
+            String playlist = path.getName(1).toString();
             return getApi().getPlaylistsItems(playlist).build().execute();
         }
         catch (IOException | SpotifyWebApiException | ParseException e)
@@ -87,11 +91,11 @@ public class SpotifyAPI
 
     public Track getTrack(String url)
     {
-        String track = url.replace("https://open.spotify.com/track/","");
-        //if (track.contains("?")) StringUtils.substringBefore(track, "?");
-
         try {
-            return getApi().getTrack(track).build().execute();
+            Path path = Paths.get(new URL(url).getPath());
+
+            String trackId = path.getName(1).toString();
+            return getApi().getTrack(trackId).build().execute();
         } catch (IOException | SpotifyWebApiException | ParseException e) {
             e.printStackTrace();
         }
