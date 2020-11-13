@@ -5,6 +5,7 @@ import fr.aven.bot.Constants;
 import fr.aven.bot.Main;
 import fr.aven.bot.music.PlayerManager;
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.VoiceChannel;
@@ -38,14 +39,19 @@ public class StopCommand extends MusicCommands
             return;
         }
 
+        stop(event.getGuild(), channel);
+    }
+
+    public static void stop(Guild guild, TextChannel channel)
+    {
         PlayerManager manager = PlayerManager.getInstance();
-        AudioTrack track = manager.getGuildMusicManager(event.getGuild(), event.getChannel()).player.getPlayingTrack();
+        AudioTrack track = manager.getGuildMusicManager(guild, channel).player.getPlayingTrack();
 
-        manager.getGuildMusicManager(event.getGuild(), event.getChannel()).player.stopTrack();
-        manager.getGuildMusicManager(event.getGuild(), event.getChannel()).scheduler.getQueue().clear();
-        manager.getGuildMusicManager(event.getGuild(), event.getChannel()).scheduler.nextTrack(track, false);
+        manager.getGuildMusicManager(guild, channel).player.stopTrack();
+        manager.getGuildMusicManager(guild, channel).scheduler.getQueue().clear();
+        manager.getGuildMusicManager(guild, channel).scheduler.nextTrack(track, false);
 
-        channel.sendMessage(Main.getDatabase().getTextFor("stop.confirm", event.getGuild())).queue();
+        manager.getGuildMusicManager(guild, channel).scheduler.channel.sendMessage(Main.getDatabase().getTextFor("stop.confirm", guild)).queue();
     }
 
     @Override

@@ -5,6 +5,7 @@ import fr.aven.bot.CommandManager;
 import fr.aven.bot.Constants;
 import fr.aven.bot.Main;
 import fr.aven.bot.commands.music.LyricsCommand;
+import fr.aven.bot.commands.music.StopCommand;
 import fr.aven.bot.jda.JDAManager;
 import fr.aven.bot.music.GuildMusicManager;
 import fr.aven.bot.music.PlayerManager;
@@ -17,6 +18,7 @@ import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
+import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -162,7 +164,7 @@ public class Listener extends ListenerAdapter
         try {
             int choix = Integer.parseInt(e.getMessage().getContentDisplay());
             if (!search.containsKey(choix)) return false;
-            PlayerManager.getInstance().loadAndPlay(e.getMessage(), search.get(choix).getInfo().uri);
+            PlayerManager.getInstance().loadAndPlay(e.getMessage(), search.get(choix).getInfo().uri, false);
             search.clear();
             if (musicManager.scheduler.lastMessageSearch != null)
                 e.getChannel().deleteMessageById(musicManager.scheduler.lastMessageSearch.getId()).queue();
@@ -252,5 +254,16 @@ public class Listener extends ListenerAdapter
             event.getChannel().editMessageById(event.getMessageId(), Main.getDatabase().getTextFor("music.canceled", event.getGuild()) + event.getUser().getAsTag()).override(true).queue();
         }
 
+    }
+
+    @Override
+    public void onGuildVoiceLeave(@NotNull GuildVoiceLeaveEvent event)
+    {
+        if (event.getMember() == event.getGuild().getSelfMember())
+        {
+            if (!PlayerManager.getInstance().checkNullForEvent(event.getGuild()))
+                StopCommand.stop(event.getGuild(), null);
+        }
+        super.onGuildVoiceLeave(event);
     }
 }

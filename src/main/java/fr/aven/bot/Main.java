@@ -5,6 +5,7 @@ import fr.aven.bot.events.Listener;
 import fr.aven.bot.events.MemberActivityEvent;
 import fr.aven.bot.jda.JDAManager;
 import fr.aven.bot.events.MusicReactionListener;
+import fr.aven.bot.music.SpotifyAPI;
 import fr.aven.bot.util.Configuration;
 import fr.aven.bot.util.DBList;
 import fr.aven.bot.util.KSoft;
@@ -26,6 +27,7 @@ public class Main
     private static KSoft kSoft;
 
     private static DBList dbl = new DBList();
+    private static SpotifyAPI spotifyAPI = new SpotifyAPI();
 
     public static void main(String... args) throws Exception
     {
@@ -38,6 +40,7 @@ public class Main
         listener = new Listener(commandManager);
         JDAManager.getShardManager().addEventListener(listener, new MusicReactionListener(), new MemberActivityEvent());
         setActivity(Activity.ActivityType.WATCHING, configuration.getString("game",Constants.PREFIX+"help | justaven.xyz"));
+        spotifyAPI.createSpotifyAPI(configuration.getString("spotify.clientID", ""), configuration.getString("spotify.clientSecret", ""));
 
         configuration.save();
     }
@@ -56,6 +59,10 @@ public class Main
 
     public static DBList getDbl() {
         return dbl;
+    }
+
+    public static SpotifyAPI getSpotifyAPI() {
+        return spotifyAPI;
     }
 
     public static void setActivity(Activity.ActivityType type, String text) {
