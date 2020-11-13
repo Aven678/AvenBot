@@ -102,7 +102,7 @@ public class PlayerManager
                 String title;
                 String author;
                 EmbedBuilder builder = new EmbedBuilder();
-                builder.setThumbnail("https://i.ytimg.com/vi/" + track.getInfo().identifier + "/hqdefault.jpg");
+                builder.setThumbnail("https://i.ytimg.com/vi/" + track.getInfo().identifier + "/maxresdefault.jpg");
                 title = track.getInfo().title;
                 author = track.getInfo().author;
 
@@ -128,7 +128,7 @@ public class PlayerManager
                             String title;
                             String author;
                             EmbedBuilder builder = new EmbedBuilder();
-                            builder.setThumbnail("https://i.ytimg.com/vi/" + audioTrack.getInfo().identifier + "/hqdefault.jpg");
+                            builder.setThumbnail("https://i.ytimg.com/vi/" + audioTrack.getInfo().identifier + "/maxresdefault.jpg");
                             title = audioTrack.getInfo().title;
                             author = audioTrack.getInfo().author;
 
