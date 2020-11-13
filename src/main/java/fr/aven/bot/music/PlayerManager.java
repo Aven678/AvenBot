@@ -82,9 +82,7 @@ public class PlayerManager
 
     public void loadAndPlaySpotifyTrack(Message message, Track track)
     {
-        String search = "ytsearch:"+
-                track.getName()+" "+
-                track.getArtists()[0];
+        String search = "ytsearch:"+ track.getName()+" "+ track.getArtists()[0];
 
         loadAndPlay(message,search, true);
     }

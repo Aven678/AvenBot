@@ -2,6 +2,7 @@ package fr.aven.bot.music;
 
 import com.wrapper.spotify.SpotifyApi;
 import com.wrapper.spotify.exceptions.SpotifyWebApiException;
+import com.wrapper.spotify.model_objects.credentials.ClientCredentials;
 import com.wrapper.spotify.model_objects.specification.Paging;
 import com.wrapper.spotify.model_objects.specification.PlaylistTrack;
 import com.wrapper.spotify.model_objects.specification.Track;
@@ -17,6 +18,7 @@ public class SpotifyAPI
 {
     private SpotifyApi api;
     private Logger LOGGER = LoggerFactory.getLogger(SpotifyApi.class);
+    private ClientCredentials clientCredentials;
 
     public void createSpotifyAPI(String clientID, String clientSecret)
     {
@@ -37,10 +39,34 @@ public class SpotifyAPI
                 .setClientSecret(clientSecret)
                 .build();
 
+        try {
+            clientCredentials = api.clientCredentials().build().execute();
+            api.setAccessToken(clientCredentials.getAccessToken());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (SpotifyWebApiException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         LOGGER.info("Spotify connected.");
     }
 
     public SpotifyApi getApi() {
+        if (clientCredentials.getExpiresIn() == 0)
+        {
+            try {
+                clientCredentials = api.clientCredentials().build().execute();
+                api.setAccessToken(clientCredentials.getAccessToken());
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (SpotifyWebApiException e) {
+                e.printStackTrace();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
         return api;
     }
 
