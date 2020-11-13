@@ -28,6 +28,7 @@ public class TrackScheduler extends AudioEventAdapter
 
     public Map<AudioTrack, Long> usersRequest = new HashMap<>();
     public boolean lyricsAlwaysRequested = false;
+    public boolean alwaysStopped = false;
 
     private Guild guild;
     public TextChannel channel;
@@ -107,11 +108,13 @@ public class TrackScheduler extends AudioEventAdapter
 
         if (queue.size() == 0)
         {
+            alwaysStopped = true;
             //player.destroy();
             //PlayerManager.getInstance().destroyGuildMusicManager(guild);
             channel.sendMessage(Main.getDatabase().getTextFor("stop.confirm", guild)).queue(msg -> new Timer().schedule(new MessageTask(msg), 10000));
             if (lastMessageStatus != null) lastMessageStatus.delete().queue();
             guild.getAudioManager().closeAudioConnection();
+
             return;
         }
         // Start the next track, regardless of if something is already playing or not. In case queue was empty, we are
@@ -145,6 +148,8 @@ public class TrackScheduler extends AudioEventAdapter
 
     @Override
     public void onTrackStart(AudioPlayer player, AudioTrack track) {
+
+        alwaysStopped = false;
 
         if (lastMessageStatus != null) lastMessageStatus.delete().queue();
 

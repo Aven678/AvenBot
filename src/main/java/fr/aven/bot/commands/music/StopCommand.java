@@ -47,6 +47,7 @@ public class StopCommand extends MusicCommands
         PlayerManager manager = PlayerManager.getInstance();
         AudioTrack track = manager.getGuildMusicManager(guild, channel).player.getPlayingTrack();
 
+        manager.getGuildMusicManager(guild, channel).scheduler.alwaysStopped = true;
         manager.getGuildMusicManager(guild, channel).player.stopTrack();
         manager.getGuildMusicManager(guild, channel).scheduler.getQueue().clear();
         manager.getGuildMusicManager(guild, channel).scheduler.nextTrack(track, false);

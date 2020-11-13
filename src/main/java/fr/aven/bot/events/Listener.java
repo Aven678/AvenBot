@@ -262,7 +262,8 @@ public class Listener extends ListenerAdapter
         if (event.getMember() == event.getGuild().getSelfMember())
         {
             if (!PlayerManager.getInstance().checkNullForEvent(event.getGuild()))
-                StopCommand.stop(event.getGuild(), null);
+                if (!PlayerManager.getInstance().getGuildMusicManager(channel.getGuild(), null).scheduler.alwaysStopped)
+                    StopCommand.stop(event.getGuild(), null);
         }
         super.onGuildVoiceLeave(event);
     }
