@@ -67,6 +67,7 @@ public class SpotifyAPI
         try {
             return getApi().getTrack(track).build().execute();
         } catch (IOException | SpotifyWebApiException | ParseException e) {
+            e.printStackTrace();
         }
 
         return null;
