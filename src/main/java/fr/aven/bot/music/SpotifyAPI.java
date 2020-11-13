@@ -88,7 +88,7 @@ public class SpotifyAPI
     public Track getTrack(String url)
     {
         String track = url.replace("https://open.spotify.com/track/","");
-        if (track.contains("?")) StringUtils.substringBefore(track, "?");
+        //if (track.contains("?")) StringUtils.substringBefore(track, "?");
 
         try {
             return getApi().getTrack(track).build().execute();
