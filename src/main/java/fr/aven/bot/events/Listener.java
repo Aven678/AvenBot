@@ -164,7 +164,7 @@ public class Listener extends ListenerAdapter
         try {
             int choix = Integer.parseInt(e.getMessage().getContentDisplay());
             if (!search.containsKey(choix)) return false;
-            PlayerManager.getInstance().loadAndPlay(e.getMessage(), search.get(choix).getInfo().uri, false);
+            PlayerManager.getInstance().loadAndPlay(e.getMessage(), search.get(choix).getInfo().uri, false, false);
             search.clear();
             if (musicManager.scheduler.lastMessageSearch != null)
                 e.getChannel().deleteMessageById(musicManager.scheduler.lastMessageSearch.getId()).queue();

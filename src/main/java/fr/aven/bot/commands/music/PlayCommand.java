@@ -74,7 +74,7 @@ public class PlayCommand extends MusicCommands
             if (!isUrl(input))
                 input = "ytsearch: "+input;
 
-            manager.loadAndPlay(event.getMessage(), input, false);
+            manager.loadAndPlay(event.getMessage(), input, false, false);
         }
 
     }
