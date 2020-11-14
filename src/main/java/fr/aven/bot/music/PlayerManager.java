@@ -113,19 +113,19 @@ public class PlayerManager
         thread.start();
         try {
             thread.join();
+            AudioTrack firstTrack = audioTracks.get(0);
+            musicManager.scheduler.usersRequest.put(firstTrack, message.getAuthor().getIdLong());
 
+            for (int j = 1; j < audioTracks.size(); j++)
+                musicManager.scheduler.usersRequest.put(audioTracks.get(j), message.getAuthor().getIdLong());
+
+            play(musicManager, firstTrack, message.getTextChannel());
+            audioTracks.forEach(musicManager.scheduler::queue);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
-        AudioTrack firstTrack = audioTracks.get(0);
-        musicManager.scheduler.usersRequest.put(firstTrack, message.getAuthor().getIdLong());
 
-        for (int j = 1; j < audioTracks.size(); j++)
-            musicManager.scheduler.usersRequest.put(audioTracks.get(j), message.getAuthor().getIdLong());
-
-        play(musicManager, firstTrack, message.getTextChannel());
-        audioTracks.forEach(musicManager.scheduler::queue);
     }
 
     public void loadAndPlaySpotifyTrack(Message message, Track track)
