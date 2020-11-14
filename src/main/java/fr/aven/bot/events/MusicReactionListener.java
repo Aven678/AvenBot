@@ -80,6 +80,7 @@ public class MusicReactionListener extends ListenerAdapter
                     manager.player.stopTrack();
                     manager.scheduler.purgeQueue();
                     manager.scheduler.nextTrack(track, false);
+                    manager.scheduler.alwaysStopped = true;
                 } else
                     missingPermission(event);
                 break;

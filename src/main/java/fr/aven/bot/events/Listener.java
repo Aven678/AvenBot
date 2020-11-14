@@ -262,8 +262,15 @@ public class Listener extends ListenerAdapter
         if (event.getMember() == event.getGuild().getSelfMember())
         {
             if (!PlayerManager.getInstance().checkNullForEvent(event.getGuild()))
-                if (!PlayerManager.getInstance().getGuildMusicManager(channel.getGuild(), null).scheduler.alwaysStopped)
-                    StopCommand.stop(event.getGuild(), null);
+                if (!PlayerManager.getInstance().getGuildMusicManager(channel.getGuild(), null).scheduler.alwaysStopped) {
+                    GuildMusicManager manager = PlayerManager.getInstance().getGuildMusicManager(event.getGuild(), null);
+                    AudioTrack track = manager.player.getPlayingTrack();
+
+                    manager.player.stopTrack();
+                    manager.scheduler.purgeQueue();
+                    manager.scheduler.nextTrack(track, false);
+                    manager.scheduler.alwaysStopped = true;
+                }
         }
         super.onGuildVoiceLeave(event);
     }

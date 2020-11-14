@@ -86,10 +86,12 @@ public class PlayerManager
             {
                 @Override
                 public void trackLoaded(AudioTrack track) {
+                    System.out.println("COUCOU1");
                 }
 
                 @Override
                 public void playlistLoaded(AudioPlaylist playlist) {
+                    System.out.println("COUCOU2");
                     if (playlist.isSearchResult())
                         if (playlist.getSelectedTrack() == null)
                             audioTracks.add(playlist.getTracks().get(1));
@@ -100,10 +102,12 @@ public class PlayerManager
 
                 @Override
                 public void noMatches() {
+                    System.out.println("COUCOU3");
                 }
 
                 @Override
                 public void loadFailed(FriendlyException exception) {
+                    System.out.println("COUCOU4");
                     exception.printStackTrace();
                 }
             });
