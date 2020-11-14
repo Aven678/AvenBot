@@ -98,11 +98,12 @@ public class PlayerManager
                             audioTracks.add(playlist.getSelectedTrack());
 
 
-                    if (finalI == playlistTracks.getTotal())
-                        playSpotify();
-
                     int j = finalI;
                     j++;
+                    if (j == playlistTracks.getTotal())
+                        playSpotify();
+
+
                     message.getChannel().editMessageById(messageID[0], "Playlist added ! Please wait... ("+j+"/"+playlistTracks.getTotal()+")").queue();
                 }
 
