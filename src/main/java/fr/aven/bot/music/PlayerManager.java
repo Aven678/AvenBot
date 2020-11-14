@@ -101,7 +101,9 @@ public class PlayerManager
                     if (finalI == playlistTracks.getTotal())
                         playSpotify();
 
-                    message.getChannel().editMessageById(messageID[0], "Playlist added ! Please wait... ("+finalI+1+"/"+playlistTracks.getTotal()+")").queue();
+                    int j = finalI;
+                    j++;
+                    message.getChannel().editMessageById(messageID[0], "Playlist added ! Please wait... ("+j+"/"+playlistTracks.getTotal()+")").queue();
                 }
 
                 @Override
