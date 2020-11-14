@@ -73,48 +73,49 @@ public class PlayerManager
         List<AudioTrack> audioTracks = new ArrayList<>();
         GuildMusicManager musicManager = getGuildMusicManager(message.getGuild(), message.getTextChannel());
         boolean recup = false;
-        int i = 0;
 
-        for (PlaylistTrack playlistTrack : playlistTracks.getItems())
-        {
-            if (playlistTrack.getIsLocal()) continue;
-            Track track = (Track) playlistTrack.getTrack();
+        Thread thread = new Thread(() -> {
+            for (PlaylistTrack playlistTrack : playlistTracks.getItems()) {
+                if (playlistTrack.getIsLocal()) continue;
+                Track track = (Track) playlistTrack.getTrack();
 
-            String search = "ytsearch:"+track.getName()+" "+track.getArtists()[0].getName();
+                String search = "ytsearch:" + track.getName() + " " + track.getArtists()[0].getName();
 
-            playerManager.setFrameBufferDuration(5000);
-            playerManager.loadItemOrdered(musicManager, search, new AudioLoadResultHandler()
-            {
-                @Override
-                public void trackLoaded(AudioTrack track) {
-                }
+                playerManager.setFrameBufferDuration(5000);
+                playerManager.loadItemOrdered(musicManager, search, new AudioLoadResultHandler() {
+                    @Override
+                    public void trackLoaded(AudioTrack track) {
+                    }
 
-                @Override
-                public void playlistLoaded(AudioPlaylist playlist) {
-                    if (playlist.isSearchResult())
-                        if (playlist.getSelectedTrack() == null)
-                            audioTracks.add(playlist.getTracks().get(1));
-                        else
-                            audioTracks.add(playlist.getSelectedTrack());
+                    @Override
+                    public void playlistLoaded(AudioPlaylist playlist) {
+                        if (playlist.isSearchResult())
+                            if (playlist.getSelectedTrack() == null)
+                                audioTracks.add(playlist.getTracks().get(1));
+                            else
+                                audioTracks.add(playlist.getSelectedTrack());
 
-                }
 
-                @Override
-                public void noMatches() {
-                }
+                    }
 
-                @Override
-                public void loadFailed(FriendlyException exception) {
-                    exception.printStackTrace();
-                }
-            });
+                    @Override
+                    public void noMatches() {
+                    }
 
-            i++;
-        }
+                    @Override
+                    public void loadFailed(FriendlyException exception) {
+                        exception.printStackTrace();
+                    }
+                });
+            }
+        });
 
-        while (!recup)
-        {
-            if (i == playlistTracks.getTotal()) recup = true;
+        thread.start();
+        try {
+            thread.join();
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
 
         AudioTrack firstTrack = audioTracks.get(0);
