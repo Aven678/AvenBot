@@ -100,11 +100,15 @@ public class PlayerManager
 
                     int j = finalI;
                     j++;
-                    if (j == playlistTracks.getTotal())
-                        playSpotify();
-
-
                     message.getChannel().editMessageById(messageID[0], "Playlist added ! Please wait... ("+j+"/"+playlistTracks.getTotal()+")").queue();
+
+                    if (j == playlistTracks.getTotal())
+                    {
+                        playSpotify();
+                        message.getChannel().editMessageById(messageID[0], "✅ Playlist added ! Please wait... ("+j+"/"+playlistTracks.getTotal()+")").queue();
+                    }
+
+
                 }
 
                 @Override
@@ -125,12 +129,12 @@ public class PlayerManager
                         musicManager.scheduler.usersRequest.put(audioTracks.get(j), message.getAuthor().getIdLong());
 
                     play(musicManager, firstTrack, message.getTextChannel());
+                    audioTracks.forEach(musicManager.scheduler::queue);
 
                 };
         });
     }
 
-      audioTracks.forEach(musicManager.scheduler::queue);
     }
 
     public void loadAndPlaySpotifyTrack(Message message, Track track)
