@@ -72,7 +72,8 @@ public class PlayerManager
 
         List<AudioTrack> audioTracks = new ArrayList<>();
         GuildMusicManager musicManager = getGuildMusicManager(message.getGuild(), message.getTextChannel());
-
+        boolean recup = false;
+        int i = 0;
 
         for (PlaylistTrack playlistTrack : playlistTracks.getItems())
         {
@@ -86,12 +87,10 @@ public class PlayerManager
             {
                 @Override
                 public void trackLoaded(AudioTrack track) {
-                    System.out.println("COUCOU1");
                 }
 
                 @Override
                 public void playlistLoaded(AudioPlaylist playlist) {
-                    System.out.println("COUCOU2");
                     if (playlist.isSearchResult())
                         if (playlist.getSelectedTrack() == null)
                             audioTracks.add(playlist.getTracks().get(1));
@@ -102,23 +101,27 @@ public class PlayerManager
 
                 @Override
                 public void noMatches() {
-                    System.out.println("COUCOU3");
                 }
 
                 @Override
                 public void loadFailed(FriendlyException exception) {
-                    System.out.println("COUCOU4");
                     exception.printStackTrace();
                 }
             });
 
+            i++;
+        }
+
+        while (!recup)
+        {
+            if (i == playlistTracks.getTotal()) recup = true;
         }
 
         AudioTrack firstTrack = audioTracks.get(0);
         musicManager.scheduler.usersRequest.put(firstTrack, message.getAuthor().getIdLong());
 
-        for (int i = 1; i < audioTracks.size(); i++)
-            musicManager.scheduler.usersRequest.put(audioTracks.get(i), message.getAuthor().getIdLong());
+        for (int j = 1; j < audioTracks.size(); j++)
+            musicManager.scheduler.usersRequest.put(audioTracks.get(j), message.getAuthor().getIdLong());
 
         play(musicManager, firstTrack, message.getTextChannel());
         audioTracks.forEach(musicManager.scheduler::queue);
