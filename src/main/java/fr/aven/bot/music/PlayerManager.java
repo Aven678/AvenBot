@@ -22,9 +22,8 @@ import net.dv8tion.jda.api.events.message.guild.GenericGuildMessageEvent;
 
 import javax.annotation.Nullable;
 import java.awt.*;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Timer;
+import java.util.*;
+import java.util.List;
 
 public class PlayerManager
 {
@@ -71,6 +70,10 @@ public class PlayerManager
     {
         message.getChannel().sendMessage("Playlist added ! Please wait...").queue();
 
+        List<AudioTrack> audioTracks = new ArrayList<>();
+        GuildMusicManager musicManager = getGuildMusicManager(message.getGuild(), message.getTextChannel());
+
+
         for (PlaylistTrack playlistTrack : playlistTracks.getItems())
         {
             if (playlistTrack.getIsLocal()) continue;
@@ -78,18 +81,49 @@ public class PlayerManager
 
             String search = "ytsearch:"+track.getName()+" "+track.getArtists()[0].getName();
 
-            loadAndPlay(message,search, true, true);
+            playerManager.setFrameBufferDuration(5000);
+            playerManager.loadItemOrdered(musicManager, search, new AudioLoadResultHandler()
+            {
+                @Override
+                public void trackLoaded(AudioTrack track) {
+                }
+
+                @Override
+                public void playlistLoaded(AudioPlaylist playlist) {
+                    if (playlist.isSearchResult())
+                        audioTracks.add(playlist.getTracks().get(0));
+
+                }
+
+                @Override
+                public void noMatches() {
+                }
+
+                @Override
+                public void loadFailed(FriendlyException exception) {
+                }
+            });
+
         }
+
+        AudioTrack firstTrack = audioTracks.get(0);
+        musicManager.scheduler.usersRequest.put(firstTrack, message.getAuthor().getIdLong());
+
+        for (int i = 1; i < audioTracks.size(); i++)
+            musicManager.scheduler.usersRequest.put(audioTracks.get(i), message.getAuthor().getIdLong());
+
+        play(musicManager, firstTrack, message.getTextChannel());
+        audioTracks.forEach(musicManager.scheduler::queue);
     }
 
     public void loadAndPlaySpotifyTrack(Message message, Track track)
     {
         String search = "ytsearch:"+ track.getName()+" "+ track.getArtists()[0].getName();
 
-        loadAndPlay(message,search, true, false);
+        loadAndPlay(message,search, true);
     }
 
-    public void loadAndPlay(Message message, String trackUrl, boolean spotify, boolean playlistSpotify)
+    public void loadAndPlay(Message message, String trackUrl, boolean spotify)
     {
         GuildMusicManager musicManager = getGuildMusicManager(message.getGuild(), message.getTextChannel());
 
@@ -124,7 +158,7 @@ public class PlayerManager
                     {
                         AudioTrack audioTrack = playlist.getTracks().get(0);
 
-                        if (!playlistSpotify) {
+
                             String title;
                             String author;
                             EmbedBuilder builder = new EmbedBuilder();
@@ -138,7 +172,6 @@ public class PlayerManager
                                     .setFooter("AvenBot by Aven#1000").build()).queue(msg -> {
                                 new Timer().schedule(new MessageTask(msg), 10000);
                             });
-                        }
 
                         musicManager.scheduler.usersRequest.put(audioTrack, message.getAuthor().getIdLong());
                         play(musicManager, audioTrack, message.getTextChannel());
