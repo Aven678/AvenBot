@@ -69,7 +69,7 @@ public class PlayerManager
     public void loadAndPlaySpotifyPlaylist(Message message, Paging<PlaylistTrack> playlistTracks) {
         final Long[] messageID = {0L};
 
-        message.getChannel().sendMessage("Playlist added ! Please wait...").queue(msg -> messageID[0] = message.getIdLong());
+        message.getChannel().sendMessage("Playlist added ! Please wait...").queue(msg -> messageID[0] = msg.getIdLong());
 
         List<AudioTrack> audioTracks = new ArrayList<>();
         GuildMusicManager musicManager = getGuildMusicManager(message.getGuild(), message.getTextChannel());
