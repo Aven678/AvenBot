@@ -74,15 +74,17 @@ public class PlayerManager
         GuildMusicManager musicManager = getGuildMusicManager(message.getGuild(), message.getTextChannel());
         boolean recup = false;
 
-        //Thread thread = new Thread(() -> {
-            for (PlaylistTrack playlistTrack : playlistTracks.getItems()) {
+        Thread thread = new Thread(() -> {
+            for (int i = 0; i < playlistTracks.getTotal(); i++) {
+                PlaylistTrack playlistTrack = playlistTracks.getItems()[i];
                 if (playlistTrack.getIsLocal()) continue;
                 Track track = (Track) playlistTrack.getTrack();
 
                 String search = "ytsearch:" + track.getName() + " " + track.getArtists()[0].getName();
 
                 playerManager.setFrameBufferDuration(5000);
-                if (playerManager.loadItemOrdered(musicManager, search, new AudioLoadResultHandler() {
+                int finalI = i;
+                playerManager.loadItemOrdered(musicManager, search, new AudioLoadResultHandler() {
 
                     @Override
                     public void trackLoaded(AudioTrack track) {
@@ -96,6 +98,10 @@ public class PlayerManager
                             else
                                 audioTracks.add(playlist.getSelectedTrack());
 
+
+                        if (finalI == playlistTracks.getTotal())
+                            notifyAll();
+
                     }
 
                     @Override
@@ -106,22 +112,28 @@ public class PlayerManager
                     public void loadFailed(FriendlyException exception) {
                         exception.printStackTrace();
                     }
-                }).isDone()) { continue;}
+                });
             }
-        //});
+        });
 
-        //try {
-            AudioTrack firstTrack = audioTracks.get(0);
-            musicManager.scheduler.usersRequest.put(firstTrack, message.getAuthor().getIdLong());
+        thread.start();
 
-            for (int j = 1; j < audioTracks.size(); j++)
-                musicManager.scheduler.usersRequest.put(audioTracks.get(j), message.getAuthor().getIdLong());
+            new Thread(() -> {
+                try {
+                    wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
 
-            play(musicManager, firstTrack, message.getTextChannel());
-            audioTracks.forEach(musicManager.scheduler::queue);
-        /*} catch (InterruptedException e) {
-            e.printStackTrace();
-        }*/
+                AudioTrack firstTrack = audioTracks.get(0);
+                musicManager.scheduler.usersRequest.put(firstTrack, message.getAuthor().getIdLong());
+
+                for (int j = 1; j < audioTracks.size(); j++)
+                    musicManager.scheduler.usersRequest.put(audioTracks.get(j), message.getAuthor().getIdLong());
+
+                play(musicManager, firstTrack, message.getTextChannel());
+                audioTracks.forEach(musicManager.scheduler::queue);
+            }).start();
 
 
     }
