@@ -66,76 +66,65 @@ public class PlayerManager
         return musicManager;
     }
 
-    public void loadAndPlaySpotifyPlaylist(Message message, Paging<PlaylistTrack> playlistTracks)
-    {
+    public void loadAndPlaySpotifyPlaylist(Message message, Paging<PlaylistTrack> playlistTracks) {
         message.getChannel().sendMessage("Playlist added ! Please wait...").queue();
 
         List<AudioTrack> audioTracks = new ArrayList<>();
         GuildMusicManager musicManager = getGuildMusicManager(message.getGuild(), message.getTextChannel());
-        boolean recup = false;
 
-        Thread thread = new Thread(() -> {
-            for (int i = 0; i < playlistTracks.getTotal(); i++) {
-                PlaylistTrack playlistTrack = playlistTracks.getItems()[i];
-                if (playlistTrack.getIsLocal()) continue;
-                Track track = (Track) playlistTrack.getTrack();
+        for (int i = 0; i < playlistTracks.getTotal(); i++) {
+            PlaylistTrack playlistTrack = playlistTracks.getItems()[i];
+            if (playlistTrack.getIsLocal()) continue;
+            Track track = (Track) playlistTrack.getTrack();
 
-                String search = "ytsearch:" + track.getName() + " " + track.getArtists()[0].getName();
+            String search = "ytsearch:" + track.getName() + " " + track.getArtists()[0].getName();
 
-                playerManager.setFrameBufferDuration(5000);
-                int finalI = i;
-                playerManager.loadItemOrdered(musicManager, search, new AudioLoadResultHandler() {
+            playerManager.setFrameBufferDuration(5000);
+            int finalI = i;
+            playerManager.loadItemOrdered(musicManager, search, new AudioLoadResultHandler() {
 
-                    @Override
-                    public void trackLoaded(AudioTrack track) {
-                    }
-
-                    @Override
-                    public void playlistLoaded(AudioPlaylist playlist) {
-                        if (playlist.isSearchResult())
-                            if (playlist.getSelectedTrack() == null)
-                                audioTracks.add(playlist.getTracks().get(1));
-                            else
-                                audioTracks.add(playlist.getSelectedTrack());
-
-
-                        if (finalI == playlistTracks.getTotal())
-                            notifyAll();
-
-                    }
-
-                    @Override
-                    public void noMatches() {
-                    }
-
-                    @Override
-                    public void loadFailed(FriendlyException exception) {
-                        exception.printStackTrace();
-                    }
-                });
-            }
-        });
-
-        thread.start();
-
-            new Thread(() -> {
-                try {
-                    wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                @Override
+                public void trackLoaded(AudioTrack track) {
                 }
 
-                AudioTrack firstTrack = audioTracks.get(0);
-                musicManager.scheduler.usersRequest.put(firstTrack, message.getAuthor().getIdLong());
-
-                for (int j = 1; j < audioTracks.size(); j++)
-                    musicManager.scheduler.usersRequest.put(audioTracks.get(j), message.getAuthor().getIdLong());
-
-                play(musicManager, firstTrack, message.getTextChannel());
-                audioTracks.forEach(musicManager.scheduler::queue);
-            }).start();
+                @Override
+                public void playlistLoaded(AudioPlaylist playlist) {
+                    if (playlist.isSearchResult())
+                        if (playlist.getSelectedTrack() == null)
+                            audioTracks.add(playlist.getTracks().get(1));
+                        else
+                            audioTracks.add(playlist.getSelectedTrack());
 
 
+                    if (finalI == playlistTracks.getTotal())
+                        playSpotify();
+
+                }
+
+                @Override
+                public void noMatches() {
+                }
+
+                @Override
+                public void loadFailed(FriendlyException exception) {
+                    exception.printStackTrace();
+                }
+
+                public void playSpotify()
+                {
+                    AudioTrack firstTrack = audioTracks.get(0);
+                    musicManager.scheduler.usersRequest.put(firstTrack, message.getAuthor().getIdLong());
+
+                    for (int j = 1; j < audioTracks.size(); j++)
+                        musicManager.scheduler.usersRequest.put(audioTracks.get(j), message.getAuthor().getIdLong());
+
+                    play(musicManager, firstTrack, message.getTextChannel());
+
+                };
+        });
+    }
+
+      audioTracks.forEach(musicManager.scheduler::queue);
     }
 
     public void loadAndPlaySpotifyTrack(Message message, Track track)

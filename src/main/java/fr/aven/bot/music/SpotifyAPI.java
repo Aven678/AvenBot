@@ -82,8 +82,12 @@ public class SpotifyAPI
             String playlist = path.getName(1).toString();
             return getApi().getPlaylistsItems(playlist).build().execute();
         }
-        catch (IOException | SpotifyWebApiException | ParseException e)
+        catch (IOException | ParseException e)
         {
+        }
+        catch (SpotifyWebApiException e)
+        {
+            createSpotifyAPI(Main.getConfiguration().getString("spotify.clientID", ""), Main.getConfiguration().getString("spotify.clientSecret", ""));
         }
 
         return null;
@@ -96,8 +100,11 @@ public class SpotifyAPI
 
             String trackId = path.getName(1).toString();
             return getApi().getTrack(trackId).build().execute();
-        } catch (IOException | SpotifyWebApiException | ParseException e) {
-            e.printStackTrace();
+        } catch (IOException | ParseException e) {
+        }
+        catch (SpotifyWebApiException e)
+        {
+            createSpotifyAPI(Main.getConfiguration().getString("spotify.clientID", ""), Main.getConfiguration().getString("spotify.clientSecret", ""));
         }
 
         return null;
