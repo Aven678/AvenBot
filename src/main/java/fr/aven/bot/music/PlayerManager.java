@@ -90,7 +90,11 @@ public class PlayerManager
 
                 @Override
                 public void playlistLoaded(AudioPlaylist playlist) {
-                    audioTracks.add(playlist.getTracks().get(0));
+                    if (playlist.isSearchResult())
+                        if (playlist.getSelectedTrack() == null)
+                            audioTracks.add(playlist.getTracks().get(1));
+                        else
+                            audioTracks.add(playlist.getSelectedTrack());
 
                 }
 
