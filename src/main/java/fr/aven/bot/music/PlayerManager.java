@@ -74,7 +74,7 @@ public class PlayerManager
         GuildMusicManager musicManager = getGuildMusicManager(message.getGuild(), message.getTextChannel());
         boolean recup = false;
 
-        Thread thread = new Thread(() -> {
+        //Thread thread = new Thread(() -> {
             for (PlaylistTrack playlistTrack : playlistTracks.getItems()) {
                 if (playlistTrack.getIsLocal()) continue;
                 Track track = (Track) playlistTrack.getTrack();
@@ -82,37 +82,39 @@ public class PlayerManager
                 String search = "ytsearch:" + track.getName() + " " + track.getArtists()[0].getName();
 
                 playerManager.setFrameBufferDuration(5000);
-                playerManager.loadItemOrdered(musicManager, search, new AudioLoadResultHandler() {
-                    @Override
-                    public void trackLoaded(AudioTrack track) {
-                    }
+                try {
+                    playerManager.loadItemOrdered(musicManager, search, new AudioLoadResultHandler() {
 
-                    @Override
-                    public void playlistLoaded(AudioPlaylist playlist) {
-                        if (playlist.isSearchResult())
-                            if (playlist.getSelectedTrack() == null)
-                                audioTracks.add(playlist.getTracks().get(1));
-                            else
-                                audioTracks.add(playlist.getSelectedTrack());
+                        @Override
+                        public void trackLoaded(AudioTrack track) {
+                        }
 
+                        @Override
+                        public void playlistLoaded(AudioPlaylist playlist) {
+                            if (playlist.isSearchResult())
+                                if (playlist.getSelectedTrack() == null)
+                                    audioTracks.add(playlist.getTracks().get(1));
+                                else
+                                    audioTracks.add(playlist.getSelectedTrack());
 
-                    }
+                        }
 
-                    @Override
-                    public void noMatches() {
-                    }
+                        @Override
+                        public void noMatches() {
+                        }
 
-                    @Override
-                    public void loadFailed(FriendlyException exception) {
-                        exception.printStackTrace();
-                    }
-                });
+                        @Override
+                        public void loadFailed(FriendlyException exception) {
+                            exception.printStackTrace();
+                        }
+                    }).wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
-        });
+        //});
 
-        thread.start();
-        try {
-            thread.join();
+        //try {
             AudioTrack firstTrack = audioTracks.get(0);
             musicManager.scheduler.usersRequest.put(firstTrack, message.getAuthor().getIdLong());
 
@@ -121,9 +123,9 @@ public class PlayerManager
 
             play(musicManager, firstTrack, message.getTextChannel());
             audioTracks.forEach(musicManager.scheduler::queue);
-        } catch (InterruptedException e) {
+        /*} catch (InterruptedException e) {
             e.printStackTrace();
-        }
+        }*/
 
 
     }
