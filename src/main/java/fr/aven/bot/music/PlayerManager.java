@@ -82,35 +82,31 @@ public class PlayerManager
                 String search = "ytsearch:" + track.getName() + " " + track.getArtists()[0].getName();
 
                 playerManager.setFrameBufferDuration(5000);
-                try {
-                    playerManager.loadItemOrdered(musicManager, search, new AudioLoadResultHandler() {
+                if (playerManager.loadItemOrdered(musicManager, search, new AudioLoadResultHandler() {
 
-                        @Override
-                        public void trackLoaded(AudioTrack track) {
-                        }
+                    @Override
+                    public void trackLoaded(AudioTrack track) {
+                    }
 
-                        @Override
-                        public void playlistLoaded(AudioPlaylist playlist) {
-                            if (playlist.isSearchResult())
-                                if (playlist.getSelectedTrack() == null)
-                                    audioTracks.add(playlist.getTracks().get(1));
-                                else
-                                    audioTracks.add(playlist.getSelectedTrack());
+                    @Override
+                    public void playlistLoaded(AudioPlaylist playlist) {
+                        if (playlist.isSearchResult())
+                            if (playlist.getSelectedTrack() == null)
+                                audioTracks.add(playlist.getTracks().get(1));
+                            else
+                                audioTracks.add(playlist.getSelectedTrack());
 
-                        }
+                    }
 
-                        @Override
-                        public void noMatches() {
-                        }
+                    @Override
+                    public void noMatches() {
+                    }
 
-                        @Override
-                        public void loadFailed(FriendlyException exception) {
-                            exception.printStackTrace();
-                        }
-                    }).wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                    @Override
+                    public void loadFailed(FriendlyException exception) {
+                        exception.printStackTrace();
+                    }
+                }).isDone()) { continue;}
             }
         //});
 
