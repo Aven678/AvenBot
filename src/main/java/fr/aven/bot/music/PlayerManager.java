@@ -129,6 +129,7 @@ public class PlayerManager
                         musicManager.scheduler.usersRequest.put(audioTracks.get(j), message.getAuthor().getIdLong());
 
                     play(musicManager, firstTrack, message.getTextChannel());
+                    audioTracks.remove(0);
                     audioTracks.forEach(musicManager.scheduler::queue);
 
                 };
