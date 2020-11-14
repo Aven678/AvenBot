@@ -67,7 +67,9 @@ public class PlayerManager
     }
 
     public void loadAndPlaySpotifyPlaylist(Message message, Paging<PlaylistTrack> playlistTracks) {
-        message.getChannel().sendMessage("Playlist added ! Please wait...").queue();
+        final Long[] messageID = {0L};
+
+        message.getChannel().sendMessage("Playlist added ! Please wait...").queue(msg -> messageID[0] = message.getIdLong());
 
         List<AudioTrack> audioTracks = new ArrayList<>();
         GuildMusicManager musicManager = getGuildMusicManager(message.getGuild(), message.getTextChannel());
@@ -99,6 +101,7 @@ public class PlayerManager
                     if (finalI == playlistTracks.getTotal())
                         playSpotify();
 
+                    message.getChannel().editMessageById(messageID[0], "Playlist added ! Please wait... ("+finalI+1+"/"+playlistTracks.getTotal()+")");
                 }
 
                 @Override
