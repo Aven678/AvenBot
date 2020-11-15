@@ -1,5 +1,6 @@
 package fr.aven.bot.music;
 
+import com.sedmelluq.discord.lavaplayer.filter.equalizer.EqualizerFactory;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
@@ -42,6 +43,10 @@ public class TrackScheduler extends AudioEventAdapter
     public Message lastMessageLyrics = null;
     public Message lastMessageSearch = null;
 
+    public int boostPercentage = 0;
+    private static final float[] BASS_BOOST = {-0.05f, 0.07f, 0.16f, 0.03f, -0.05f, -0.11f};
+    public EqualizerFactory equalizer = null;
+
     public TrackScheduler(AudioPlayer player, Guild guild, TextChannel channel)
     {
         this.player = player;
@@ -78,6 +83,31 @@ public class TrackScheduler extends AudioEventAdapter
         tQueue.add(0, current);
         purgeQueue();
         queue.addAll(tQueue);
+    }
+
+    public void bassBoost(int percentage) {
+        final int previousPercentage = this.boostPercentage;
+        this.boostPercentage = percentage;
+
+        // Disable filter factory
+        if (previousPercentage > 0 && percentage == 0) {
+            this.player.setFilterFactory(null);
+            return;
+        }
+        // Enable filter factory
+        if (previousPercentage == 0 && percentage > 0) {
+            if (this.equalizer == null) {
+                this.equalizer = new EqualizerFactory();
+            }
+            this.player.setFilterFactory(this.equalizer);
+        }
+
+        final float multiplier = percentage / 100.0f;
+        for (int i = 0; i < BASS_BOOST.length; i++) {
+            this.equalizer.setGain(i, BASS_BOOST[i] * multiplier);
+        }
+
+        this.boostPercentage = percentage;
     }
 
     public void purgeQueue() {

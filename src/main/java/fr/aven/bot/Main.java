@@ -27,7 +27,7 @@ public class Main
     private static KSoft kSoft;
 
     private static DBList dbl = new DBList();
-    private static SpotifyAPI spotifyAPI = new SpotifyAPI();
+    private static SpotifyAPI spotifyAPI;
 
     public static void main(String... args) throws Exception
     {
@@ -40,7 +40,7 @@ public class Main
         listener = new Listener(commandManager);
         JDAManager.getShardManager().addEventListener(listener, new MusicReactionListener(), new MemberActivityEvent());
         setActivity(Activity.ActivityType.WATCHING, configuration.getString("game",Constants.PREFIX+"help | justaven.xyz"));
-        spotifyAPI.createSpotifyAPI(configuration.getString("spotify.clientID", ""), configuration.getString("spotify.clientSecret", ""));
+        spotifyAPI = new SpotifyAPI(configuration.getString("spotify.clientID", ""), configuration.getString("spotify.clientSecret", ""));
 
         configuration.save();
     }

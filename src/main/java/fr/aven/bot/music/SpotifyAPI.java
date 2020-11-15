@@ -6,6 +6,7 @@ import com.wrapper.spotify.model_objects.credentials.ClientCredentials;
 import com.wrapper.spotify.model_objects.specification.Paging;
 import com.wrapper.spotify.model_objects.specification.PlaylistTrack;
 import com.wrapper.spotify.model_objects.specification.Track;
+import com.wrapper.spotify.requests.authorization.client_credentials.ClientCredentialsRequest;
 import fr.aven.bot.Main;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.hc.core5.http.ParseException;
@@ -17,12 +18,36 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class SpotifyAPI
 {
     private SpotifyApi api;
     private Logger LOGGER = LoggerFactory.getLogger(SpotifyApi.class);
-    private ClientCredentials clientCredentials;
+    private ClientCredentialsRequest clientCredentialsRequest;
+    private ScheduledExecutorService service;
+
+    public SpotifyAPI(String clientID, String clientSecret)
+    {
+        createSpotifyAPI(clientID, clientSecret);
+        this.clientCredentialsRequest = api.clientCredentials().build();
+
+        service = Executors.newScheduledThreadPool(1, r -> new Thread(r, "Spotify-Token-Update-Thread"));
+        service.scheduleAtFixedRate(this::updateAccessToken, 0, 1, TimeUnit.HOURS);
+    }
+
+    private void updateAccessToken() {
+        try {
+            Future<ClientCredentials> clientCredentialsFuture = clientCredentialsRequest.executeAsync();
+            ClientCredentials clientCredentials = clientCredentialsFuture.get();
+            api.setAccessToken(clientCredentials.getAccessToken());
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
+        }
+    }
 
     public void createSpotifyAPI(String clientID, String clientSecret)
     {
@@ -43,34 +68,10 @@ public class SpotifyAPI
                 .setClientSecret(clientSecret)
                 .build();
 
-        try {
-            clientCredentials = api.clientCredentials().build().execute();
-            api.setAccessToken(clientCredentials.getAccessToken());
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (SpotifyWebApiException e) {
-            e.printStackTrace();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
         LOGGER.info("Spotify connected.");
     }
 
     public SpotifyApi getApi() {
-        if (clientCredentials.getExpiresIn() == 0)
-        {
-            try {
-                clientCredentials = api.clientCredentials().build().execute();
-                api.setAccessToken(clientCredentials.getAccessToken());
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (SpotifyWebApiException e) {
-                e.printStackTrace();
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        }
-
         return api;
     }
 
@@ -87,8 +88,7 @@ public class SpotifyAPI
         }
         catch (SpotifyWebApiException e)
         {
-            createSpotifyAPI(Main.getConfiguration().getString("spotify.clientID", ""), Main.getConfiguration().getString("spotify.clientSecret", ""));
-        }
+            }
 
         return null;
     }
@@ -104,7 +104,6 @@ public class SpotifyAPI
         }
         catch (SpotifyWebApiException e)
         {
-            createSpotifyAPI(Main.getConfiguration().getString("spotify.clientID", ""), Main.getConfiguration().getString("spotify.clientSecret", ""));
         }
 
         return null;

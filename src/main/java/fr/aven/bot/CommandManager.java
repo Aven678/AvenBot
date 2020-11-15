@@ -43,7 +43,7 @@ public class CommandManager {
         addCommands(new AnnounceCommand(), new ClearConfigCommand(), new DJRoleCommand(), new LangCommand(), new Prefix(), new WarnConfig());
 
         //MUSIC COMMANDS
-        addCommands(new JoinCommand(), new LyricsCommand(), new PlayCommand(), new PauseCommand(), new QueueCommand(), new SkipCommand(), new ShuffleCommand(), new StopCommand(), new VolumeCommand());
+        addCommands(new BassCommand(), new JoinCommand(), new LyricsCommand(), new PlayCommand(), new PauseCommand(), new QueueCommand(), new SkipCommand(), new ShuffleCommand(), new StopCommand(), new VolumeCommand());
         //MODO COMMANDS
         addCommands(new BanCommand(), new KickCommand(), new ModlogsCommand(), new MuteCommand(), new UnbanCommand(), new UnmuteCommand(), new WarnCommand(), new WarnsCommand());
         //INFO COMMANDS
