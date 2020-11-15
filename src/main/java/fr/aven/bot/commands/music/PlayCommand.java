@@ -60,22 +60,22 @@ public class PlayCommand extends MusicCommands
 
         String input = String.join(" ", args);
 
-        /*if (isSpotifyTrackURL(input))
+        if (isSpotifyTrackURL(input))
         {
             manager.loadAndPlaySpotifyTrack(event.getMessage(), Main.getSpotifyAPI().getTrack(input));
         }
 
-        else if (isSpotifyPlaylistURL(input))
+        /*else if (isSpotifyPlaylistURL(input))
         {
             manager.loadAndPlaySpotifyPlaylist(event.getMessage(), Main.getSpotifyAPI().getPlaylistTracks(input));
-        }
+        }*/
         else
-        {*/
+        {
             if (!isUrl(input))
                 input = "ytsearch: "+input;
 
             manager.loadAndPlay(event.getMessage(), input, false);
-        //}
+        }
 
     }
 
@@ -92,7 +92,7 @@ public class PlayCommand extends MusicCommands
         }
     }
 
-    /*private boolean isSpotifyTrackURL(String input)
+    private boolean isSpotifyTrackURL(String input)
     {
         if (input.startsWith("https://open.spotify.com/track/")) return true;
         return false;
@@ -102,7 +102,7 @@ public class PlayCommand extends MusicCommands
     {
         if (input.startsWith("https://open.spotify.com/playlist/")) return true;
         return false;
-    }*/
+    }
 
     @Override
     public boolean haveEvent() {

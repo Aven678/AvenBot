@@ -37,13 +37,13 @@ public class PlayerManager
         this.musicManagers = new HashMap<>();
 
         this.playerManager = new DefaultAudioPlayerManager();
-        YoutubeAudioSourceManager youtubemanger = new YoutubeAudioSourceManager();
+        /*YoutubeAudioSourceManager youtubemanger = new YoutubeAudioSourceManager();
 
         playerManager.registerSourceManager(youtubemanger);
         playerManager.registerSourceManager(new SpotifyAudioSourceManager(Main.getConfiguration().getString("spotify.clientID", ""),
                 Main.getConfiguration().getString("spotify.clientSecret", ""),
                 Main.getConfiguration().getString("youtubeAPI", ""),
-                youtubemanger));
+                youtubemanger));*/
 
         AudioSourceManagers.registerLocalSource(playerManager);
         AudioSourceManagers.registerRemoteSources(playerManager);
@@ -145,14 +145,14 @@ public class PlayerManager
         });
     }
 
-    }
+    }*/
 
     public void loadAndPlaySpotifyTrack(Message message, Track track)
     {
         String search = "ytsearch:"+ track.getName()+" "+ track.getArtists()[0].getName();
 
         loadAndPlay(message,search, true);
-    }*/
+    }
 
     public void loadAndPlay(Message message, String trackUrl, boolean spotify)
     {
@@ -185,7 +185,7 @@ public class PlayerManager
             @Override
             public void playlistLoaded(AudioPlaylist playlist) {
                 if (playlist.isSearchResult()) {
-                    /*if (spotify)
+                    if (spotify)
                     {
                         AudioTrack audioTrack = playlist.getTracks().get(0);
 
@@ -206,7 +206,7 @@ public class PlayerManager
 
                         musicManager.scheduler.usersRequest.put(audioTrack, message.getAuthor().getIdLong());
                         play(musicManager, audioTrack, message.getTextChannel());
-                    } else {*/
+                    } else {
 
                         EmbedBuilder builder = new EmbedBuilder();
                         builder.setAuthor(Main.getDatabase().getTextFor("music.searchTitle", message.getGuild()), "https://justaven.com", message.getAuthor().getAvatarUrl());
@@ -227,7 +227,7 @@ public class PlayerManager
                             msg.addReaction("❌").queue();
                             musicManager.scheduler.lastMessageSearch = msg;
                         });
-                    //}
+                    }
                 } else {
                     AudioTrack firstTrack = playlist.getSelectedTrack();
 
