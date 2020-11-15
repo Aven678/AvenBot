@@ -85,7 +85,7 @@ public class TrackScheduler extends AudioEventAdapter
         queue.addAll(tQueue);
     }
 
-    public void bassBoost(int percentage) {
+    public void bassBoost(int percentage, Message message) {
         final int previousPercentage = this.boostPercentage;
         this.boostPercentage = percentage;
 
@@ -108,6 +108,7 @@ public class TrackScheduler extends AudioEventAdapter
         }
 
         this.boostPercentage = percentage;
+        message.addReaction("✅").queue();
     }
 
     public void purgeQueue() {

@@ -49,9 +49,7 @@ public class BassCommand extends MusicCommands
 
         try {
             var choice = Integer.parseInt(args.get(0));
-            manager.scheduler.bassBoost(choice);
-
-            event.getMessage().addReaction("✅").queue();
+            manager.scheduler.bassBoost(choice, event.getMessage());
         } catch (NumberFormatException nfe)
         {
             channel.sendMessage(new EmbedBuilder().addField(getHelp()).build()).queue();
