@@ -54,7 +54,7 @@ public class SpotifyAudioSourceManager implements AudioSourceManager, HttpConfig
     private static String DOMAIN_REGEX = "spotify\\.com/";
     private static String TRACK_REGEX = "track/";
     private static String ALBUM_REGEX = "album/";
-    private static String PLAYLIST_REGEX = "user/(.*)/playlist/";
+    private static String PLAYLIST_REGEX = "playlist/";
     private static String REST_REGEX = "(.*)";
     private static String SPOTIFY_BASE_REGEX = PROTOCOL_REGEX + DOMAIN_REGEX;
 
@@ -90,7 +90,7 @@ public class SpotifyAudioSourceManager implements AudioSourceManager, HttpConfig
         try {
             return new YouTube.Builder(GoogleNetHttpTransport.newTrustedTransport(),
                     JacksonFactory.getDefaultInstance(), (unused) -> {
-            }).setApplicationName("SkyBot-youtube-search").build();
+            }).setApplicationName("AvenBot-youtube-search").build();
         } catch (GeneralSecurityException | IOException e) {
             LOGGER.error(e.getMessage());
             return null;
