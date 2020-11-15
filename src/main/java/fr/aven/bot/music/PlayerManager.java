@@ -4,6 +4,7 @@ import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
+import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
@@ -36,6 +37,14 @@ public class PlayerManager
         this.musicManagers = new HashMap<>();
 
         this.playerManager = new DefaultAudioPlayerManager();
+        YoutubeAudioSourceManager youtubemanger = new YoutubeAudioSourceManager();
+
+        playerManager.registerSourceManager(youtubemanger);
+        playerManager.registerSourceManager(new SpotifyAudioSourceManager(Main.getConfiguration().getString("spotify.clientID", ""),
+                Main.getConfiguration().getString("spotify.clientSecret", ""),
+                Main.getConfiguration().getString("youtubeAPI", ""),
+                youtubemanger));
+
         AudioSourceManagers.registerLocalSource(playerManager);
         AudioSourceManagers.registerRemoteSources(playerManager);
     }
@@ -66,7 +75,7 @@ public class PlayerManager
         return musicManager;
     }
 
-    public void loadAndPlaySpotifyPlaylist(Message message, Paging<PlaylistTrack> playlistTracks) {
+    /*public void loadAndPlaySpotifyPlaylist(Message message, Paging<PlaylistTrack> playlistTracks) {
         final Long[] messageID = {0L};
 
         message.getChannel().sendMessage("Playlist added ! Please wait...").queue(msg -> messageID[0] = msg.getIdLong());
@@ -143,7 +152,7 @@ public class PlayerManager
         String search = "ytsearch:"+ track.getName()+" "+ track.getArtists()[0].getName();
 
         loadAndPlay(message,search, true);
-    }
+    }*/
 
     public void loadAndPlay(Message message, String trackUrl, boolean spotify)
     {
@@ -176,7 +185,7 @@ public class PlayerManager
             @Override
             public void playlistLoaded(AudioPlaylist playlist) {
                 if (playlist.isSearchResult()) {
-                    if (spotify)
+                    /*if (spotify)
                     {
                         AudioTrack audioTrack = playlist.getTracks().get(0);
 
@@ -197,7 +206,7 @@ public class PlayerManager
 
                         musicManager.scheduler.usersRequest.put(audioTrack, message.getAuthor().getIdLong());
                         play(musicManager, audioTrack, message.getTextChannel());
-                    } else {
+                    } else {*/
 
                         EmbedBuilder builder = new EmbedBuilder();
                         builder.setAuthor(Main.getDatabase().getTextFor("music.searchTitle", message.getGuild()), "https://justaven.com", message.getAuthor().getAvatarUrl());
@@ -218,7 +227,7 @@ public class PlayerManager
                             msg.addReaction("❌").queue();
                             musicManager.scheduler.lastMessageSearch = msg;
                         });
-                    }
+                    //}
                 } else {
                     AudioTrack firstTrack = playlist.getSelectedTrack();
 
