@@ -144,6 +144,8 @@ public class TrackScheduler extends AudioEventAdapter
             channel.sendMessage(Main.getDatabase().getTextFor("stop.confirm", guild)).queue(msg -> new Timer().schedule(new MessageTask(msg), 10000));
             if (lastMessageStatus != null) lastMessageStatus.delete().queue();
             guild.getAudioManager().closeAudioConnection();
+            this.boostPercentage = 0;
+            this.player.setFilterFactory(null);
 
             return;
         }
