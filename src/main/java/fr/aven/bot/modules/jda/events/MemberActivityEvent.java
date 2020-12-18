@@ -1,4 +1,4 @@
-package fr.aven.bot.events;
+package fr.aven.bot.modules.jda.events;
 
 import fr.aven.bot.Main;
 import net.dv8tion.jda.api.Permission;

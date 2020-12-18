@@ -1,4 +1,4 @@
-package fr.aven.bot.music;
+package fr.aven.bot.modules.music;
 
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestInitializer;

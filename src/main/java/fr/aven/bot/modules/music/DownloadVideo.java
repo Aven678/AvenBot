@@ -1,9 +1,6 @@
-package fr.aven.bot.music;
+package fr.aven.bot.modules.music;
 
-import java.io.File;
 import java.io.PrintWriter;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 public class DownloadVideo
 {

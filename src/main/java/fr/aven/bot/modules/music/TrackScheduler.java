@@ -1,4 +1,4 @@
-package fr.aven.bot.music;
+package fr.aven.bot.modules.music;
 
 import com.sedmelluq.discord.lavaplayer.filter.equalizer.EqualizerFactory;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;

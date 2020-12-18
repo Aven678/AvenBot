@@ -1,20 +1,14 @@
 package fr.aven.bot.commands.music;
 
-import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 import fr.aven.bot.Constants;
 import fr.aven.bot.Main;
-import fr.aven.bot.music.GuildMusicManager;
-import fr.aven.bot.music.PlayerManager;
+import fr.aven.bot.modules.music.GuildMusicManager;
+import fr.aven.bot.modules.music.PlayerManager;
 import fr.aven.bot.util.ICommand;
-import fr.aven.bot.util.KSoft;
-import fr.aven.bot.util.MessageTask;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.GenericEvent;
-import net.dv8tion.jda.api.events.message.GenericMessageEvent;
 import net.dv8tion.jda.api.events.message.guild.GenericGuildMessageEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.explodingbush.ksoftapi.entities.Lyric;

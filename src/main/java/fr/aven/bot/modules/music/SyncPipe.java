@@ -1,4 +1,4 @@
-package fr.aven.bot.music;
+package fr.aven.bot.modules.music;
 
 import java.io.InputStream;
 import java.io.OutputStream;

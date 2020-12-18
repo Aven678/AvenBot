@@ -1,4 +1,4 @@
-package fr.aven.bot.music;
+package fr.aven.bot.modules.music;
 
 import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioTrack;

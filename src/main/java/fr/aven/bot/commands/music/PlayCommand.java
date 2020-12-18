@@ -1,14 +1,8 @@
 package fr.aven.bot.commands.music;
 
-import com.google.api.services.youtube.model.SearchResult;
-import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 import fr.aven.bot.Constants;
 import fr.aven.bot.Main;
-import fr.aven.bot.music.GuildMusicManager;
-import fr.aven.bot.music.PlayerManager;
-import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.Permission;
+import fr.aven.bot.modules.music.PlayerManager;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.GenericEvent;
@@ -18,7 +12,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
 public class PlayCommand extends MusicCommands

@@ -1,15 +1,14 @@
-package fr.aven.bot.events;
+package fr.aven.bot.modules.jda.events;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import fr.aven.bot.Main;
 import fr.aven.bot.commands.music.LyricsCommand;
-import fr.aven.bot.music.GuildMusicManager;
-import fr.aven.bot.music.PlayerManager;
+import fr.aven.bot.modules.music.GuildMusicManager;
+import fr.aven.bot.modules.music.PlayerManager;
 import fr.aven.bot.util.ICommand;
 import fr.aven.bot.util.MessageTask;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
-import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import javax.annotation.Nonnull;

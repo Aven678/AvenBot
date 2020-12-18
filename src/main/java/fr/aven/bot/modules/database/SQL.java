@@ -1,4 +1,4 @@
-package fr.aven.bot.database;
+package fr.aven.bot.modules.database;
 
 import fr.aven.bot.Constants;
 import fr.aven.bot.Main;
@@ -6,8 +6,8 @@ import fr.aven.bot.entity.Ban;
 import fr.aven.bot.entity.Kick;
 import fr.aven.bot.entity.Mute;
 import fr.aven.bot.entity.Warn;
-import fr.aven.bot.music.GuildMusicManager;
-import fr.aven.bot.music.PlayerManager;
+import fr.aven.bot.modules.music.GuildMusicManager;
+import fr.aven.bot.modules.music.PlayerManager;
 import fr.aven.bot.util.ICommand;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;

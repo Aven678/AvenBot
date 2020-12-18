@@ -1,17 +1,12 @@
-package fr.aven.bot.jda;
+package fr.aven.bot.modules.jda;
 
 import com.sedmelluq.discord.lavaplayer.jdaudp.NativeAudioSendFactory;
 import fr.aven.bot.Main;
+import fr.aven.bot.modules.tickets.TicketsEvent;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
 import net.dv8tion.jda.api.sharding.ShardManager;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
-import net.dv8tion.jda.api.utils.MemberCachePolicy;
-
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.EnumSet;
-import java.util.function.Function;
 
 public class JDAManager
 {
@@ -37,6 +32,7 @@ public class JDAManager
                             GatewayIntent.GUILD_MESSAGES,
                             GatewayIntent.GUILD_VOICE_STATES)
                     .setAudioSendFactory(new NativeAudioSendFactory())
+                    .addEventListeners(new TicketsEvent())
                     .build();
         } catch (Exception e)
         {

@@ -1,6 +1,6 @@
 package fr.aven.bot.util;
 
-import fr.aven.bot.jda.JDAManager;
+import fr.aven.bot.modules.jda.JDAManager;
 import org.discordbots.api.client.DiscordBotListAPI;
 
 public class DBList

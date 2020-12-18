@@ -3,8 +3,7 @@ package fr.aven.bot.commands.music;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import fr.aven.bot.Constants;
 import fr.aven.bot.Main;
-import fr.aven.bot.music.PlayerManager;
-import net.dv8tion.jda.api.Permission;
+import fr.aven.bot.modules.music.PlayerManager;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 

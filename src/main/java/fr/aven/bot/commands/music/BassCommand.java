@@ -1,17 +1,10 @@
 package fr.aven.bot.commands.music;
 
-import com.sedmelluq.discord.lavaplayer.filter.equalizer.EqualizerFactory;
 import fr.aven.bot.Constants;
 import fr.aven.bot.Main;
-import fr.aven.bot.music.GuildMusicManager;
-import fr.aven.bot.music.PlayerManager;
-import fr.aven.bot.music.TrackScheduler;
+import fr.aven.bot.modules.music.PlayerManager;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.util.Arrays;

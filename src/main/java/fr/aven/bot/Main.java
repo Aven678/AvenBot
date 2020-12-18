@@ -1,11 +1,12 @@
 package fr.aven.bot;
 
-import fr.aven.bot.database.SQL;
-import fr.aven.bot.events.Listener;
-import fr.aven.bot.events.MemberActivityEvent;
-import fr.aven.bot.jda.JDAManager;
-import fr.aven.bot.events.MusicReactionListener;
-import fr.aven.bot.music.SpotifyAPI;
+import fr.aven.bot.modules.database.SQL;
+import fr.aven.bot.modules.database.TickDB;
+import fr.aven.bot.modules.jda.events.Listener;
+import fr.aven.bot.modules.jda.events.MemberActivityEvent;
+import fr.aven.bot.modules.jda.JDAManager;
+import fr.aven.bot.modules.jda.events.MusicReactionListener;
+import fr.aven.bot.modules.music.SpotifyAPI;
 import fr.aven.bot.util.Configuration;
 import fr.aven.bot.util.DBList;
 import fr.aven.bot.util.KSoft;
