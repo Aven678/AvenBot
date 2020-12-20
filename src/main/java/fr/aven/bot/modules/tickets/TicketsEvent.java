@@ -26,6 +26,7 @@ public class TicketsEvent extends ListenerAdapter
     public void onMessageReactionAdd(@NotNull MessageReactionAddEvent event)
     {
         if (!event.getReactionEmote().isEmoji()) return;
+        if (event.getUser().isBot()) return;
 
         switch (event.getReactionEmote().getEmoji())
         {
