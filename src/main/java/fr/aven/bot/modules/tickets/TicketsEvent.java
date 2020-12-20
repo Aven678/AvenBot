@@ -12,6 +12,7 @@ import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
+import java.awt.*;
 import java.util.Arrays;
 
 import static net.dv8tion.jda.api.Permission.*;
@@ -60,6 +61,13 @@ public class TicketsEvent extends ListenerAdapter
                 if (ticketChannel)
                 {
                     channel.getManager().setName("closed-"+ticketId).clearOverridesAdded().queue();
+                    channel.sendMessage(new EmbedBuilder()
+                            .setTitle(Main.getDatabase().getTextFor("ticket.closeTitle", channel.getGuild()), "https://www.justaven.xyz")
+                            .setDescription(Main.getDatabase().getTextFor("ticket.closeDesc", channel.getGuild()))
+                            .setColor(event.getMember().getColor())
+                            .setFooter("AvenBot by Aven#1000")
+                            .build())
+                        .queue();
                 }
 
                 break;
@@ -83,8 +91,10 @@ public class TicketsEvent extends ListenerAdapter
                         tc.sendMessage(new MessageBuilder()
                                 .setContent(user.getAsMention())
                                 .setEmbed(new EmbedBuilder()
-                                        .setDescription(name + "\n" + Main.getDatabase().getTextFor("ticket.closeText", channel.getGuild()))
+                                        .setAuthor(name, "https://justaven.xyz")
+                                        .setDescription(Main.getDatabase().getTextFor("ticket.closeText", channel.getGuild()))
                                         .setColor(channel.getGuild().getMember(user).getColor())
+                                        .setFooter("AvenBot by Aven#1000")
                                         .build())
                                 .build()).queue(msg -> msg.addReaction(close).queue());
                     });
