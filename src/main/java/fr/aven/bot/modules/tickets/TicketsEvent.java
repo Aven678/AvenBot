@@ -60,7 +60,7 @@ public class TicketsEvent extends ListenerAdapter
 
                 if (ticketChannel)
                 {
-                    channel.getManager().setName("closed-"+ticketId).clearOverridesAdded().queue();
+                    channel.getManager().setName("closed-"+ticketId).removePermissionOverride(event.getGuild().getMemberById(ticketId)).queue();
                     channel.sendMessage(new EmbedBuilder()
                             .setTitle(Main.getDatabase().getTextFor("ticket.closeTitle", channel.getGuild()), "https://www.justaven.xyz")
                             .setDescription(Main.getDatabase().getTextFor("ticket.closeDesc", channel.getGuild()))
