@@ -21,6 +21,9 @@ public class TicketsEvent extends ListenerAdapter
 {
     private final String ticket = "\uD83C\uDFAB";
     private final String close = "\uD83D\uDD10";
+    private final String reopen = "\uD83D\uDD13";
+    private final String delete = "❌";
+
     private TickDB tickDB = new TickDB();
 
     @Override
@@ -62,14 +65,24 @@ public class TicketsEvent extends ListenerAdapter
                 {
                     channel.getManager().setName("closed-"+ticketId).removePermissionOverride(event.getGuild().getMemberById(ticketId)).queue();
                     channel.sendMessage(new EmbedBuilder()
-                            .setTitle(Main.getDatabase().getTextFor("ticket.closeTitle", channel.getGuild()), "https://www.justaven.xyz")
+                            .setAuthor(Main.getDatabase().getTextFor("ticket.closeTitle", channel.getGuild()), "https://www.justaven.xyz")
                             .setDescription(Main.getDatabase().getTextFor("ticket.closeDesc", channel.getGuild()))
                             .setColor(event.getMember().getColor())
                             .setFooter("AvenBot by Aven#1000")
                             .build())
-                        .queue();
+                        .queue(msg -> {
+                            msg.addReaction(reopen).queue();
+                            msg.addReaction(delete).queue();
+                        });
                 }
 
+                break;
+
+            case reopen:
+
+                break;
+
+            case delete:
                 break;
         }
 
