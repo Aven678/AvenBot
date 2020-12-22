@@ -96,7 +96,7 @@ public class TicketsEvent extends ListenerAdapter
                 break;
         }
 
-        event.getReaction().removeReaction().queue();
+        event.getReaction().removeReaction(event.getUser()).queue();
 
         super.onMessageReactionAdd(event);
     }
