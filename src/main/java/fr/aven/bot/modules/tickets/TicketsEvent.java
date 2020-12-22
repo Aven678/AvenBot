@@ -36,7 +36,7 @@ public class TicketsEvent extends ListenerAdapter
         if (!event.getReactionEmote().isEmoji()) return;
         if (event.getUser().isBot()) return;
 
-        if (!emotes.contains(event.getReactionEmote())) return;
+        if (!emotes.contains(event.getReactionEmote().getName())) return;
 
         TextChannel channel = event.getTextChannel();
         String channelName = channel.getName();
