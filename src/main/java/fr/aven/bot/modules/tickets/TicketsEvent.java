@@ -12,8 +12,8 @@ import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
-import java.awt.*;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Timer;
 
 import static net.dv8tion.jda.api.Permission.*;
@@ -25,6 +25,9 @@ public class TicketsEvent extends ListenerAdapter
     private final String reopen = "\uD83D\uDD13";
     private final String delete = "❌";
 
+    private final List<String> emotes = Arrays.asList(ticket, close, reopen, delete);
+
+
     private TickDB tickDB = new TickDB();
 
     @Override
@@ -32,6 +35,8 @@ public class TicketsEvent extends ListenerAdapter
     {
         if (!event.getReactionEmote().isEmoji()) return;
         if (event.getUser().isBot()) return;
+
+        if (!emotes.contains(event.getReactionEmote())) return;
 
         TextChannel channel = event.getTextChannel();
         String channelName = channel.getName();
@@ -90,6 +95,8 @@ public class TicketsEvent extends ListenerAdapter
                 new Timer().schedule(new TicketsCloseTask(channel), 5000);
                 break;
         }
+
+        event.getReaction().removeReaction().queue();
 
         super.onMessageReactionAdd(event);
     }
