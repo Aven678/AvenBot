@@ -82,7 +82,7 @@ public class TicketsEvent extends ListenerAdapter
                             msg.addReaction(reopen).queue();
                             msg.addReaction(delete).queue();
 
-                            channel.getManager().setTopic(finalTicketId).queue();
+                            channel.getManager().setTopic(msg.getId()).queue();
                         });
                 }
 
