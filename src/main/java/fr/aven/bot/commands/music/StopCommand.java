@@ -51,7 +51,7 @@ public class StopCommand extends MusicCommands
         manager.getGuildMusicManager(guild, channel).scheduler.getQueue().clear();
         manager.getGuildMusicManager(guild, channel).scheduler.nextTrack(track, false);
 
-        manager.getGuildMusicManager(guild, channel).scheduler.channel.sendMessage(Main.getDatabase().getTextFor("stop.confirm", guild)).queue();
+        //manager.getGuildMusicManager(guild, channel).scheduler.channel.sendMessage(Main.getDatabase().getTextFor("stop.confirm", guild)).queue();
     }
 
     @Override

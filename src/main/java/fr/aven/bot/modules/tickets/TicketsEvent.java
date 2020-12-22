@@ -14,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.util.Arrays;
+import java.util.Timer;
 
 import static net.dv8tion.jda.api.Permission.*;
 
@@ -32,6 +33,9 @@ public class TicketsEvent extends ListenerAdapter
         if (!event.getReactionEmote().isEmoji()) return;
         if (event.getUser().isBot()) return;
 
+        TextChannel channel = event.getTextChannel();
+        String channelName = channel.getName();
+
         switch (event.getReactionEmote().getEmoji())
         {
             case ticket:
@@ -44,9 +48,6 @@ public class TicketsEvent extends ListenerAdapter
                 break;
 
             case close:
-                TextChannel channel = event.getTextChannel();
-                String channelName = channel.getName();
-
                 boolean ticketChannel = false;
                 String ticketId = "";
 
@@ -79,10 +80,14 @@ public class TicketsEvent extends ListenerAdapter
                 break;
 
             case reopen:
-
+                channel.getManager().setName(channelName.replace("closed", "ticket"))
+                        .putPermissionOverride(event.getGuild().getMemberById(channelName.replace("closed-", "")), Arrays.asList(MESSAGE_READ, MESSAGE_WRITE), null)
+                        .queue();
                 break;
 
             case delete:
+                channel.sendMessage(new EmbedBuilder().setDescription(Main.getDatabase().getTextFor("tickets.closeConfirm", event.getGuild())).build()).queue();
+                new Timer().schedule(new TicketsCloseTask(channel), 5000);
                 break;
         }
 
