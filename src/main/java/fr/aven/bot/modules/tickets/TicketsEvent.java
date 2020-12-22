@@ -10,6 +10,7 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -70,6 +71,7 @@ public class TicketsEvent extends ListenerAdapter
                 if (ticketChannel)
                 {
                     channel.getManager().setName("closed-"+ticketId).removePermissionOverride(event.getGuild().getMemberById(ticketId)).queue();
+                    String finalTicketId = ticketId;
                     channel.sendMessage(new EmbedBuilder()
                             .setAuthor(Main.getDatabase().getTextFor("ticket.closeTitle", channel.getGuild()), "https://www.justaven.xyz")
                             .setDescription(Main.getDatabase().getTextFor("ticket.closeDesc", channel.getGuild()))
@@ -79,15 +81,24 @@ public class TicketsEvent extends ListenerAdapter
                         .queue(msg -> {
                             msg.addReaction(reopen).queue();
                             msg.addReaction(delete).queue();
+
+                            channel.getManager().setTopic(finalTicketId).queue();
                         });
                 }
 
                 break;
 
             case reopen:
+                if (!channelName.startsWith("closed")) return;
+
+                var memberId = channelName;
+                memberId = StringUtils.substringBefore("-", "");
+
                 channel.getManager().setName(channelName.replace("closed", "ticket"))
-                        .putPermissionOverride(event.getGuild().getMemberById(channelName.replace("closed-", "")), Arrays.asList(MESSAGE_READ, MESSAGE_WRITE), null)
+                        .putPermissionOverride(event.getGuild().getMemberById(memberId), Arrays.asList(MESSAGE_READ, MESSAGE_WRITE), null)
                         .queue();
+
+                channel.deleteMessageById(channel.getTopic()).queue(msg -> {}, error -> {});
                 break;
 
             case delete:
