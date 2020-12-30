@@ -184,7 +184,9 @@ public class TrackScheduler extends AudioEventAdapter
 
         alwaysStopped = false;
 
+        if (guild.getTextChannelById(channel.getId()) == null) return;
         if (lastMessageStatus != null) lastMessageStatus.delete().queue();
+
 
         User userRequest = guild.getJDA().getUserById(usersRequest.get(track));
 
@@ -209,7 +211,7 @@ public class TrackScheduler extends AudioEventAdapter
             msg.addReaction("❌").queue(); //stop
 
             lastMessageStatus = msg;
-        });
+        }, error -> {});
     }
 
     public void editMessage()

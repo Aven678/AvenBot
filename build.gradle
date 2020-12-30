@@ -26,10 +26,10 @@ jar {
 dependencies {
     compile 'com.google.apis:google-api-services-youtube:v3-rev20200526-1.30.9'
     compile 'net.explodingbush.KSoft4J:KSoft4J:1.0.6'
-    compile 'net.dv8tion:JDA:4.2.0_222'
+    compile 'net.dv8tion:JDA:4.2.0_224'
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.7'
     //implementation 'com.github.Devoxin:lavaplayer:1.3.59'
-    implementation 'com.sedmelluq:lavaplayer:1.3.64'
+    implementation 'com.sedmelluq:lavaplayer:1.3.66'
 
     // https://mvnrepository.com/artifact/org.json/json
     compile group: 'org.json', name: 'json', version: '20180813'

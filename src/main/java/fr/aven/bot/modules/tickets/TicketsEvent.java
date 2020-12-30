@@ -42,6 +42,42 @@ public class TicketsEvent extends ListenerAdapter
         TextChannel channel = event.getTextChannel();
         String channelName = channel.getName();
 
+        event.getChannel().retrieveMessageById(event.getMessageId()).queue(msg -> {
+            if (!msg.getAuthor().equals(event.getGuild().getSelfMember().getUser())) return;
+
+            checkReact(event, channel, channelName);
+        });
+
+        super.onMessageReactionAdd(event);
+    }
+
+    private void createTicketChannel(TextChannel channel, User user)
+    {
+        Category category = tickDB.getCategory(channel);
+        if (category == null) return;
+
+        if (category.getGuild().getTextChannelsByName("ticket-"+user.getId(), true).size() == 0)
+        {
+            String name = tickDB.getName(channel);
+
+            category.createTextChannel("ticket-"+user.getId())
+                    .addMemberPermissionOverride(user.getIdLong(), Arrays.asList(MESSAGE_READ, MESSAGE_WRITE), null)
+                    .queue(tc -> {
+                        tc.sendMessage(new MessageBuilder()
+                                .setContent(user.getAsMention())
+                                .setEmbed(new EmbedBuilder()
+                                        .setAuthor(name, "https://justaven.xyz")
+                                        .setDescription(Main.getDatabase().getTextFor("ticket.closeText", channel.getGuild()))
+                                        .setColor(channel.getGuild().getMember(user).getColor())
+                                        .setFooter("AvenBot by Aven#1000")
+                                        .build())
+                                .build()).queue(msg -> msg.addReaction(close).queue());
+                    });
+        }
+    }
+
+    private void checkReact(MessageReactionAddEvent event, TextChannel channel, String channelName)
+    {
         switch (event.getReactionEmote().getEmoji())
         {
             case ticket:
@@ -78,12 +114,12 @@ public class TicketsEvent extends ListenerAdapter
                             .setColor(event.getMember().getColor())
                             .setFooter("AvenBot by Aven#1000")
                             .build())
-                        .queue(msg -> {
-                            msg.addReaction(reopen).queue();
-                            msg.addReaction(delete).queue();
+                            .queue(msg -> {
+                                msg.addReaction(reopen).queue();
+                                msg.addReaction(delete).queue();
 
-                            channel.getManager().setTopic(msg.getId()).queue();
-                        });
+                                channel.getManager().setTopic(msg.getId()).queue();
+                            });
                 }
 
                 break;
@@ -95,7 +131,8 @@ public class TicketsEvent extends ListenerAdapter
                 memberId = StringUtils.substringBefore("-", "");
 
                 channel.getManager().setName(channelName.replace("closed", "ticket"))
-                        .putPermissionOverride(event.getGuild().getMemberById(memberId), Arrays.asList(MESSAGE_READ, MESSAGE_WRITE), null)
+                        .putPermissionOverride(event.getGuild().getMemberById(memberId),
+                                Arrays.asList(MESSAGE_READ, MESSAGE_WRITE), null)
                         .queue();
 
                 channel.deleteMessageById(channel.getTopic()).queue(msg -> {}, error -> {});
@@ -108,32 +145,5 @@ public class TicketsEvent extends ListenerAdapter
         }
 
         event.getReaction().removeReaction(event.getUser()).queue();
-
-        super.onMessageReactionAdd(event);
-    }
-
-    private void createTicketChannel(TextChannel channel, User user)
-    {
-        Category category = tickDB.getCategory(channel);
-        if (category == null) return;
-
-        if (category.getGuild().getTextChannelsByName("ticket-"+user.getId(), true).size() == 0)
-        {
-            String name = tickDB.getName(channel);
-
-            category.createTextChannel("ticket-"+user.getId())
-                    .addMemberPermissionOverride(user.getIdLong(), Arrays.asList(MESSAGE_READ, MESSAGE_WRITE), null)
-                    .queue(tc -> {
-                        tc.sendMessage(new MessageBuilder()
-                                .setContent(user.getAsMention())
-                                .setEmbed(new EmbedBuilder()
-                                        .setAuthor(name, "https://justaven.xyz")
-                                        .setDescription(Main.getDatabase().getTextFor("ticket.closeText", channel.getGuild()))
-                                        .setColor(channel.getGuild().getMember(user).getColor())
-                                        .setFooter("AvenBot by Aven#1000")
-                                        .build())
-                                .build()).queue(msg -> msg.addReaction(close).queue());
-                    });
-        }
     }
 }
