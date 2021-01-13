@@ -71,7 +71,7 @@ public class TicketsEvent extends ListenerAdapter
                                     .setColor(member.getColor())
                                     .setFooter("AvenBot by Aven#1000")
                                     .build())
-                            .build()).queue(msg -> msg.addReaction(close).queue())
+                            .build()).queue(msg -> msg.addReaction(close).queue());
                 });
 
     }
