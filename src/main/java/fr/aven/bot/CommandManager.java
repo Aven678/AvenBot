@@ -52,7 +52,7 @@ public class CommandManager {
         addCommands(new InviteCommand());
         //addCommands(new LmgtfyCommand(), new HelpCommand(this), new SearchCommand());
         //FUN COMMANDS
-        addCommands(new CatCommand(), new DogCommand(), new NsfwPictureCommand(), new SayCommand(), new StonksCommand());
+        addCommands(new CatCommand(), new CfunCommand(), new DogCommand(), new LmgtfyCommand(), new NsfwPictureCommand(), new SayCommand(), new StonksCommand());
     }
 
     private void addCommand(ICommand command) {
