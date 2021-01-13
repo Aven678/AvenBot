@@ -16,7 +16,7 @@ public class LmgtfyCommand implements ICommand
 {
     @Override
     public void handle(List<String> args, GuildMessageReceivedEvent event) {
-        String link = "https://lmgtfy.com/?q="+ (args.size() == 0 ? "justaven.xyz" : StringUtils.join(args, "%20"));
+        String link = "https://lmgtfy.app/?qtype=search&q="+ (args.size() == 0 ? "justaven.xyz" : StringUtils.join(args, "%20"));
 
         event.getChannel().sendMessage("✅ "+event.getAuthor().getAsMention()+" ─> "+link).queue();
     }

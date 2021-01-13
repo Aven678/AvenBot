@@ -40,6 +40,7 @@ public class Main
         System.setProperty("AvenBot", "");
         configuration = new Configuration("config.json");
         database = new SQL();
+        ticketsChannelDB = new TicketsChannelDB();
         commandManager = new CommandManager();
         listener = new Listener(commandManager);
         JDAManager.getShardManager().addEventListener(listener, new MusicReactionListener(), new MemberActivityEvent());
