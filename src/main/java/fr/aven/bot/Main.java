@@ -1,12 +1,12 @@
 package fr.aven.bot;
 
 import fr.aven.bot.modules.database.SQL;
-import fr.aven.bot.modules.database.TickDB;
 import fr.aven.bot.modules.jda.events.Listener;
 import fr.aven.bot.modules.jda.events.MemberActivityEvent;
 import fr.aven.bot.modules.jda.JDAManager;
 import fr.aven.bot.modules.jda.events.MusicReactionListener;
 import fr.aven.bot.modules.music.SpotifyAPI;
+import fr.aven.bot.modules.tickets.TicketsChannelDB;
 import fr.aven.bot.util.Configuration;
 import fr.aven.bot.util.DBList;
 import fr.aven.bot.util.KSoft;
@@ -24,7 +24,10 @@ public class Main
     public static Date lastRestart;
     private static CommandManager commandManager;
     private static Listener listener;
+
+    private static TicketsChannelDB ticketsChannelDB;
     private static SQL database;
+
     private static KSoft kSoft;
 
     private static DBList dbl = new DBList();
@@ -65,6 +68,8 @@ public class Main
     public static SpotifyAPI getSpotifyAPI() {
         return spotifyAPI;
     }
+
+    public static TicketsChannelDB getTicketsDB() { return ticketsChannelDB; }
 
     public static void setActivity(Activity.ActivityType type, String text) {
 

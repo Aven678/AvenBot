@@ -51,29 +51,25 @@ public class TicketsEvent extends ListenerAdapter
         super.onMessageReactionAdd(event);
     }
 
-    private void createTicketChannel(TextChannel channel, User user)
-    {
+    private void createTicketChannel(TextChannel channel, Member member) {
         Category category = tickDB.getCategory(channel);
         if (category == null) return;
+        if (Main.getTicketsDB().hasOpenTicket(member)) return;
 
-        if (category.getGuild().getTextChannelsByName("ticket-"+user.getId(), true).size() == 0)
-        {
-            String name = tickDB.getName(channel);
+        String name = tickDB.getName(channel);
 
-            category.createTextChannel("ticket-"+user.getId())
-                    .addMemberPermissionOverride(user.getIdLong(), Arrays.asList(MESSAGE_READ, MESSAGE_WRITE), null)
-                    .queue(tc -> {
-                        tc.sendMessage(new MessageBuilder()
-                                .setContent(user.getAsMention())
-                                .setEmbed(new EmbedBuilder()
-                                        .setAuthor(name, "https://justaven.xyz")
-                                        .setDescription(Main.getDatabase().getTextFor("ticket.closeText", channel.getGuild()))
-                                        .setColor(channel.getGuild().getMember(user).getColor())
-                                        .setFooter("AvenBot by Aven#1000")
-                                        .build())
-                                .build()).queue(msg -> msg.addReaction(close).queue());
-                    });
-        }
+        category.createTextChannel("ticket-" + Main.getTicketsDB().createTicketID(member.getGuild()))
+                .addMemberPermissionOverride(member.getIdLong(), Arrays.asList(MESSAGE_READ, MESSAGE_WRITE), null)
+                .queue(tc -> tc.sendMessage(new MessageBuilder()
+                        .setContent(member.getAsMention())
+                        .setEmbed(new EmbedBuilder()
+                                .setAuthor(name, "https://justaven.xyz")
+                                .setDescription(Main.getDatabase().getTextFor("ticket.closeText", channel.getGuild()))
+                                .setColor(member.getColor())
+                                .setFooter("AvenBot by Aven#1000")
+                                .build())
+                        .build()).queue(msg -> msg.addReaction(close).queue()));
+
     }
 
     private void checkReact(MessageReactionAddEvent event, TextChannel channel, String channelName)
@@ -83,17 +79,20 @@ public class TicketsEvent extends ListenerAdapter
             case ticket:
                 if (!tickDB.isTicketRequestChannel(event.getTextChannel())) return;
 
-                event.retrieveMessage().queue(msg -> {
-                    if (!msg.getMember().equals(event.getGuild().getSelfMember())) return;
-                    createTicketChannel(event.getTextChannel(), event.getUser());
-                });
+                event.retrieveMessage().queue(msg -> createTicketChannel(event.getTextChannel(), event.getMember()));
                 break;
 
             case close:
-                boolean ticketChannel = false;
-                String ticketId = "";
+                //boolean ticketChannel = false;
 
-                for (Member member : channel.getMembers())
+                Member author = Main.getTicketsDB().getAuthorByTicketChannel(channel);
+                if (author == null) return;
+                if (!channel.getMembers().contains(author)) return;
+                int ticketId = Main.getTicketsDB().getTicketIdByTicketChannel(channel);
+
+                if (!channelName.equalsIgnoreCase("ticket-"+ticketId)) return;
+
+                /*for (Member member : channel.getMembers())
                 {
                     if (member.getUser().isBot()) continue;
 
@@ -102,12 +101,13 @@ public class TicketsEvent extends ListenerAdapter
                         ticketId = member.getId();
                         break;
                     }
-                }
+                }*/
 
-                if (ticketChannel)
-                {
-                    channel.getManager().setName("closed-"+ticketId).removePermissionOverride(event.getGuild().getMemberById(ticketId)).queue();
-                    String finalTicketId = ticketId;
+                /*if (ticketChannel)
+                {*/
+
+                Main.getTicketsDB().closeTicket(channel);
+                    channel.getManager().setName("closed-"+ticketId).removePermissionOverride(author).queue();
                     channel.sendMessage(new EmbedBuilder()
                             .setAuthor(Main.getDatabase().getTextFor("ticket.closeTitle", channel.getGuild()), "https://www.justaven.xyz")
                             .setDescription(Main.getDatabase().getTextFor("ticket.closeDesc", channel.getGuild()))
@@ -120,25 +120,27 @@ public class TicketsEvent extends ListenerAdapter
 
                                 channel.getManager().setTopic(msg.getId()).queue();
                             });
-                }
+                //}
 
                 break;
 
             case reopen:
                 if (!channelName.startsWith("closed")) return;
 
-                var memberId = channelName;
-                memberId = StringUtils.substringBefore("-", "");
+                Main.getTicketsDB().reopenTicket(channel);
 
                 channel.getManager().setName(channelName.replace("closed", "ticket"))
-                        .putPermissionOverride(event.getGuild().getMemberById(memberId),
+                        .putPermissionOverride(Main.getTicketsDB().getAuthorByTicketChannel(channel),
                                 Arrays.asList(MESSAGE_READ, MESSAGE_WRITE), null)
                         .queue();
 
-                channel.deleteMessageById(channel.getTopic()).queue(msg -> {}, error -> {});
+                if (channel.getTopic() != null) channel.deleteMessageById(channel.getTopic()).queue(msg -> {}, error -> {});
                 break;
 
             case delete:
+                if (!Main.getTicketsDB().isTicketClosed(channel)) return;
+
+                Main.getTicketsDB().ticketDeleted(channel);
                 channel.sendMessage(new EmbedBuilder().setDescription(Main.getDatabase().getTextFor("tickets.closeConfirm", event.getGuild())).build()).queue();
                 new Timer().schedule(new TicketsCloseTask(channel), 5000);
                 break;
