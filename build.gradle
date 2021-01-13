@@ -24,10 +24,6 @@ jar {
     }
 }
 
-shadowJar {
-    minimize()
-}
-
 dependencies {
     compile 'com.google.apis:google-api-services-youtube:v3-rev20200526-1.30.9'
     compile 'net.explodingbush.KSoft4J:KSoft4J:1.0.6'
