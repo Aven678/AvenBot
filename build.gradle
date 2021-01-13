@@ -2,7 +2,7 @@ plugins {
     id'java'
     id'application'
     id'com.github.johnrengelman.shadow' version '4.0.4'
-    id "com.sedmelluq.jdaction" version "1.0.99-beta3"
+    //id "com.sedmelluq.jdaction" version "1.0.99-beta3"
 }
 
 group 'fr.aven'
