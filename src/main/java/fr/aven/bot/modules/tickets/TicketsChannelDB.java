@@ -49,7 +49,7 @@ public class TicketsChannelDB
             Statement statement = database.getConnection().createStatement();
 
             ResultSet resultSet = statement.executeQuery(SQL);
-            int ticketId = 0;
+            int ticketId = 1;
 
             while (resultSet.next())
                 ticketId = ticketId + 1;

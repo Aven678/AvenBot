@@ -57,18 +57,22 @@ public class TicketsEvent extends ListenerAdapter
         if (Main.getTicketsDB().hasOpenTicket(member)) return;
 
         String name = tickDB.getName(channel);
+        int ticketID = Main.getTicketsDB().createTicketID(member.getGuild());
 
-        category.createTextChannel("ticket-" + Main.getTicketsDB().createTicketID(member.getGuild()))
+        category.createTextChannel("ticket-" + ticketID)
                 .addMemberPermissionOverride(member.getIdLong(), Arrays.asList(MESSAGE_READ, MESSAGE_WRITE), null)
-                .queue(tc -> tc.sendMessage(new MessageBuilder()
-                        .setContent(member.getAsMention())
-                        .setEmbed(new EmbedBuilder()
-                                .setAuthor(name, "https://justaven.xyz")
-                                .setDescription(Main.getDatabase().getTextFor("ticket.closeText", channel.getGuild()))
-                                .setColor(member.getColor())
-                                .setFooter("AvenBot by Aven#1000")
-                                .build())
-                        .build()).queue(msg -> msg.addReaction(close).queue()));
+                .queue(tc -> {
+                    Main.getTicketsDB().addTicketChannel(channel, member.getId(), ticketID);
+                    tc.sendMessage(new MessageBuilder()
+                            .setContent(member.getAsMention())
+                            .setEmbed(new EmbedBuilder()
+                                    .setAuthor(name, "https://justaven.xyz")
+                                    .setDescription(Main.getDatabase().getTextFor("ticket.closeText", channel.getGuild()))
+                                    .setColor(member.getColor())
+                                    .setFooter("AvenBot by Aven#1000")
+                                    .build())
+                            .build()).queue(msg -> msg.addReaction(close).queue())
+                });
 
     }
 
