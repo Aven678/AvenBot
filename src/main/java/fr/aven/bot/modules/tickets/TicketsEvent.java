@@ -94,7 +94,7 @@ public class TicketsEvent extends ListenerAdapter
                 if (!channel.getMembers().contains(author)) return;
                 int ticketId = Main.getTicketsDB().getTicketIdByTicketChannel(channel);
 
-                if (!channelName.equalsIgnoreCase("ticket-"+ticketId)) return;
+                if (!Main.getTicketsDB().isTicketClosed(channel)) return;
 
                 /*for (Member member : channel.getMembers())
                 {
