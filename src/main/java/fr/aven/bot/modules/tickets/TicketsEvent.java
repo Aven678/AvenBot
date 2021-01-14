@@ -4,13 +4,9 @@ import fr.aven.bot.Main;
 import fr.aven.bot.modules.database.TickDB;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
-import net.dv8tion.jda.api.entities.Category;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -45,6 +41,7 @@ public class TicketsEvent extends ListenerAdapter
         event.getChannel().retrieveMessageById(event.getMessageId()).queue(msg -> {
             if (!msg.getAuthor().equals(event.getGuild().getSelfMember().getUser())) return;
 
+            System.out.println("ça c'est ok x1");
             checkReact(event, channel, channelName);
         });
 
@@ -62,7 +59,7 @@ public class TicketsEvent extends ListenerAdapter
         category.createTextChannel("ticket-" + ticketID)
                 .addMemberPermissionOverride(member.getIdLong(), Arrays.asList(MESSAGE_READ, MESSAGE_WRITE), null)
                 .queue(tc -> {
-                    Main.getTicketsDB().addTicketChannel(channel, member.getId(), ticketID);
+                    Main.getTicketsDB().addTicketChannel(tc, member.getId(), ticketID);
                     tc.sendMessage(new MessageBuilder()
                             .setContent(member.getAsMention())
                             .setEmbed(new EmbedBuilder()
@@ -91,10 +88,14 @@ public class TicketsEvent extends ListenerAdapter
 
                 Member author = Main.getTicketsDB().getAuthorByTicketChannel(channel);
                 if (author == null) return;
+                System.out.println("ça c'est ok x2");
                 if (!channel.getMembers().contains(author)) return;
+                System.out.println("ça c'est ok x3");
                 int ticketId = Main.getTicketsDB().getTicketIdByTicketChannel(channel);
+                System.out.println("ça c'est ok x4");
 
-                if (!Main.getTicketsDB().isTicketClosed(channel)) return;
+                if (Main.getTicketsDB().isTicketClosed(channel)) return;
+                System.out.println("ça c'est ok x5");
 
                 /*for (Member member : channel.getMembers())
                 {
@@ -142,14 +143,17 @@ public class TicketsEvent extends ListenerAdapter
                 break;
 
             case delete:
-                if (!Main.getTicketsDB().isTicketClosed(channel)) return;
+                if (Main.getTicketsDB().isTicketClosed(channel)) return;
 
                 Main.getTicketsDB().ticketDeleted(channel);
                 channel.sendMessage(new EmbedBuilder().setDescription(Main.getDatabase().getTextFor("tickets.closeConfirm", event.getGuild())).build()).queue();
                 new Timer().schedule(new TicketsCloseTask(channel), 5000);
                 break;
         }
+    }
 
-        event.getReaction().removeReaction(event.getUser()).queue();
+    private void deleteReaction(User user, MessageReaction reaction)
+    {
+        reaction.removeReaction(user).queue();
     }
 }

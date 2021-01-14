@@ -92,7 +92,7 @@ public class CommandManager {
 
         if (!commands.containsKey(invoke)) return;
 
-        if (!Main.getDatabase().checkPermission(event.getGuild(), event.getAuthor(), commands.get(invoke).getPermission(), event.getChannel())) {
+        if (!Main.getDatabase().checkPermission(event.getGuild(), event.getAuthor(), getCommand(invoke).getPermission(), event.getChannel())) {
             event.getChannel().sendMessage(new EmbedBuilder().setColor(Color.RED).setTitle("Error").setDescription("You don't have the permission to execute this command.").setFooter("Command executed by " + event.getAuthor().getAsTag()).build()).queue();
             return;
         }
@@ -100,17 +100,18 @@ public class CommandManager {
         final List<String> args = Arrays.asList(split).subList(1, split.length);
 
         if (args.size() != 0 && args.get(0).equals("-help")) {
-            event.getChannel().sendMessage(new EmbedBuilder().addField(commands.get(invoke).getHelp()).build()).queue();
+            event.getChannel().sendMessage(new EmbedBuilder().addField(getCommand(invoke).getHelp()).build()).queue();
         } else {
             if (event.getGuild().getSelfMember().hasPermission(event.getChannel(), Permission.MESSAGE_WRITE)) {
-                if (!event.getGuild().getSelfMember().hasPermission(commands.get(invoke).requiredDiscordPermission()))
+                if (!event.getGuild().getSelfMember().hasPermission(getCommand(invoke).requiredDiscordPermission()))
                     if (!event.getGuild().getSelfMember().hasPermission(Permission.ADMINISTRATOR)) {
                         event.getChannel().sendMessage(Main.getDatabase().getTextFor("missingPermissions", event.getGuild())).queue();
                         return;
                     }
             }
 
-            commands.get(invoke).handle(args, event);
+            getCommand(invoke).handle(args, event);
+            if (event.getGuild().getSelfMember().hasPermission(Permission.MESSAGE_MANAGE)) event.getMessage().delete().queue();
         }
     }
 

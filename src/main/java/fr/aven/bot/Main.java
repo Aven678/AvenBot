@@ -35,6 +35,7 @@ public class Main
 
     public static void main(String... args) throws Exception
     {
+        System.setProperty("console.encoding","UTF-8");
         kSoft = new KSoft();
         lastRestart = new Date();
         System.setProperty("AvenBot", "");

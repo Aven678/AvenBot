@@ -73,7 +73,7 @@ public class TicketsChannelDB
             Statement statement = database.getConnection().createStatement();
             ResultSet resultSet = statement.executeQuery(SQL);
             if (resultSet.next())
-                result = resultSet.getInt("closed") == 1;
+                if (resultSet.getInt("closed") == 1) result = true;
 
             resultSet.close();
             statement.close();
