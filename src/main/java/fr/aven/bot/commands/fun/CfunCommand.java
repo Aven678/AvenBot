@@ -16,7 +16,7 @@ public class CfunCommand implements ICommand
 {
     @Override
     public void handle(List<String> args, GuildMessageReceivedEvent event) {
-        event.getChannel().sendMessage(new EmbedBuilder().setImage("https://www.justaven.xyz/gifs/cfun.gif").build()).queue();
+        event.getChannel().sendMessage(new EmbedBuilder().setImage("https://www.justaven.xyz/gif/cfun.gif").build()).queue();
     }
 
     @Override
