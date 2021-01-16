@@ -46,6 +46,12 @@ dependencies {
     compile 'org.discordbots:DBL-Java-Library:2.0.1'
 
     compile 'se.michaelthelin.spotify:spotify-web-api-java:6.4.1'
+    //implementation 'me.shib.java.lib:omdb-java:1.2.0'
+    compile 'org.brianodisho.omdb:omdb:1.1'
+    compile 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation("com.squareup.okhttp3:logging-interceptor:4.9.0")
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+
 }
 
 compileJava.options.encoding = 'UTF-8'

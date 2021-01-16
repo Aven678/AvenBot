@@ -185,7 +185,7 @@ public class TrackScheduler extends AudioEventAdapter
         alwaysStopped = false;
 
         if (guild.getTextChannelById(channel.getId()) == null) return;
-        if (lastMessageStatus != null) lastMessageStatus.delete().queue();
+        if (lastMessageStatus != null) lastMessageStatus.delete().queue(success -> {}, error -> {});
 
 
         User userRequest = guild.getJDA().getUserById(usersRequest.get(track));

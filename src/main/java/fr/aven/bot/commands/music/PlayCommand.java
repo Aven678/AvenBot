@@ -1,5 +1,6 @@
 package fr.aven.bot.commands.music;
 
+import deezer.client.DeezerClient;
 import fr.aven.bot.Constants;
 import fr.aven.bot.Main;
 import fr.aven.bot.modules.music.PlayerManager;
@@ -10,12 +11,15 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
 public class PlayCommand extends MusicCommands
 {
+    private DeezerClient deezerClient = new DeezerClient();
+
     @Override
     public void handle(List<String> args, GuildMessageReceivedEvent event)
     {
@@ -28,6 +32,12 @@ public class PlayCommand extends MusicCommands
 
         if (args.isEmpty())
         {
+            if (event.getMessage().getAttachments().size() > 0)
+            {
+                manager.loadAndPlay(event.getMessage(), event.getMessage().getAttachments().get(0).getUrl(), false, false, true);
+                return;
+            }
+
             if (manager.getGuildMusicManager(event.getGuild(), event.getChannel()).scheduler.getQueue().isEmpty())
                 channel.sendMessage(Main.getDatabase().getTextFor("argsNotFound", event.getGuild())).queue();
 
@@ -53,7 +63,12 @@ public class PlayCommand extends MusicCommands
 
         String input = String.join(" ", args);
 
-        if (isSpotifyTrackURL(input))
+        if (isDeezerTrackURL(input))
+        {
+            manager.loadAndPlayDeezerTrack(event.getMessage(), deezerClient.getTrack(getDeezerTrackId(input)));
+        }
+
+        else if (isSpotifyTrackURL(input))
         {
             manager.loadAndPlaySpotifyTrack(event.getMessage(), Main.getSpotifyAPI().getTrack(input));
         }
@@ -67,7 +82,7 @@ public class PlayCommand extends MusicCommands
             if (!isUrl(input))
                 input = "ytsearch: "+input;
 
-            manager.loadAndPlay(event.getMessage(), input, false);
+            manager.loadAndPlay(event.getMessage(), input, false, false, false);
         }
 
     }
@@ -96,6 +111,41 @@ public class PlayCommand extends MusicCommands
         if (input.startsWith("https://open.spotify.com/playlist/")) return true;
         return false;
     }
+
+    private boolean isDeezerTrackURL(String input)
+    {
+        try {
+            URL url = new URL(input);
+
+            if (url.getHost().equalsIgnoreCase("www.deezer.com") || url.getHost().equalsIgnoreCase("deezer.com"))
+            {
+                if (Paths.get(url.getPath()).getName(1).toString().equalsIgnoreCase("track"))
+                    return true;
+            }
+        } catch (MalformedURLException | NumberFormatException e) {
+
+        }
+        return false;
+    }
+
+    private long getDeezerTrackId(String input)
+    {
+        try {
+            URL url = new URL(input);
+
+            /*String path = url.getPath().replaceFirst("/", "");
+            String pathV1 = path.substring(path.indexOf("/" ));
+            String pathV2 = pathV1.substring("/track/".length());
+
+            System.out.println(pathV2);*/
+            return Long.parseLong(Paths.get(url.getPath()).getName(2).toString());
+        } catch (NumberFormatException | MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
+
 
     @Override
     public boolean haveEvent() {

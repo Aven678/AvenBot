@@ -24,7 +24,6 @@ public class MusicReactionListener extends ListenerAdapter
     @Override
     public void onGuildMessageReactionAdd(@Nonnull GuildMessageReactionAddEvent event) {
         if (event.getUser().isBot()) return;
-        if (event.getGuild() == null) return;
         if (!event.getGuild().getAudioManager().isConnected()) return;
         GuildMusicManager manager = PlayerManager.getInstance().getGuildMusicManager(event.getGuild(), event.getChannel());
 
@@ -99,7 +98,5 @@ public class MusicReactionListener extends ListenerAdapter
         event.getChannel().sendMessage(new EmbedBuilder().setColor(Color.RED).setTitle("Error")
                 .setDescription("You don't have the permission to execute this command.")
                 .setFooter("Command executed by " + event.getUser().getAsTag()).build())
-                .queue(msg -> new Timer().schedule(new MessageTask(msg), 5000));
-        return;
-    }
+                .queue(msg -> new Timer().schedule(new MessageTask(msg), 5000)); }
 }

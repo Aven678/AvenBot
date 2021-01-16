@@ -40,7 +40,7 @@ public class BotCommand extends InfoSubCommands {
                 "Creators ❱ " + event.getJDA().getUserById(Constants.OWNER).getAsMention()+
                         "\nUptime ❱ " + getTimeDiff(new Date(), Main.lastRestart) +
                         "\nVersion ❱ " + Constants.VERSION +
-                        "\nLibraries used ❱ " + "JDA, OMDB, restcountries.eu",
+                        "\nLibraries used ❱ " + "JDA, OMDB, restcountries.eu, [deezer-api](https://github.com/alex-massa/deezer-api)",
                 false);
         botBuilder.addField("Some Figures: ",
                 "Servers ❱ " + event.getJDA().getGuilds().size() +
@@ -50,7 +50,8 @@ public class BotCommand extends InfoSubCommands {
                 false);
         botBuilder.addField("Links: ",
                 "Support Server ❱ " + "https://discord.gg/ntbdKjv" +
-                        "\nInvite Link ❱ " + "http://invite.justaven.xyz",
+                        "\nInvite Link ❱ " + "https://invite.justaven.xyz" +
+                        "\nWebsite ❱ " + "https://www.justaven.xyz",
                 false);
         event.getChannel().sendMessage(botBuilder.build()).queue();
     }

@@ -146,6 +146,62 @@ public class SQL
         return false;
     }
 
+    public void addAFK(Guild guild, User user, String reason)
+    {
+        String SQL = "INSERT INTO afk(guildID, userID, reason) VALUES (?,?,?)";
+
+        try {
+            PreparedStatement preparedStatement = getConnection().prepareStatement(SQL);
+            preparedStatement.setString(1, guild.getId());
+            preparedStatement.setString(2, user.getId());
+            preparedStatement.setString(3, reason);
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException sqlException) {
+            LOGGER.error(sqlException.getMessage());
+        }
+    }
+
+    public String getReasonAFK(Guild guild, User user)
+    {
+        String SQL = "SELECT * FROM afk WHERE guildID="+guild.getId()+" AND userID="+user.getId();
+
+        try {
+            ResultSet resultSet = getConnection().createStatement().executeQuery(SQL);
+            if (resultSet.next()) return resultSet.getString("reason");
+        } catch (SQLException sqlException) {
+            LOGGER.error(sqlException.getMessage());
+        }
+
+        return null;
+    }
+
+    public boolean isAFK(Guild guild, User user)
+    {
+        String SQL = "SELECT * FROM afk WHERE guildID="+guild.getId()+" AND userID="+user.getId();
+
+        try {
+            ResultSet resultSet = getConnection().createStatement().executeQuery(SQL);
+            if (resultSet.next()) return true;
+        } catch (SQLException sqlException) {
+            LOGGER.error(sqlException.getMessage());
+        }
+
+        return false;
+    }
+
+    public void removeAFK(Guild guild, User user)
+    {
+        String SQL = "DELETE FROM afk WHERE guildID="+guild.getId()+" AND userID="+user.getId();
+
+        try {
+            getConnection().createStatement().executeUpdate(SQL);
+        } catch (SQLException sqlException)
+        {
+            LOGGER.error(sqlException.getMessage());
+        }
+    }
+
     //INSERT IN DB
     public void insertGuild(Guild guild, String mutedRole) {
         //String SQL = "INSERT INTO guild(id, lang, adminRoles, modRoles, prefix, , idguild, joinmessage, leavemessage, announcechan)" + "VALUES(?,?,?,?,?,?)";

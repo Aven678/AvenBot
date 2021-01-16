@@ -1,5 +1,6 @@
 package fr.aven.bot;
 
+import fr.aven.bot.commands.fun.BingoMap;
 import fr.aven.bot.modules.database.SQL;
 import fr.aven.bot.modules.jda.events.Listener;
 import fr.aven.bot.modules.jda.events.MemberActivityEvent;
@@ -13,7 +14,10 @@ import fr.aven.bot.util.KSoft;
 import net.dv8tion.jda.api.entities.Activity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.impl.BotLoggerFactory;
+import org.slf4j.impl.StaticLoggerBinder;
 
+import java.io.IOException;
 import java.util.Date;
 
 public class Main
@@ -32,6 +36,7 @@ public class Main
 
     private static DBList dbl = new DBList();
     private static SpotifyAPI spotifyAPI;
+    private static BingoMap bingoMap;
 
     public static void main(String... args) throws Exception
     {
@@ -47,6 +52,7 @@ public class Main
         JDAManager.getShardManager().addEventListener(listener, new MusicReactionListener(), new MemberActivityEvent());
         setActivity(Activity.ActivityType.WATCHING, configuration.getString("game",Constants.PREFIX+"help | justaven.xyz"));
         spotifyAPI = new SpotifyAPI(configuration.getString("spotify.clientID", ""), configuration.getString("spotify.clientSecret", ""));
+        bingoMap = new BingoMap();
 
         configuration.save();
     }
@@ -73,6 +79,10 @@ public class Main
 
     public static TicketsChannelDB getTicketsDB() { return ticketsChannelDB; }
 
+    public static BingoMap getBingoMap() {
+        return bingoMap;
+    }
+
     public static void setActivity(Activity.ActivityType type, String text) {
 
         switch (type) {
@@ -93,7 +103,12 @@ public class Main
 
     public static void stop()
     {
-        configuration.save();
+        try {
+            configuration.save();
+            StaticLoggerBinder.getSingleton().getLoggerFactory().save();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         JDAManager.getShardManager().shutdown();
 
         System.exit(0);

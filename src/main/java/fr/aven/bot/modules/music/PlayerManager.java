@@ -140,14 +140,21 @@ public class PlayerManager
 
     }*/
 
+    public void loadAndPlayDeezerTrack(Message message, deezer.model.Track track)
+    {
+        String search = "ytsearch:" + track.getTitle()+" "+track.getArtist().getName();
+
+        loadAndPlay(message, search, false, true, false);
+    }
+
     public void loadAndPlaySpotifyTrack(Message message, Track track)
     {
         String search = "ytsearch:"+ track.getName()+" "+ track.getArtists()[0].getName();
 
-        loadAndPlay(message,search, true);
+        loadAndPlay(message,search, true, false, false);
     }
 
-    public void loadAndPlay(Message message, String trackUrl, boolean spotify)
+    public void loadAndPlay(Message message, String trackUrl, boolean spotify, boolean deezer, boolean file)
     {
         GuildMusicManager musicManager = getGuildMusicManager(message.getGuild(), message.getTextChannel());
 
@@ -160,7 +167,7 @@ public class PlayerManager
                 String title;
                 String author;
                 EmbedBuilder builder = new EmbedBuilder();
-                builder.setThumbnail("https://i.ytimg.com/vi/" + track.getInfo().identifier + "/maxresdefault.jpg");
+                if (!file) builder.setThumbnail("https://i.ytimg.com/vi/" + track.getInfo().identifier + "/maxresdefault.jpg");
                 title = track.getInfo().title;
                 author = track.getInfo().author;
 
@@ -178,27 +185,10 @@ public class PlayerManager
             @Override
             public void playlistLoaded(AudioPlaylist playlist) {
                 if (playlist.isSearchResult()) {
-                    if (spotify)
-                    {
-                        AudioTrack audioTrack = playlist.getTracks().get(0);
-
-
-                            String title;
-                            String author;
-                            EmbedBuilder builder = new EmbedBuilder();
-                            builder.setThumbnail("https://i.ytimg.com/vi/" + audioTrack.getInfo().identifier + "/maxresdefault.jpg");
-                            title = audioTrack.getInfo().title;
-                            author = audioTrack.getInfo().author;
-
-                            message.getChannel().sendMessage(builder.setAuthor(Main.getDatabase().getTextFor("music.add", message.getGuild()) + " (Spotify)", audioTrack.getInfo().uri, message.getJDA().getSelfUser().getAvatarUrl())
-                                    .addField("❱ " + Main.getDatabase().getTextFor("music.author", message.getGuild()) + " : " + author, "❱ " + title, false)
-                                    .setColor(new Color(0, 255, 151))
-                                    .setFooter("AvenBot by Aven#1000").build()).queue(msg -> {
-                                new Timer().schedule(new MessageTask(msg), 10000);
-                            });
-
-                        musicManager.scheduler.usersRequest.put(audioTrack, message.getAuthor().getIdLong());
-                        play(musicManager, audioTrack, message.getTextChannel());
+                    if (spotify) {
+                        loadAndPlayWithPlatforms(playlist, message, musicManager, "Spotify");
+                    } else if (deezer) {
+                        loadAndPlayWithPlatforms(playlist, message, musicManager, "Deezer");
                     } else {
 
                         EmbedBuilder builder = new EmbedBuilder();
@@ -266,6 +256,29 @@ public class PlayerManager
 
     }
 
+    private void loadAndPlayWithPlatforms(AudioPlaylist playlist, Message message, GuildMusicManager musicManager, String platform)
+    {
+        AudioTrack audioTrack = playlist.getTracks().get(0);
+
+
+        String title;
+        String author;
+        EmbedBuilder builder = new EmbedBuilder();
+        builder.setThumbnail("https://i.ytimg.com/vi/" + audioTrack.getInfo().identifier + "/maxresdefault.jpg");
+        title = audioTrack.getInfo().title;
+        author = audioTrack.getInfo().author;
+
+        message.getChannel().sendMessage(builder.setAuthor(Main.getDatabase().getTextFor("music.add", message.getGuild()) + (" ("+platform+")"), audioTrack.getInfo().uri, message.getJDA().getSelfUser().getAvatarUrl())
+                .addField("❱ " + Main.getDatabase().getTextFor("music.author", message.getGuild()) + " : " + author, "❱ " + title, false)
+                .setColor(new Color(0, 255, 151))
+                .setFooter("AvenBot by Aven#1000").build()).queue(msg -> {
+            new Timer().schedule(new MessageTask(msg), 10000);
+        });
+
+        musicManager.scheduler.usersRequest.put(audioTrack, message.getAuthor().getIdLong());
+        play(musicManager, audioTrack, message.getTextChannel());
+    }
+
     private void play(GuildMusicManager musicManager, AudioTrack track, TextChannel channel)
     {
         if (musicManager.scheduler.getQueue().isEmpty()) musicManager.scheduler.channel = channel;
@@ -281,4 +294,6 @@ public class PlayerManager
 
         return INSTANCE;
     }
+
+
 }

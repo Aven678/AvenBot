@@ -13,7 +13,7 @@ import java.util.Date;
 
 public class BotLogger implements Logger
 {
-    protected static final SimpleDateFormat simpleDate = new SimpleDateFormat("HH:mm:ss");
+    protected static final SimpleDateFormat simpleDate = new SimpleDateFormat("dd:MM:YYYY HH:mm:ss");
     protected static final int LOG_LEVEL_TRACE = LocationAwareLogger.TRACE_INT;
     protected static final int LOG_LEVEL_DEBUG = LocationAwareLogger.DEBUG_INT;
     protected static final int LOG_LEVEL_INFO = LocationAwareLogger.INFO_INT;

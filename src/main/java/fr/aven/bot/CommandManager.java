@@ -15,6 +15,7 @@ import fr.aven.bot.commands.modo.*;
 import fr.aven.bot.commands.music.*;
 /*import fr.aven.bot.commands.util.LmgtfyCommand;
 import fr.aven.bot.commands.util.search.subcommands.SearchSubCommands;*/
+import fr.aven.bot.commands.util.AFKCommand;
 import fr.aven.bot.commands.util.InviteCommand;
 import fr.aven.bot.util.ICommand;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -49,10 +50,10 @@ public class CommandManager {
         //INFO COMMANDS
         addCommands(new HelpCommand(), new InfoCommand());
         //UTIL COMMANDS
-        addCommands(new InviteCommand());
+        addCommands(new AFKCommand(), new InviteCommand());
         //addCommands(new LmgtfyCommand(), new HelpCommand(this), new SearchCommand());
         //FUN COMMANDS
-        addCommands(new CatCommand(), new CfunCommand(), new DogCommand(), new LmgtfyCommand(), new NsfwPictureCommand(), new SayCommand(), new StonksCommand());
+        addCommands(new Base64Command(), new BingoCommand(), new CatCommand(), new CfunCommand(), new DogCommand(), new LmgtfyCommand(), new NsfwPictureCommand(), new OMDBCommand(), new RollCommand(), new SayCommand(), new StonksCommand());
     }
 
     private void addCommand(ICommand command) {
@@ -111,7 +112,8 @@ public class CommandManager {
             }
 
             getCommand(invoke).handle(args, event);
-            if (event.getGuild().getSelfMember().hasPermission(Permission.MESSAGE_MANAGE)) event.getMessage().delete().queue();
+            COMMANDLOGGER.info("[Command] "+event.getAuthor().getAsTag()+" ("+event.getAuthor().getId()+") - "+event.getGuild().getName()+" ("+event.getGuild().getId()+") => "+event.getMessage().getContentRaw());
+            //if (event.getGuild().getSelfMember().hasPermission(Permission.MESSAGE_MANAGE)) event.getMessage().delete().queue();
         }
     }
 
