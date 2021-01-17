@@ -16,11 +16,13 @@ public class FakebanCommand implements ICommand
 {
     @Override
     public void handle(List<String> args, GuildMessageReceivedEvent event) {
-        String text = Main.getDatabase().getTextJLB(event.getGuild().getId(),"ban");
-        var textFinal = text.replaceAll("<guild>", event.getGuild().getName()).replaceAll("<member>", event.getMessage().getMentionedUsers().get(0).getAsTag()).replaceAll("<number>", String.valueOf(event.getGuild().getMembers().size()));
+        if (event.getMessage().getMentionedUsers().size() > 0)
+        {
+            var textFinal = event.getMessage().getMentionedUsers().get(0).getAsMention()+" has been banned...";
+            event.getChannel().sendMessage(textFinal).queue();
+        }
 
         if (event.getGuild().getSelfMember().hasPermission(net.dv8tion.jda.api.Permission.MESSAGE_MANAGE)) event.getMessage().delete().queue();
-        event.getChannel().sendMessage(textFinal).queue();
     }
 
     @Override
@@ -35,7 +37,7 @@ public class FakebanCommand implements ICommand
 
     @Override
     public MessageEmbed.Field getHelp() {
-        return new MessageEmbed.Field("", "Usage: `"+ Constants.PREFIX + getInvoke() +"`", false);
+        return new MessageEmbed.Field("FakeBan a member", "Usage: `"+ Constants.PREFIX + getInvoke() +"`", false);
     }
 
     @Override
