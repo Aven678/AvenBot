@@ -14,7 +14,7 @@ public class RollCommand implements ICommand
     @Override
     public void handle(List<String> args, GuildMessageReceivedEvent event) {
         Random random = new Random();
-        var number = random.nextInt();
+        var number = random.nextInt(100);
 
         try {
             if (args.size() > 0)
@@ -36,7 +36,7 @@ public class RollCommand implements ICommand
 
     @Override
     public MessageEmbed.Field getHelp() {
-        return new MessageEmbed.Field("Generates a random number.", "Usage: `"+ Constants.PREFIX + getInvoke() + " [limit]`", false);
+        return new MessageEmbed.Field("Generates a random number (limit is default 100).", "Usage: `"+ Constants.PREFIX + getInvoke() + " [limit]`", false);
     }
 
     @Override

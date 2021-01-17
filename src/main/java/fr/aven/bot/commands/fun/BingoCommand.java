@@ -17,6 +17,12 @@ public class BingoCommand implements ICommand
 {
     @Override
     public void handle(List<String> args, GuildMessageReceivedEvent event) {
+        if (!Main.getBingoMap().channelHasBingo(event.getChannel()))
+        {
+            event.getChannel().sendMessage("A bingo has already started!").queue();
+            return;
+        }
+
         Random random = new Random();
 
         int limit = random.nextInt(100);
@@ -28,6 +34,8 @@ public class BingoCommand implements ICommand
 
         Main.getBingoMap().addBingoChannel(event.getChannel(), limit);
         event.getChannel().sendMessage("A bingo has been started.").queue();
+        int finalLimit = limit;
+        event.getAuthor().openPrivateChannel().queue(pc -> pc.sendMessage("You started a bingo, the winning number is: "+ finalLimit).queue());
     }
 
     @Override

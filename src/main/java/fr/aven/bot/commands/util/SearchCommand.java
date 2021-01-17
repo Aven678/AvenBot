@@ -1,4 +1,4 @@
-package fr.aven.bot.commands.fun;
+package fr.aven.bot.commands.util;
 
 import fr.aven.bot.Constants;
 import fr.aven.bot.util.ICommand;
@@ -12,18 +12,18 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-public class LmgtfyCommand implements ICommand
+public class SearchCommand implements ICommand
 {
     @Override
     public void handle(List<String> args, GuildMessageReceivedEvent event) {
-        String link = "https://lmgtfy.app/?qtype=search&q="+ (args.size() == 0 ? "justaven.xyz" : StringUtils.join(args, "%20"));
+        String link = "https://www.google.fr/search?q="+ (args.size() == 0 ? "justaven.xyz" : StringUtils.join(args, "%20"));
 
         event.getChannel().sendMessage("✅ "+event.getAuthor().getAsMention()+" ─> "+link).queue();
     }
 
     @Override
     public Type getType() {
-        return Type.FUN;
+        return Type.UTIL;
     }
 
     @Override
@@ -38,7 +38,7 @@ public class LmgtfyCommand implements ICommand
 
     @Override
     public String getInvoke() {
-        return "lmgtfy";
+        return "search";
     }
 
     @Override

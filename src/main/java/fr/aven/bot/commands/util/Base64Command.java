@@ -1,4 +1,4 @@
-package fr.aven.bot.commands.fun;
+package fr.aven.bot.commands.util;
 
 import fr.aven.bot.Constants;
 import fr.aven.bot.util.ICommand;
@@ -53,7 +53,7 @@ public class Base64Command implements ICommand
 
     @Override
     public Type getType() {
-        return Type.FUN;
+        return Type.UTIL;
     }
 
     @Override

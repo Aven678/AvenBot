@@ -1,4 +1,4 @@
-package fr.aven.bot.commands.fun;
+package fr.aven.bot.commands.util;
 
 import fr.aven.bot.Constants;
 import fr.aven.bot.Main;
@@ -85,7 +85,7 @@ public class OMDBCommand implements ICommand
 
     @Override
     public Type getType() {
-        return Type.FUN;
+        return Type.UTIL;
     }
 
     @Override

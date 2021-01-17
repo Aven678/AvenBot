@@ -5,6 +5,7 @@ import fr.aven.bot.modules.database.SQL;
 import fr.aven.bot.modules.jda.JDAManager;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.TextChannel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -217,5 +218,25 @@ public class TicketsChannelDB
         {
             LOGGER.error(sqlException.getMessage());
         }
+    }
+
+    public boolean isTicketChannel(TextChannel channel)
+    {
+        String SQL = "SELECT * FROM tickets_id WHERE guildId=? AND channelId=?";
+
+
+        try {
+            PreparedStatement preparedStatement = database.getConnection().prepareStatement(SQL);
+
+            preparedStatement.setString(1, channel.getGuild().getId());
+            preparedStatement.setString(2, channel.getId());
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) return true;
+        } catch (SQLException sqlException) {
+            LOGGER.error(sqlException.getMessage());
+        }
+
+        return false;
     }
 }
