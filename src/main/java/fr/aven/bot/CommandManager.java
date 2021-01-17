@@ -15,10 +15,7 @@ import fr.aven.bot.commands.modo.*;
 import fr.aven.bot.commands.music.*;
 /*import fr.aven.bot.commands.util.LmgtfyCommand;
 import fr.aven.bot.commands.util.search.subcommands.SearchSubCommands;*/
-import fr.aven.bot.commands.util.AFKCommand;
-import fr.aven.bot.commands.util.Base64Command;
-import fr.aven.bot.commands.util.InviteCommand;
-import fr.aven.bot.commands.util.OMDBCommand;
+import fr.aven.bot.commands.util.*;
 import fr.aven.bot.util.ICommand;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
@@ -55,7 +52,7 @@ public class CommandManager {
         addCommands(new AFKCommand(), new InviteCommand());
         //addCommands(new LmgtfyCommand(), new HelpCommand(this), new SearchCommand());
         //FUN COMMANDS
-        addCommands(new Base64Command(), new BingoCommand(), new CatCommand(), new CfunCommand(), new DogCommand(), new LmgtfyCommand(), new NsfwPictureCommand(), new OMDBCommand(), new RollCommand(), new SayCommand(), new StonksCommand());
+        addCommands(new Base64Command(), new BingoCommand(), new CatCommand(), new CfunCommand(), new DogCommand(), new SearchCommand(), new NsfwPictureCommand(), new OMDBCommand(), new RollCommand(), new SayCommand(), new StonksCommand());
     }
 
     private void addCommand(ICommand command) {
