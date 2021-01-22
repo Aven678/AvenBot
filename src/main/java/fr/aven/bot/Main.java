@@ -107,7 +107,7 @@ public class Main
             configuration.save();
             StaticLoggerBinder.getSingleton().getLoggerFactory().save();
 
-            setActivity(Activity.ActivityType.COMPETING, "shutting down!");
+            setActivity(Activity.ActivityType.WATCHING, "shutting down!");
             JDAManager.getShardManager().setStatus(OnlineStatus.DO_NOT_DISTURB);
             Thread.sleep(5000);
         } catch (Exception e) {
