@@ -11,6 +11,7 @@ import fr.aven.bot.modules.tickets.TicketsChannelDB;
 import fr.aven.bot.util.Configuration;
 import fr.aven.bot.util.DBList;
 import fr.aven.bot.util.KSoft;
+import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +23,6 @@ import java.util.Date;
 
 public class Main
 {
-    public static Long owner = 261846314554228739L;
     private static Configuration configuration;
     public static Logger LOGGER = LoggerFactory.getLogger("AvenBot");
     public static Date lastRestart;
@@ -106,9 +106,14 @@ public class Main
         try {
             configuration.save();
             StaticLoggerBinder.getSingleton().getLoggerFactory().save();
-        } catch (IOException e) {
-            e.printStackTrace();
+
+            setActivity(Activity.ActivityType.COMPETING, "shutting down!");
+            JDAManager.getShardManager().setStatus(OnlineStatus.DO_NOT_DISTURB);
+            Thread.sleep(5000);
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
         }
+
         JDAManager.getShardManager().shutdown();
 
         System.exit(0);

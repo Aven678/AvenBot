@@ -40,7 +40,7 @@ public class CommandManager {
         COMMANDLOGGER.info("Loading commands");
 
         //ADMIN COMMANDS
-        addCommands(new AnnounceCommand(), new ClearConfigCommand(), new DJRoleCommand(), new LangCommand(), new Prefix(), new WarnConfig());
+        addCommands(new AnnounceCommand(), new AutoRoleCommand(), new ClearConfigCommand(), new DJRoleCommand(), new LangCommand(), new Prefix(), new WarnConfig());
 
         //MUSIC COMMANDS
         addCommands(new BassCommand(), new JoinCommand(), new LyricsCommand(), new PlayCommand(), new PauseCommand(), new QueueCommand(), new SkipCommand(), new ShuffleCommand(), new StopCommand(), new VolumeCommand());

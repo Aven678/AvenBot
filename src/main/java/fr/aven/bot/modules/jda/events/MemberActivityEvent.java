@@ -3,6 +3,7 @@ package fr.aven.bot.modules.jda.events;
 import fr.aven.bot.Main;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.guild.GuildBanEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
@@ -30,6 +31,10 @@ public class MemberActivityEvent extends ListenerAdapter
 
         if (event.getGuild().getSelfMember().hasPermission(textChannel, Permission.MESSAGE_WRITE))
             textChannel.sendMessage(textFinal).queue();
+
+        Role role = Main.getDatabase().getAutoRole(event.getGuild());
+        if (role != null && (event.getGuild().getSelfMember().hasPermission(Permission.MANAGE_ROLES) || event.getGuild().getSelfMember().hasPermission(Permission.ADMINISTRATOR)))
+            event.getGuild().addRoleToMember(event.getMember(), role).queue();
 
         super.onGuildMemberJoin(event);
     }

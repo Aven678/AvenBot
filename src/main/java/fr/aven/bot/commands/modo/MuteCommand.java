@@ -55,6 +55,12 @@ public class MuteCommand extends ModoCommands {
 
         Member mutedMember = message.getMentionedMembers().get(0);
 
+        if (mutedMember.getId().equalsIgnoreCase(message.getAuthor().getId()))
+        {
+            channel.sendMessage(new EmbedBuilder().setDescription("You can't mute yourself!").setColor(Color.RED).build()).queue();
+            return;
+        }
+
         if (message.toString().length() > 2) {
 
             String reason;

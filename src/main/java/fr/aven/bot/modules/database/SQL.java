@@ -6,6 +6,7 @@ import fr.aven.bot.entity.Ban;
 import fr.aven.bot.entity.Kick;
 import fr.aven.bot.entity.Mute;
 import fr.aven.bot.entity.Warn;
+import fr.aven.bot.modules.jda.JDAManager;
 import fr.aven.bot.modules.music.GuildMusicManager;
 import fr.aven.bot.modules.music.PlayerManager;
 import fr.aven.bot.util.ICommand;
@@ -232,6 +233,22 @@ public class SQL
         String SQL = "INSERT INTO ";
     }
 
+    public Role getAutoRole(Guild guild)
+    {
+        String SQL = "SELECT * FROM guild WHERE guildID="+guild.getId();
+
+        try {
+            Statement statement = getConnection().createStatement();
+            ResultSet resultSet = statement.executeQuery(SQL);
+
+            if (resultSet.next())
+                if (resultSet.getString("autoRoleID") != null)
+                    return JDAManager.getShardManager().getRoleById(resultSet.getString("autoRoleID"));
+        } catch (SQLException sqlException) { LOGGER.error(sqlException.getMessage()); }
+
+        return null;
+    }
+
     public String getTextFor(String request, Guild guild)
     {
         try {
@@ -256,7 +273,10 @@ public class SQL
     {
         if (member.isOwner()) return true;
         if (member.hasPermission(net.dv8tion.jda.api.Permission.ADMINISTRATOR)) return true;
-        if (Main.owner == (member.getUser().getIdLong())) { return true; }
+
+        if (Constants.OWNER == (member.getUser().getIdLong())) { return true; }
+        if (Constants.COOWNER == (member.getUser().getIdLong())) { return true; }
+        if (Constants.OWNER_TERTIAIRE == (member.getUser().getIdLong())) return true;
 
         for(Role role : member.getRoles()) {
             if (adminRoles.contains(role.getId())) return true;
@@ -270,7 +290,11 @@ public class SQL
     {
         if (member.isOwner()) return true;
         if (member.hasPermission(net.dv8tion.jda.api.Permission.ADMINISTRATOR)) return true;
-        if (Main.owner == (member.getUser().getIdLong())) { return true; }
+
+        if (Constants.OWNER == (member.getUser().getIdLong())) { return true; }
+        if (Constants.COOWNER == (member.getUser().getIdLong())) { return true; }
+        if (Constants.OWNER_TERTIAIRE == (member.getUser().getIdLong())) return true;
+
         GuildMusicManager musicManager = PlayerManager.getInstance().getGuildMusicManager(member.getGuild(), channel);
         if (member.getUser().getIdLong() == musicManager.scheduler.usersRequest.get(musicManager.player.getPlayingTrack())) return true;
 
@@ -287,7 +311,9 @@ public class SQL
     {
         if (member.isOwner()) return true;
         if (member.hasPermission(net.dv8tion.jda.api.Permission.ADMINISTRATOR)) return true;
-        if (Main.owner == (member.getUser().getIdLong())) { return true; }
+        if (Constants.OWNER == (member.getUser().getIdLong())) { return true; }
+        if (Constants.COOWNER == (member.getUser().getIdLong())) { return true; }
+        if (Constants.OWNER_TERTIAIRE == (member.getUser().getIdLong())) return true;
 
         for(Role role : member.getRoles()) { if (adminRoles.contains(role.getId())) return true; }
         return false;
@@ -295,7 +321,9 @@ public class SQL
 
     public boolean isBotOwner (Member member)
     {
-        if (Main.owner == (member.getUser().getIdLong())) { return true; }
+        if (Constants.OWNER == (member.getUser().getIdLong())) { return true; }
+        if (Constants.COOWNER == (member.getUser().getIdLong())) { return true; }
+        if (Constants.OWNER_TERTIAIRE == (member.getUser().getIdLong())) return true;
         return false;
     }
 
@@ -699,6 +727,16 @@ public class SQL
             statement1.executeUpdate(SQL);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+        }
+    }
+
+    public void setAutoRole(Guild guild, String id)
+    {
+        String SQL = "UPDATE guild SET autoRoleID = '" + id + "' WHERE guildID = '" + guild.getId() + "'";
+        try {
+            getConnection().createStatement().executeUpdate(SQL);
+        } catch (SQLException e) {
+            LOGGER.error(e.getMessage());
         }
     }
 }

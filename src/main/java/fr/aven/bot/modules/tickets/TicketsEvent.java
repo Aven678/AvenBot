@@ -34,7 +34,6 @@ public class TicketsEvent extends ListenerAdapter
         if (event.getUser().isBot()) return;
 
         if (!emotes.contains(event.getReactionEmote().getName())) return;
-        if (!Main.getTicketsDB().isTicketChannel(event.getTextChannel())) return;
 
         TextChannel channel = event.getTextChannel();
         String channelName = channel.getName();
@@ -86,6 +85,7 @@ public class TicketsEvent extends ListenerAdapter
 
             case close:
                 //boolean ticketChannel = false;
+                if (!Main.getTicketsDB().isTicketChannel(event.getTextChannel())) return;
 
                 Member author = Main.getTicketsDB().getAuthorByTicketChannel(channel);
                 if (author == null) return;
@@ -131,6 +131,7 @@ public class TicketsEvent extends ListenerAdapter
                 break;
 
             case reopen:
+                if (!Main.getTicketsDB().isTicketChannel(event.getTextChannel())) return;
                 if (!channelName.startsWith("closed")) return;
 
                 Main.getTicketsDB().reopenTicket(channel);
@@ -144,6 +145,7 @@ public class TicketsEvent extends ListenerAdapter
                 break;
 
             case delete:
+                if (!Main.getTicketsDB().isTicketChannel(event.getTextChannel())) return;
                 if (!Main.getTicketsDB().isTicketClosed(channel)) return;
 
                 Main.getTicketsDB().ticketDeleted(channel);

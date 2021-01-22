@@ -9,6 +9,7 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
 import java.time.format.DateTimeFormatter;
@@ -49,19 +50,17 @@ public class KickCommand extends ModoCommands {
             return;
         }
 
+        if (message.getMentionedUsers().get(0).getId().equalsIgnoreCase(message.getAuthor().getId()))
+        {
+            channel.sendMessage(new EmbedBuilder().setDescription("You can't kick yourself!").setColor(Color.RED).build()).queue();
+            return;
+        }
+
         if (message.toString().length() > 2)
         {
 
-            String reason;
+            String reason = StringUtils.join(args, " ").replaceFirst(message.getMentionedUsers().get(0).getAsTag(), "");
 
-            StringBuilder reasonBuilder = new StringBuilder();
-            for (int i = 1; i < args.size(); i++)
-            {
-                if (!reasonBuilder.toString().equalsIgnoreCase("")) reasonBuilder.append("\n");
-                reasonBuilder.append(args.get(i));
-            }
-
-            reason = reasonBuilder.toString();
             Main.getDatabase().addKick(message.getMentionedUsers().get(0).getId(), event.getGuild().getId(), message.getAuthor().getId(), message.getTimeCreated().format(DateTimeFormatter.RFC_1123_DATE_TIME), reason);
             event.getGuild().kick(message.getMentionedMembers().get(0), reason).queue();
 

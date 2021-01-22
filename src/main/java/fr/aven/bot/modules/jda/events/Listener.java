@@ -85,10 +85,14 @@ public class Listener extends ListenerAdapter
             if (event.getMessage().isWebhookMessage()) return;
             String rw = event.getMessage().getContentRaw();
 
-            if (rw.equalsIgnoreCase(Constants.PREFIX + "shutdown") && (event.getAuthor().getIdLong() == Constants.OWNER || event.getAuthor().getIdLong() == Constants.COOWNER))
+            if (rw.equalsIgnoreCase(Constants.PREFIX + "shutdown") && (event.getAuthor().getIdLong() == Constants.OWNER || event.getAuthor().getIdLong() == Constants.COOWNER)  || event.getAuthor().getIdLong() == Constants.OWNER_TERTIAIRE)
             {
-                Main.stop();
+                event.getMessage().delete().queue();
                 logger.info("Bot stop");
+                event.getChannel().sendMessage(new EmbedBuilder().setAuthor("Bot is shutting down", "https://justaven.xyz", event.getAuthor().getAvatarUrl())
+                        .setDescription("✅ Good! The bot will be down in 5 seconds!")
+                        .build()).queue();
+                Main.stop();
                 return;
             }
 

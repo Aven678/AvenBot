@@ -10,7 +10,9 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import org.apache.commons.lang3.StringUtils;
 
+import java.awt.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Collection;
@@ -33,13 +35,14 @@ public class WarnCommand implements ICommand
         }
 
         User user = event.getMessage().getMentionedUsers().get(0);
-        StringBuilder reasonBuilder = new StringBuilder();
-        for (int i = 1; i < args.size(); i++) {
-            if (!reasonBuilder.toString().equalsIgnoreCase("")) reasonBuilder.append("\n");
-            reasonBuilder.append(args.get(i));
+
+        if (user.getId().equalsIgnoreCase(event.getMessage().getAuthor().getId()))
+        {
+            event.getChannel().sendMessage(new EmbedBuilder().setDescription("You can't warn yourself!").setColor(Color.RED).build()).queue();
+            return;
         }
 
-        String reason = reasonBuilder.toString();
+        String reason = StringUtils.join(args, " ").replaceFirst(user.getAsTag(), "");
         Warn warn = new Warn(user.getId(), event.getGuild().getId(), event.getAuthor().getId(), reason, event.getMessage().getTimeCreated().format(DateTimeFormatter.RFC_1123_DATE_TIME));
         Main.getDatabase().addWarn(warn);
 
