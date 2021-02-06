@@ -6,7 +6,8 @@ plugins {
 }
 
 group 'fr.aven'
-version '1.0.1_'+System.properties['build.number']
+//version '2.2_'+System.properties['build.number']
+version '2.2-SNAPSHOT'
 
 sourceCompatibility = 11
 
@@ -30,7 +31,7 @@ dependencies {
     compile 'net.dv8tion:JDA:4.2.0_227'
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.7'
     //implementation 'com.github.Devoxin:lavaplayer:1.3.59'
-    implementation 'com.sedmelluq:lavaplayer:1.3.66'
+    implementation 'com.sedmelluq:lavaplayer:1.3.67'
 
     // https://mvnrepository.com/artifact/org.json/json
     compile group: 'org.json', name: 'json', version: '20180813'

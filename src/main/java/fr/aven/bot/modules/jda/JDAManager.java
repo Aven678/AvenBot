@@ -4,6 +4,7 @@ import com.sedmelluq.discord.lavaplayer.jdaudp.NativeAudioSendFactory;
 import fr.aven.bot.Main;
 import fr.aven.bot.modules.jda.events.AFKListener;
 import fr.aven.bot.modules.jda.events.BingoListener;
+import fr.aven.bot.modules.jda.events.ReactRoleListener;
 import fr.aven.bot.modules.tickets.TicketsEvent;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
@@ -34,7 +35,7 @@ public class JDAManager
                             GatewayIntent.GUILD_MESSAGES,
                             GatewayIntent.GUILD_VOICE_STATES)
                     .setAudioSendFactory(new NativeAudioSendFactory())
-                    .addEventListeners(new TicketsEvent(), new BingoListener(), new AFKListener())
+                    .addEventListeners(new TicketsEvent(), new BingoListener(), new AFKListener(), new ReactRoleListener())
                     .build();
         } catch (Exception e)
         {

@@ -23,7 +23,7 @@ public class NsfwPictureCommand implements ICommand
             return;
         }
 
-        event.getChannel().sendMessage(new EmbedBuilder().setImage(Main.getkSoft().getNsfwPicture()).build()).queue();
+        event.getChannel().sendMessage(new EmbedBuilder().setImage(Main.getkSoft().getNsfwPicture()).setFooter("Picture by KSoft.SI").build()).queue();
     }
 
     @Override

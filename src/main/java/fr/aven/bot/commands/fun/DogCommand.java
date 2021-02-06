@@ -17,7 +17,7 @@ public class DogCommand implements ICommand
 {
     @Override
     public void handle(List<String> args, GuildMessageReceivedEvent event) {
-        event.getChannel().sendMessage(new EmbedBuilder().setAuthor("Woof \uD83D\uDC36").setImage(Main.getkSoft().getDogPicture()).build()).queue();
+        event.getChannel().sendMessage(new EmbedBuilder().setAuthor("Woof \uD83D\uDC36").setImage(Main.getkSoft().getDogPicture()).setFooter("Picture by KSoft.SI").build()).queue();
     }
 
     @Override

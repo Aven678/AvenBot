@@ -36,6 +36,8 @@ public class MemberActivityEvent extends ListenerAdapter
         if (role != null && (event.getGuild().getSelfMember().hasPermission(Permission.MANAGE_ROLES) || event.getGuild().getSelfMember().hasPermission(Permission.ADMINISTRATOR)))
             event.getGuild().addRoleToMember(event.getMember(), role).queue();
 
+        
+
         super.onGuildMemberJoin(event);
     }
 

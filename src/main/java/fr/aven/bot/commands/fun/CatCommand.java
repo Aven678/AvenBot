@@ -17,7 +17,7 @@ public class CatCommand implements ICommand
 {
     @Override
     public void handle(List<String> args, GuildMessageReceivedEvent event) {
-        event.getChannel().sendMessage(new EmbedBuilder().setAuthor("Meow \uD83D\uDC31").setImage(Main.getkSoft().getCatPicture()).build()).queue();
+        event.getChannel().sendMessage(new EmbedBuilder().setAuthor("Meow \uD83D\uDC31").setImage(Main.getkSoft().getCatPicture()).setFooter("Picture by KSoft.SI").build()).queue();
     }
 
     @Override

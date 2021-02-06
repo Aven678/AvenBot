@@ -739,4 +739,38 @@ public class SQL
             LOGGER.error(e.getMessage());
         }
     }
+
+    public boolean isMessageReactRole(String message)
+    {
+        String SQL = "SELECT * FROM react_roles WHERE messageId="+message;
+
+        try {
+            Statement statement = getConnection().createStatement();
+            ResultSet resultSet = statement.executeQuery(SQL);
+
+            return resultSet.next();
+        } catch (SQLException e) { LOGGER.error(e.getMessage()); }
+
+        return false;
+    }
+
+    public Role getRoleWithReact(String message, String emote)
+    {
+        Role role = null;
+        String SQL = "SELECT * FROM react_roles WHERE messageId="+message+" AND emote="+emote;
+
+        try {
+            Statement statement = getConnection().createStatement();
+            ResultSet resultSet = statement.executeQuery(SQL);
+
+            if (resultSet.next()) role = JDAManager.getShardManager().getRoleById(resultSet.getString("roleID"));
+
+            resultSet.close();
+            statement.close();
+        } catch (SQLException sqlException) {
+            LOGGER.error(sqlException.getMessage());
+        }
+
+        return role;
+    }
 }

@@ -33,7 +33,7 @@ public class CommandManager {
 
     private final Map<String, ICommand> commands = new HashMap<>();
     private final Map<String, ICommand> commandsWithEvent = new HashMap<>();
-    private Logger COMMANDLOGGER = LoggerFactory.getLogger(this.getClass());
+    private final Logger COMMANDLOGGER = LoggerFactory.getLogger(this.getClass());
 
     CommandManager() {
 
@@ -49,7 +49,7 @@ public class CommandManager {
         //INFO COMMANDS
         addCommands(new HelpCommand(), new InfoCommand());
         //UTIL COMMANDS
-        addCommands(new AFKCommand(), new InviteCommand());
+        addCommands(new AFKCommand(), new InviteCommand(), new PatchnoteCommand());
         //addCommands(new LmgtfyCommand(), new HelpCommand(this), new SearchCommand());
         //FUN COMMANDS
         addCommands(new Base64Command(), new BingoCommand(), new CatCommand(), new CfunCommand(), new DogCommand(), new FakebanCommand(), new SearchCommand(), new NsfwPictureCommand(), new OMDBCommand(), new RollCommand(), new SayCommand(), new StonksCommand());
