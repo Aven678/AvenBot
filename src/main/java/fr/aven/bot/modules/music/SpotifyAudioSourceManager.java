@@ -16,6 +16,7 @@ import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import org.apache.http.impl.client.HttpClientBuilder;
 
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
@@ -114,7 +115,7 @@ public class SpotifyAudioSourceManager implements AudioSourceManager, HttpConfig
     }
 
     @Override
-    public AudioItem loadItem(DefaultAudioPlayerManager manager, AudioReference reference) {
+    public AudioItem loadItem(AudioPlayerManager manager, AudioReference reference) {
         if (isSpotifyAlbum(reference.identifier)) {
             if (youtube == null)
                 return null;
