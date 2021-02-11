@@ -6,7 +6,7 @@ import fr.aven.bot.modules.jda.events.Listener;
 import fr.aven.bot.modules.jda.events.MemberActivityEvent;
 import fr.aven.bot.modules.jda.JDAManager;
 import fr.aven.bot.modules.jda.events.MusicReactionListener;
-import fr.aven.bot.modules.music.SpotifyAPI;
+import fr.aven.bot.modules.music.spotify.SpotifyAPI;
 import fr.aven.bot.modules.tickets.TicketsChannelDB;
 import fr.aven.bot.util.Configuration;
 import fr.aven.bot.util.DBList;
@@ -15,10 +15,8 @@ import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.impl.BotLoggerFactory;
 import org.slf4j.impl.StaticLoggerBinder;
 
-import java.io.IOException;
 import java.util.Date;
 
 public class Main

@@ -17,7 +17,8 @@ import java.util.List;
 public class AutoRoleCommand implements ICommand
 {
     @Override
-    public void handle(List<String> args, GuildMessageReceivedEvent event) {
+    public void handle(List<String> args, GuildMessageReceivedEvent event)
+    {
         if (args.isEmpty())
         {
             event.getChannel().sendMessage(new EmbedBuilder().addField(getHelp()).build()).queue();

@@ -40,12 +40,12 @@ public class CommandManager {
         COMMANDLOGGER.info("Loading commands");
 
         //ADMIN COMMANDS
-        addCommands(new AnnounceCommand(), new AutoRoleCommand(), new ClearConfigCommand(), new DJRoleCommand(), new LangCommand(), new Prefix(), new WarnConfig());
+        addCommands(new AnnounceCommand(), new AutoRoleCommand(), new ClearConfigCommand(), new DJRoleCommand(), new LangCommand(), new Prefix(), new RolesCommand());
 
         //MUSIC COMMANDS
         addCommands(new BassCommand(), new JoinCommand(), new LyricsCommand(), new PlayCommand(), new PauseCommand(), new QueueCommand(), new SkipCommand(), new ShuffleCommand(), new StopCommand(), new VolumeCommand());
         //MODO COMMANDS
-        addCommands(new BanCommand(), new KickCommand(), new ModlogsCommand(), new MuteCommand(), new UnbanCommand(), new UnmuteCommand(), new WarnCommand(), new WarnsCommand());
+        addCommands(new BanCommand(), new ClearCommand(), new KickCommand(), new ModlogsCommand(), new MuteCommand(), new UnbanCommand(), new UnmuteCommand(), new WarnCommand(), new WarnsCommand());
         //INFO COMMANDS
         addCommands(new HelpCommand(), new InfoCommand());
         //UTIL COMMANDS

@@ -131,7 +131,7 @@ public class TicketsEvent extends ListenerAdapter
                 break;
 
             case reopen:
-                if (!Main.getTicketsDB().isTicketChannel(event.getTextChannel())) return;
+                if (!Main.getTicketsDB().isTicketClosed(event.getTextChannel())) return;
                 if (!channelName.startsWith("closed")) return;
 
                 Main.getTicketsDB().reopenTicket(channel);

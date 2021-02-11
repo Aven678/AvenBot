@@ -34,7 +34,8 @@ public class TrackScheduler extends AudioEventAdapter
     private Guild guild;
     public TextChannel channel;
 
-    public boolean repeat = false;
+    public boolean repeatMusic = false;
+    public boolean repeatPlaylist = false;
     private boolean oldUsed = false;
 
     public AudioTrack oldTrack = null;
@@ -92,6 +93,7 @@ public class TrackScheduler extends AudioEventAdapter
         // Disable filter factory
         if (previousPercentage > 0 && percentage == 0) {
             this.player.setFilterFactory(null);
+            message.addReaction("✅").queue();
             return;
         }
         // Enable filter factory
@@ -119,7 +121,7 @@ public class TrackScheduler extends AudioEventAdapter
     {
         lyricsAlwaysRequested = false;
 
-        if (oldMusicRequested && track != null)
+        if (oldMusicRequested && track != null && !oldUsed)
         {
             AudioTrack track1 = oldTrack.makeClone();
             usersRequest.put(track1, usersRequest.get(track));
@@ -128,18 +130,27 @@ public class TrackScheduler extends AudioEventAdapter
             return;
         }
 
-        if (repeat)
+        if (repeatMusic)
         {
             AudioTrack track1 = track.makeClone();
             usersRequest.put(track1, usersRequest.get(track));
             player.startTrack(track1, false);
-            repeat = false;
+            repeatMusic = false;
             return;
+        }
+
+        if (repeatPlaylist)
+        {
+            AudioTrack track1 = track.makeClone();
+            usersRequest.put(track1, usersRequest.get(track));
+            queue.offer(track1);
         }
 
         if (queue.size() == 0)
         {
             alwaysStopped = true;
+            repeatPlaylist = false;
+            repeatMusic = false;
             //player.destroy();
             //PlayerManager.getInstance().destroyGuildMusicManager(guild);
             channel.sendMessage(Main.getDatabase().getTextFor("stop.confirm", guild)).queue(msg -> new Timer().schedule(new MessageTask(msg), 10000));
@@ -187,6 +198,7 @@ public class TrackScheduler extends AudioEventAdapter
         if (guild.getTextChannelById(channel.getId()) == null) return;
         if (lastMessageStatus != null) lastMessageStatus.delete().queue(success -> {}, error -> {});
 
+        String repeatPlaylistField = "";
 
         User userRequest = guild.getJDA().getUserById(usersRequest.get(track));
 
@@ -194,9 +206,12 @@ public class TrackScheduler extends AudioEventAdapter
         builder.setAuthor(Main.getDatabase().getTextFor("music.progress", guild), track.getInfo().uri, guild.getJDA().getSelfUser().getAvatarUrl());
         builder.setColor(guild.getMember(userRequest).getColor());
 
+        if (repeatPlaylist)
+            repeatPlaylistField = "\n❱ " + Main.getDatabase().getTextFor("music.repeatPlaylistRequested", guild);
+
         builder.addField(track.getInfo().title, "❱ "+Main.getDatabase().getTextFor("music.author", guild)
                 +" : "+ track.getInfo().author
-                +"\n❱ "+Main.getDatabase().getTextFor("music.duration", guild)+" : "+ getTimestamp(track.getInfo().length), false);
+                +"\n❱ "+Main.getDatabase().getTextFor("music.duration", guild)+" : "+ getTimestamp(track.getInfo().length) + repeatPlaylistField, false);
 
         builder.setThumbnail("https://i.ytimg.com/vi/" + track.getInfo().identifier + "/maxresdefault.jpg");
 
@@ -207,6 +222,7 @@ public class TrackScheduler extends AudioEventAdapter
             msg.addReaction("⏯️").queue();
             msg.addReaction("⏭️").queue();
             msg.addReaction("\uD83D\uDD01").queue(); //repeat
+            msg.addReaction("\uD83D\uDD02").queue(); //repeatMusic
             msg.addReaction("\uD83D\uDCDC").queue(); //scroll/lyrics
             msg.addReaction("❌").queue(); //stop
 
@@ -217,19 +233,25 @@ public class TrackScheduler extends AudioEventAdapter
     public void editMessage()
     {
         AudioTrack track = PlayerManager.getInstance().getGuildMusicManager(guild, channel).player.getPlayingTrack();
+        if (track == null) return;
+
         User userRequest = guild.getJDA().getUserById(usersRequest.get(track));
 
         EmbedBuilder builder = new EmbedBuilder();
         builder.setAuthor(Main.getDatabase().getTextFor(player.isPaused() ? "player.paused" : "music.progress", guild), track.getInfo().uri, guild.getJDA().getSelfUser().getAvatarUrl());
         builder.setColor(guild.getMember(userRequest).getColor());
-        String finalField = "";
+        String repeatMusicField = "";
+        String repeatPlaylistField = "";
 
-        if (repeat)
-            finalField = "\n❱ "+ Main.getDatabase().getTextFor("music.repeatRequested", guild);
+        if (repeatMusic)
+            repeatMusicField = "\n❱ "+ Main.getDatabase().getTextFor("music.repeatRequested", guild);
+
+        if (repeatPlaylist)
+            repeatPlaylistField = "\n❱ " + Main.getDatabase().getTextFor("music.repeatPlaylistRequested", guild);
 
         builder.addField(track.getInfo().title, "❱ "+Main.getDatabase().getTextFor("music.author", guild)
                 +" : "+ track.getInfo().author
-                +"\n❱ "+Main.getDatabase().getTextFor("music.duration", guild)+" : "+ getTimestamp(track.getInfo().length) + finalField, false);
+                +"\n❱ "+Main.getDatabase().getTextFor("music.duration", guild)+" : "+ getTimestamp(track.getInfo().length) + repeatPlaylistField + repeatMusicField, false);
 
         builder.setThumbnail("https://i.ytimg.com/vi/" + track.getInfo().identifier + "/maxresdefault.jpg");
 

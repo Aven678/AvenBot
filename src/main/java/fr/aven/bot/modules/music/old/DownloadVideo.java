@@ -1,4 +1,4 @@
-package fr.aven.bot.modules.music;
+package fr.aven.bot.modules.music.old;
 
 import java.io.PrintWriter;
 

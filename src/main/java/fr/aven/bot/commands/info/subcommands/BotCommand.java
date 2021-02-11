@@ -34,7 +34,7 @@ public class BotCommand extends InfoSubCommands {
         }*/
 
         EmbedBuilder botBuilder = new EmbedBuilder();
-        botBuilder.setAuthor(event.getJDA().getSelfUser().getName(), "https://www.avenbot.xyz", event.getJDA().getSelfUser().getAvatarUrl());
+        botBuilder.setAuthor(event.getJDA().getSelfUser().getName(), "https://www.justaven.xyz", event.getJDA().getSelfUser().getAvatarUrl());
         botBuilder.setThumbnail(event.getJDA().getSelfUser().getAvatarUrl());
         botBuilder.addField("Bot Informations: ",
                 "Creators ❱ " + event.getJDA().getUserById(Constants.OWNER).getAsMention()+

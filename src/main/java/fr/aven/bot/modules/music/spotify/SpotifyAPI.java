@@ -1,4 +1,4 @@
-package fr.aven.bot.modules.music;
+package fr.aven.bot.modules.music.spotify;
 
 import com.wrapper.spotify.SpotifyApi;
 import com.wrapper.spotify.exceptions.SpotifyWebApiException;

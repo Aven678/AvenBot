@@ -129,7 +129,7 @@ public class LyricsCommand implements ICommand
         String input = String.join(" ", args);
 
         EmbedBuilder builder = new EmbedBuilder();
-        builder.setAuthor(Main.getDatabase().getTextFor("lyrics.searchTitle", event.getGuild()), "https://justaven.com", event.getAuthor().getAvatarUrl());
+        builder.setAuthor(Main.getDatabase().getTextFor("lyrics.searchTitle", event.getGuild()), "https://justaven.xyz", event.getAuthor().getAvatarUrl());
         builder.setColor(event.getMember().getColor());
         builder.setFooter(Main.getDatabase().getTextFor("music.searchFooter", event.getGuild()), event.getJDA().getSelfUser().getAvatarUrl());
 

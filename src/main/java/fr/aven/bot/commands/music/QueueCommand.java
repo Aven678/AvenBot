@@ -3,6 +3,7 @@ package fr.aven.bot.commands.music;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import fr.aven.bot.Constants;
 import fr.aven.bot.Main;
+import fr.aven.bot.modules.music.GuildMusicManager;
 import fr.aven.bot.modules.music.PlayerManager;
 import fr.aven.bot.util.ICommand;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -22,7 +23,9 @@ public class QueueCommand implements ICommand
             SideNumbInput = Integer.parseInt(args.get(0));
 
         TextChannel channel = event.getChannel();
+        GuildMusicManager manager = PlayerManager.getInstance().getGuildMusicManager(event.getGuild(), channel);
         StringBuilder sb = new StringBuilder();
+        sb.append("**"+Main.getDatabase().getTextFor("music.progress", event.getGuild())+" ** ❱ `["+getTimestamp(manager.player.getPlayingTrack().getInfo().length)+"]` "+manager.player.getPlayingTrack().getInfo().title);
 
         if (PlayerManager.getInstance().getGuildMusicManager(event.getGuild(), event.getChannel()).scheduler.getQueue().isEmpty())
         {
@@ -30,7 +33,7 @@ public class QueueCommand implements ICommand
             return;
         }
 
-        Set<AudioTrack> queue = PlayerManager.getInstance().getGuildMusicManager(event.getGuild(), channel).scheduler.getQueuedTracks();
+        Set<AudioTrack> queue = manager.scheduler.getQueuedTracks();
         ArrayList<String> tracks = new ArrayList<>();
         queue.forEach(track -> tracks.add("\n`[" + getTimestamp(track.getInfo().length) + "]` " + track.getInfo().title));
 
@@ -47,7 +50,7 @@ public class QueueCommand implements ICommand
         tracksSublist.forEach(s -> sb.append(s));
 
         EmbedBuilder builder = new EmbedBuilder();
-        builder.setAuthor("Queue : "+queue.size()+" tracks", "https://justaven.com", event.getJDA().getSelfUser().getAvatarUrl());
+        builder.setAuthor("Queue : "+queue.size()+" tracks", "https://justaven.xyz", event.getJDA().getSelfUser().getAvatarUrl());
 
         builder.setDescription(sb);
         builder.setColor(event.getMember().getColor());

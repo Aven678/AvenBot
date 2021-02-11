@@ -192,7 +192,7 @@ public class PlayerManager
                     } else {
 
                         EmbedBuilder builder = new EmbedBuilder();
-                        builder.setAuthor(Main.getDatabase().getTextFor("music.searchTitle", message.getGuild()), "https://justaven.com", message.getAuthor().getAvatarUrl());
+                        builder.setAuthor(Main.getDatabase().getTextFor("music.searchTitle", message.getGuild()), "https://justaven.xyz", message.getAuthor().getAvatarUrl());
                         builder.setColor(message.getMember().getColor());
                         builder.setFooter(Main.getDatabase().getTextFor("music.searchFooter", message.getGuild()), message.getJDA().getSelfUser().getAvatarUrl());
 

@@ -19,7 +19,7 @@ import java.util.Timer;
 
 public class MusicReactionListener extends ListenerAdapter
 {
-    private List<String> emotes = Arrays.asList("⏮️","⏯️", "⏭️", "\uD83D\uDD01", "\uD83D\uDCDC", "❌");
+    private List<String> emotes = Arrays.asList("⏮️","⏯️", "⏭️", "\uD83D\uDD01", "\uD83D\uDD02", "\uD83D\uDCDC", "❌");
 
     @Override
     public void onGuildMessageReactionAdd(@Nonnull GuildMessageReactionAddEvent event) {
@@ -63,8 +63,13 @@ public class MusicReactionListener extends ListenerAdapter
                 } else
                     missingPermission(event);
                 break;
-            case "\uD83D\uDD01": //repeat
-                manager.scheduler.repeat = true;
+
+            case "\uD83D\uDD01":
+                manager.scheduler.repeatPlaylist = !manager.scheduler.repeatPlaylist;
+                manager.scheduler.editMessage();
+                break;
+            case "\uD83D\uDD02": //repeatMusic 🔂
+                manager.scheduler.repeatMusic = !manager.scheduler.repeatMusic;
                 manager.scheduler.editMessage();
                 break;
             case "\uD83D\uDCDC": //lyrics
@@ -79,6 +84,8 @@ public class MusicReactionListener extends ListenerAdapter
                     manager.scheduler.purgeQueue();
                     manager.scheduler.nextTrack(track, false);
                     manager.scheduler.alwaysStopped = true;
+                    manager.scheduler.repeatMusic = false;
+                    manager.scheduler.repeatPlaylist = false;
                 } else
                     missingPermission(event);
                 break;

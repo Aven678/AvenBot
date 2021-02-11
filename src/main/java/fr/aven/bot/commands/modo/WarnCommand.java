@@ -10,6 +10,8 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.exceptions.ErrorResponseException;
+import net.dv8tion.jda.api.requests.ErrorResponse;
 import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
@@ -55,11 +57,15 @@ public class WarnCommand implements ICommand
                 .setThumbnail(user.getAvatarUrl());
 
         event.getChannel().sendMessage(builder.build()).queue();
-        if (user.hasPrivateChannel()) user.openPrivateChannel().queue(pc -> pc.sendMessage(new MessageBuilder()
+        user.openPrivateChannel().queue(pc -> pc.sendMessage(new MessageBuilder()
                 .appendFormat(Main.getDatabase().getTextFor("warn.mp", event.getGuild()), event.getGuild().getName())
-                .setEmbed(builder.build()).build()).queue());
-        else
-            event.getChannel().sendMessage(Main.getDatabase().getTextFor("warn.mpDisabled", event.getGuild())).queue();
+                .setEmbed(builder.build()).build()).queue(success -> {}, error -> {
+                    var errorException = (ErrorResponseException) error;
+
+                    if (errorException.getErrorResponse().equals(ErrorResponse.CANNOT_SEND_TO_USER))
+                        event.getChannel().sendMessage(Main.getDatabase().getTextFor("warn.mpDisabled", event.getGuild())).queue();
+        }));
+
 
         List<Warn> warns = Main.getDatabase().listWarns(user.getId(), event.getGuild().getId());
         Integer warnsLimit = Main.getDatabase().getWarnLimit(event.getGuild());
