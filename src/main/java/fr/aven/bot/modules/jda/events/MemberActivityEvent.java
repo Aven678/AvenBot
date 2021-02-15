@@ -3,6 +3,7 @@ package fr.aven.bot.modules.jda.events;
 import fr.aven.bot.Main;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.guild.GuildBanEvent;
@@ -28,20 +29,16 @@ public class MemberActivityEvent extends ListenerAdapter
         TextChannel textChannel = event.getGuild().getTextChannelById(channelID);
         if (textChannel == null) return;
 
+        Member selfMember = event.getGuild().getSelfMember();
+
         textFinal = text.replaceAll("<guild>", event.getGuild().getName()).replaceAll("<member>", event.getUser().getAsMention()).replaceAll("<number>", String.valueOf(event.getGuild().getMembers().size()));
 
-        if (event.getGuild().getSelfMember().hasPermission(textChannel, Permission.MESSAGE_WRITE))
+        if (selfMember.hasPermission(textChannel, Permission.MESSAGE_WRITE))
             textChannel.sendMessage(textFinal).queue();
 
         Role role = Main.getDatabase().getAutoRole(event.getGuild());
         if (role != null)
-        {
-            if (!event.getGuild().getSelfMember().hasPermission(Permission.MANAGE_ROLES))
-                if (!event.getGuild().getSelfMember().hasPermission(Permission.ADMINISTRATOR))
-                    return;
-
-            event.getGuild().addRoleToMember(event.getMember(), role).reason("Autorole by AvenBot").queue();
-        }
+            if (selfMember.canInteract(role) && selfMember.hasPermission(Permission.MANAGE_ROLES)) event.getGuild().addRoleToMember(event.getMember(), role).reason("Autorole by AvenBot").queue();
 
         super.onGuildMemberJoin(event);
     }
