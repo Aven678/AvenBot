@@ -7,6 +7,7 @@ import fr.aven.bot.modules.jda.events.MemberActivityEvent;
 import fr.aven.bot.modules.jda.JDAManager;
 import fr.aven.bot.modules.jda.events.MusicReactionListener;
 import fr.aven.bot.modules.music.spotify.SpotifyAPI;
+//import fr.aven.bot.modules.notifications.twitch.Twitch;
 import fr.aven.bot.modules.tickets.TicketsChannelDB;
 import fr.aven.bot.util.Configuration;
 import fr.aven.bot.util.DBList;
@@ -34,6 +35,8 @@ public class Main
 
     private static DBList dbl = new DBList();
     private static SpotifyAPI spotifyAPI;
+    //private static Twitch twitchAPI;
+
     private static BingoMap bingoMap;
 
     public static void main(String... args) throws Exception
@@ -50,6 +53,9 @@ public class Main
         JDAManager.getShardManager().addEventListener(listener, new MusicReactionListener(), new MemberActivityEvent());
         setActivity(Activity.ActivityType.WATCHING, configuration.getString("game",Constants.PREFIX+"help | justaven.xyz"));
         spotifyAPI = new SpotifyAPI(configuration.getString("spotify.clientID", ""), configuration.getString("spotify.clientSecret", ""));
+        /*twitchAPI = new Twitch();
+        twitchAPI.registerFeatures();*/
+
         bingoMap = new BingoMap();
 
         configuration.save();
@@ -80,6 +86,10 @@ public class Main
     public static BingoMap getBingoMap() {
         return bingoMap;
     }
+
+    /*public static Twitch getTwitchAPI() {
+        return twitchAPI;
+    }*/
 
     public static void setActivity(Activity.ActivityType type, String text) {
 

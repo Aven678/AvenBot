@@ -26,6 +26,7 @@ public class MemberActivityEvent extends ListenerAdapter
         if (channelID.equalsIgnoreCase("")) return;
         if (text.equalsIgnoreCase("")) return;
         TextChannel textChannel = event.getGuild().getTextChannelById(channelID);
+        if (textChannel == null) return;
 
         textFinal = text.replaceAll("<guild>", event.getGuild().getName()).replaceAll("<member>", event.getUser().getAsMention()).replaceAll("<number>", String.valueOf(event.getGuild().getMembers().size()));
 
@@ -33,10 +34,14 @@ public class MemberActivityEvent extends ListenerAdapter
             textChannel.sendMessage(textFinal).queue();
 
         Role role = Main.getDatabase().getAutoRole(event.getGuild());
-        if (role != null && (event.getGuild().getSelfMember().hasPermission(Permission.MANAGE_ROLES) || event.getGuild().getSelfMember().hasPermission(Permission.ADMINISTRATOR)))
-            event.getGuild().addRoleToMember(event.getMember(), role).queue();
+        if (role != null)
+        {
+            if (!event.getGuild().getSelfMember().hasPermission(Permission.MANAGE_ROLES))
+                if (!event.getGuild().getSelfMember().hasPermission(Permission.ADMINISTRATOR))
+                    return;
 
-        
+            event.getGuild().addRoleToMember(event.getMember(), role).reason("Autorole by AvenBot").queue();
+        }
 
         super.onGuildMemberJoin(event);
     }
