@@ -40,6 +40,7 @@ public class BotCommand extends InfoSubCommands {
                 "Creators ❱ " + event.getJDA().getUserById(Constants.OWNER).getAsMention()+
                         "\nUptime ❱ " + getTimeDiff(new Date(), Main.lastRestart) +
                         "\nVersion ❱ " + Constants.VERSION +
+                        "\nLanguages ❱ JDA, Kotlin" +
                         "\nLibraries used ❱ " + "JDA, OMDB, restcountries.eu, [deezer-api](https://github.com/alex-massa/deezer-api)",
                 false);
         botBuilder.addField("Some Figures: ",

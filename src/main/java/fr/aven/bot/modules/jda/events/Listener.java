@@ -130,13 +130,13 @@ public class Listener extends ListenerAdapter
 
             createMutedRole(joinedGuild);
 
-            status("join", event.getGuild());
+            //status("join", event.getGuild());
         }
 
-    @Override
+    /*@Override
     public void onGuildLeave(@NotNull GuildLeaveEvent event) {
         status("leave", event.getGuild());
-    }
+    }*/
 
     private void status(String nameEvent, Guild guild) {
         String owner = guild.getOwner().getUser().getAsTag();
