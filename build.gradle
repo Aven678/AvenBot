@@ -20,12 +20,13 @@ mainClassName = 'fr.aven.bot.Main'
 repositories {
     jcenter()
     mavenCentral()
-    maven { url 'https://jitpack.io' }
 
     maven {
         name 'm2-dv8tion'
         url 'https://m2.dv8tion.net/releases'
     }
+
+    maven { url 'https://jitpack.io' }
 }
 
 jar {
@@ -37,13 +38,11 @@ jar {
 dependencies {
     compile 'com.google.apis:google-api-services-youtube:v3-rev20200526-1.30.9'
     compile 'net.explodingbush.KSoft4J:KSoft4J:1.0.6'
-    compile 'net.dv8tion:JDA:4.2.0_252'
+    compile 'net.dv8tion:JDA:4.2.1_259'
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.7'
     //implementation 'com.github.Devoxin:lavaplayer:1.3.59'
-    //implementation 'com.sedmelluq:lavaplayer:1.3.73'
 
-    //temporatire, bug jcenter
-    implementation 'com.github.sedmelluq:lavaplayer:1.3.74'
+    implementation 'com.sedmelluq:lavaplayer:1.3.76'
 
     // https://mvnrepository.com/artifact/org.json/json
     compile group: 'org.json', name: 'json', version: '20180813'
@@ -56,7 +55,7 @@ dependencies {
 
     compile 'com.sedmelluq:jda-nas:1.1.0'
 
-    compile 'org.discordbots:DBL-Java-Library:2.0.1'
+    implementation 'com.github.top-gg:java-sdk:2.0.1'
 
     compile 'se.michaelthelin.spotify:spotify-web-api-java:6.4.1'
     //implementation 'me.shib.java.lib:omdb-java:1.2.0'

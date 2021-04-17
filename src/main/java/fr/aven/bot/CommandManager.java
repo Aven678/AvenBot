@@ -43,7 +43,7 @@ public class CommandManager {
         addCommands(new AnnounceCommand(), new AutoRoleCommand(), new ClearConfigCommand(), new DJRoleCommand(), new LangCommand(), new Prefix(), new RolesCommand());
 
         //MUSIC COMMANDS
-        addCommands(new BassCommand(), new JoinCommand(), new LyricsCommand(), new PlayCommand(), new PauseCommand(), new QueueCommand(), new SkipCommand(), new ShuffleCommand(), new StopCommand(), new VolumeCommand());
+        addCommands(new BassCommand(), new JoinCommand(), new LyricsCommand(), new PlayCommand(), new PauseCommand(), new QueueCommand(), new SeekCommand(), new SkipCommand(), new ShuffleCommand(), new StopCommand(), new VolumeCommand());
         //MODO COMMANDS
         addCommands(new BanCommand(), new ClearCommand(), new KickCommand(), new ModlogsCommand(), new MuteCommand(), new UnbanCommand(), new UnmuteCommand(), new WarnCommand(), new WarnsCommand());
         //INFO COMMANDS
@@ -52,7 +52,7 @@ public class CommandManager {
         addCommands(new AFKCommand(), new InviteCommand(), new PatchnoteCommand());
         //addCommands(new LmgtfyCommand(), new HelpCommand(this), new SearchCommand());
         //FUN COMMANDS
-        addCommands(new Base64Command(), new BingoCommand(), new CatCommand(), new CfunCommand(), new DogCommand(), new FakebanCommand(), new SearchCommand(), new NsfwPictureCommand(), new OMDBCommand(), new RollCommand(), new SayCommand(), new StonksCommand());
+        addCommands(new Base64Command(), new BingoCommand(), new CatCommand(), new CfunCommand(), new ConfusedStonks(), new DogCommand(), new FakebanCommand(), new FakewarnCommand(), new IssouCommand(), new SearchCommand(), new NotStonksCommand(), new NsfwPictureCommand(), new OMDBCommand(), new RollCommand(), new SayCommand(), new StonksCommand());
     }
 
     private void addCommand(ICommand command) {

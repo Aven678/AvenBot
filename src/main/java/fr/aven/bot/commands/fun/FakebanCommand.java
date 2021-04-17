@@ -37,7 +37,7 @@ public class FakebanCommand implements ICommand
 
     @Override
     public MessageEmbed.Field getHelp() {
-        return new MessageEmbed.Field("FakeBan a member", "Usage: `"+ Constants.PREFIX + getInvoke() +"`", false);
+        return new MessageEmbed.Field("FakeBan a member", "Usage: `"+ Constants.PREFIX + getInvoke() +" <@member>`", false);
     }
 
     @Override

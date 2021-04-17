@@ -1,7 +1,6 @@
 package fr.aven.bot;
 
 import fr.aven.bot.commands.fun.BingoMap;
-import fr.aven.bot.modules.database.Database;
 import fr.aven.bot.modules.database.SQL;
 import fr.aven.bot.modules.jda.events.Listener;
 import fr.aven.bot.modules.jda.events.MemberActivityEvent;
@@ -32,8 +31,6 @@ public class Main
     private static TicketsChannelDB ticketsChannelDB;
     private static SQL database;
 
-    private static Database kotlinDB;
-
     private static KSoft kSoft;
 
     private static DBList dbl = new DBList();
@@ -50,11 +47,6 @@ public class Main
         System.setProperty("AvenBot", "");
         configuration = new Configuration("config.json");
         database = new SQL();
-
-        kotlinDB = new Database(configuration.getString("sql.server", "localhost"),
-                configuration.getString("sql.db", "AvenBot"),
-                configuration.getString("sql.user", "avenbot"),
-                configuration.getString("sql.pwd", "default")).connect();
 
         ticketsChannelDB = new TicketsChannelDB();
         commandManager = new CommandManager();
