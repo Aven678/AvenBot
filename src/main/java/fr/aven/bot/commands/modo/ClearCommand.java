@@ -31,7 +31,13 @@ public class ClearCommand implements ICommand
         try {
             int count = Integer.parseInt(args.get(0));
 
-            event.getChannel().getHistory().retrievePast(count-1).queue(historyMessage -> event
+            if (count > 100 || count < 1)
+            {
+                event.getChannel().sendMessage(new EmbedBuilder().addField(getHelp()).build()).queue();
+                return;
+            }
+
+            event.getChannel().getHistory().retrievePast(count).queue(historyMessage -> event
                     .getChannel()
                     .deleteMessages(getMessageCanDeleted(historyMessage))
                     .queue(success -> event.getChannel().sendMessage("\uD83D\uDDD1️ "+getMessageCanDeleted(historyMessage).size()+" successfully deleted!").queue(msg -> msg.delete().queueAfter(5, TimeUnit.SECONDS))));
@@ -65,7 +71,7 @@ public class ClearCommand implements ICommand
 
     @Override
     public MessageEmbed.Field getHelp() {
-        return new MessageEmbed.Field("Clears messages", "Usage: `"+ Constants.PREFIX + getInvoke() +"<number>`", false);
+        return new MessageEmbed.Field("Clears messages", "Usage: `"+ Constants.PREFIX + getInvoke() +" <number between 2 and 100>`", false);
     }
 
     @Override
