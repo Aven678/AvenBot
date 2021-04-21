@@ -16,7 +16,7 @@ class GuildActivities : ListenerAdapter() {
         embed.addField("Members", event.guild.members.size.toString(), true)
         embed.addField("Owner", event.guild.owner?.user?.asTag, true)
 
-        event.guild.defaultChannel?.sendMessage(embed.build())?.queue()
+        event.jda.getTextChannelById(412908508590243840L)?.sendMessage(embed.build())?.queue()
         super.onGuildJoin(event)
     }
 
@@ -27,7 +27,7 @@ class GuildActivities : ListenerAdapter() {
         embed.addField("Guild name", event.guild.name, false)
         embed.addField("Members", event.guild.members.size.toString(), true)
 
-        event.guild.defaultChannel?.sendMessage(embed.build())?.queue()
+        event.jda.getTextChannelById(412908508590243840L)?.sendMessage(embed.build())?.queue()
 
         super.onGuildLeave(event)
     }
