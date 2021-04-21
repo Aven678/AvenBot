@@ -12,9 +12,11 @@ class GuildActivities : ListenerAdapter() {
         val embed = EmbedBuilder()
         embed.setColor(MessageUtil.getRandomColor())
         embed.setAuthor("New guild joined", "https://www.justaven.xyz", event.jda.selfUser.avatarUrl)
-        embed.addField("Guild name", event.guild.name, false)
+        embed.addField("Guild name", event.guild.name, true)
         embed.addField("Members", event.guild.members.size.toString(), true)
         embed.addField("Owner", event.guild.owner?.user?.asTag, true)
+
+        if (event.guild.iconUrl != null) embed.setThumbnail(event.guild.iconUrl)
 
         event.jda.getTextChannelById(412908508590243840L)?.sendMessage(embed.build())?.queue()
         super.onGuildJoin(event)
@@ -24,7 +26,7 @@ class GuildActivities : ListenerAdapter() {
         val embed = EmbedBuilder()
         embed.setColor(MessageUtil.getRandomColor())
         embed.setAuthor("Guild leaved", "https://www.justaven.xyz", event.jda.selfUser.avatarUrl)
-        embed.addField("Guild name", event.guild.name, false)
+        embed.addField("Guild name", event.guild.name, true)
         embed.addField("Members", event.guild.members.size.toString(), true)
 
         event.jda.getTextChannelById(412908508590243840L)?.sendMessage(embed.build())?.queue()
