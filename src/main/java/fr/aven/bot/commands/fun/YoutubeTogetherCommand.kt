@@ -39,7 +39,6 @@ class YoutubeTogetherCommand: ICommand
         val responseBody = response.body
         val tokener = JSONTokener(responseBody!!.charStream())
         val obj = JSONObject(tokener)
-        println(obj)
         val returned = "<https://discord.gg/" + obj["code"] + ">"
         response.close()
 
