@@ -1,14 +1,17 @@
 package fr.aven.bot.commands.`fun`
 
 import com.google.gson.Gson
+import fr.aven.bot.Constants
 import fr.aven.bot.Main
 import fr.aven.bot.util.ICommand
 import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.entities.MessageEmbed
 import net.dv8tion.jda.api.events.GenericEvent
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
-import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody
 import org.json.JSONObject
 import org.json.JSONTokener
 import kotlin.reflect.jvm.internal.impl.load.kotlin.JvmType
@@ -21,7 +24,7 @@ class YoutubeTogetherCommand: ICommand
 
     override fun handle(args: MutableList<String>?, event: GuildMessageReceivedEvent) {
         if (!event.member?.voiceState?.inVoiceChannel()!!) {
-            event.channel.sendMessage("Vous devez être dans un salon vocal pour exécuter cette commande").queue()
+            event.channel.sendMessage(Main.getDatabase().getTextFor("join.isNotInChannel", event.guild)).queue()
             return
         }
 
@@ -42,7 +45,7 @@ class YoutubeTogetherCommand: ICommand
         val returned = "<https://discord.gg/" + obj["code"] + ">"
         response.close()
 
-        event.channel.sendMessage("Link -> $returned").queue()
+        event.channel.sendMessage("${Main.getDatabase().getTextFor("link", event.guild)} -> $returned").queue()
     }
 
     override fun getType(): ICommand.Type {
@@ -54,7 +57,7 @@ class YoutubeTogetherCommand: ICommand
     }
 
     override fun getHelp(): MessageEmbed.Field {
-        return MessageEmbed.Field("", "", false)
+        return MessageEmbed.Field("Starts YouTube Together :)", "Usage: `" + Constants.PREFIX + invoke + "`", false)
     }
 
     override fun getInvoke(): String {
