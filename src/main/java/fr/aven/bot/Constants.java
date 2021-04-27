@@ -5,7 +5,7 @@ import java.util.Locale;
 
 public class Constants
 {
-    public static final String VERSION = "2.4.1 Stable";
+    public static final String VERSION = "2.5 Stable";
     public static final String PREFIX = Main.getConfiguration().getString("prefix", "=");
     public static long OWNER = 261846314554228739L;
     public static long COOWNER = 537696808504262696L;

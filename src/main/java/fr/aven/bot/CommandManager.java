@@ -52,7 +52,7 @@ public class CommandManager {
         addCommands(new AFKCommand(), new InviteCommand(), new PatchnoteCommand());
         //addCommands(new LmgtfyCommand(), new HelpCommand(this), new SearchCommand());
         //FUN COMMANDS
-        addCommands(new Base64Command(), new BingoCommand(), new CatCommand(), new CfunCommand(), new ConfusedStonks(), new DogCommand(), new FakebanCommand(), new FakewarnCommand(), new IssouCommand(), new SearchCommand(), new NotStonksCommand(), new NsfwPictureCommand(), new OMDBCommand(), new RollCommand(), new SayCommand(), new StonksCommand());
+        addCommands(new Base64Command(), new BingoCommand(), new CatCommand(), new CfunCommand(), new ConfusedStonks(), new DogCommand(), new FakebanCommand(), new FakewarnCommand(), new IssouCommand(), new SearchCommand(), new NotStonksCommand(), new NsfwPictureCommand(), new OMDBCommand(), new RollCommand(), new SayCommand(), new StonksCommand(), new YoutubeTogetherCommand());
     }
 
     private void addCommand(ICommand command) {
