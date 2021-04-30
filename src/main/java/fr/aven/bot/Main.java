@@ -7,7 +7,8 @@ import fr.aven.bot.modules.jda.events.MemberActivityEvent;
 import fr.aven.bot.modules.jda.JDAManager;
 import fr.aven.bot.modules.jda.events.MusicReactionListener;
 import fr.aven.bot.modules.music.spotify.SpotifyAPI;
-//import fr.aven.bot.modules.notifications.twitch.Twitch;
+/*import fr.aven.bot.modules.notifications.twitch.Twitch;
+import fr.aven.bot.modules.notifications.yt.YouTubeNotification;*/
 import fr.aven.bot.modules.tickets.TicketsChannelDB;
 import fr.aven.bot.util.Configuration;
 import fr.aven.bot.util.DBList;
@@ -39,24 +40,40 @@ public class Main
 
     private static BingoMap bingoMap;
 
+    //private static YouTubeNotification ytNotifs;
+
     public static void main(String... args) throws Exception
     {
         System.setProperty("console.encoding","UTF-8");
+
         kSoft = new KSoft();
         lastRestart = new Date();
+
         System.setProperty("AvenBot", "");
+
         configuration = new Configuration("config.json");
         database = new SQL();
 
         ticketsChannelDB = new TicketsChannelDB();
         commandManager = new CommandManager();
+
+
         listener = new Listener(commandManager);
         JDAManager.getShardManager().addEventListener(listener, new MusicReactionListener(), new MemberActivityEvent());
         setActivity(Activity.ActivityType.WATCHING, configuration.getString("game",Constants.PREFIX+"help | justaven.xyz"));
-        spotifyAPI = new SpotifyAPI(configuration.getString("spotify.clientID", ""), configuration.getString("spotify.clientSecret", ""));
-        /*twitchAPI = new Twitch();
-        twitchAPI.registerFeatures();*/
 
+        //Init Spotify API
+        spotifyAPI = new SpotifyAPI(configuration.getString("spotify.clientID", ""), configuration.getString("spotify.clientSecret", ""));
+/*
+        //Init Twitch API
+        twitchAPI = new Twitch();
+        twitchAPI.registerFeatures();
+
+        //Init YT Notifications
+        ytNotifs = new YouTubeNotification(configuration.getString("sql.host"), configuration.getString("sql.user"), configuration.getString("sql.password"));
+        ytNotifs.init();*/
+
+        //Init BingoMap
         bingoMap = new BingoMap();
 
         configuration.save();
@@ -113,6 +130,7 @@ public class Main
     public static void stop()
     {
         try {
+            //ytNotifs.stop();
             configuration.save();
             StaticLoggerBinder.getSingleton().getLoggerFactory().save();
 

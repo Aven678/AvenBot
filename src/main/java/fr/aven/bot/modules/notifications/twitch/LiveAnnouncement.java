@@ -27,18 +27,16 @@ public class LiveAnnouncement {
         this.twitchClient = twitchClient;
         this.accessToken = accessToken;
 
-        eventHandler.onEvent(ChannelMessageEvent.class, event -> {
+        /*eventHandler.onEvent(ChannelMessageEvent.class, event -> {
             System.out.println("j'ai reçu un message OHLALALA sur la chaine "+event.getChannel().getName());
             System.out.println("c'est : "+event.getMessage());
-        });
+        });*/
 
         eventHandler.onEvent(ChannelGoLiveEvent.class, this::goLiveEvent);
     }
 
     public void goLiveEvent(ChannelGoLiveEvent event)
     {
-        System.out.println("LIVE "+event.getChannel().getName());
-
         List<TwitchChannel> channels = twitchDB.getAllChannels();
         if (channels.isEmpty()) return;
 

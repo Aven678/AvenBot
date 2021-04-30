@@ -5,6 +5,7 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -19,6 +20,10 @@ public interface ICommand
     boolean haveEvent();
     void onEvent(GenericEvent event);
     Collection<net.dv8tion.jda.api.Permission> requiredDiscordPermission();
+
+    public default Collection<String> getAlias() {
+        return Arrays.asList();
+    }
 
     enum Type
     {

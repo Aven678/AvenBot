@@ -85,7 +85,7 @@ public class Listener extends ListenerAdapter
             if (event.getMessage().isWebhookMessage()) return;
             String rw = event.getMessage().getContentRaw();
 
-            if (rw.equalsIgnoreCase(Constants.PREFIX + "shutdown") && (event.getAuthor().getIdLong() == Constants.OWNER || event.getAuthor().getIdLong() == Constants.COOWNER)  || event.getAuthor().getIdLong() == Constants.OWNER_TERTIAIRE)
+            if (rw.equalsIgnoreCase(Constants.PREFIX + "shutdown") && (event.getAuthor().getIdLong() == Constants.OWNER || event.getAuthor().getIdLong() == Constants.COOWNER  || event.getAuthor().getIdLong() == Constants.OWNER_TERTIAIRE))
             {
                 event.getMessage().delete().queue();
                 logger.info("Bot stop");

@@ -38,7 +38,7 @@ jar {
 dependencies {
     compile 'com.google.apis:google-api-services-youtube:v3-rev20200526-1.30.9'
     compile 'net.explodingbush.KSoft4J:KSoft4J:1.0.6'
-    compile 'net.dv8tion:JDA:4.2.1_259'
+    compile 'net.dv8tion:JDA:4.2.1_262'
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.7'
     //implementation 'com.github.Devoxin:lavaplayer:1.3.59'
 
@@ -68,6 +68,12 @@ dependencies {
 
     implementation ("org.ktorm:ktorm-support-mysql:3.3.0")
     implementation ("org.ktorm:ktorm-core:3.3.0")
+
+    implementation 'com.apptastic:rssreader:2.5.0'
+
+    implementation("org.jetbrains.exposed:exposed-core:0.31.1")
+    implementation("org.jetbrains.exposed:exposed-dao:0.31.1")
+    implementation("org.jetbrains.exposed:exposed-jdbc:0.31.1")
 }
 
 compileJava.options.encoding = 'UTF-8'

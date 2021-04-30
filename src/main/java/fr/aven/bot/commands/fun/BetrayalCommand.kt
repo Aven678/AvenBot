@@ -7,11 +7,9 @@ import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.entities.MessageEmbed
 import net.dv8tion.jda.api.events.GenericEvent
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
-import okhttp3.OkHttpClient
 
-class YoutubeTogetherCommand: ICommand
+class BetrayalCommand: ICommand
 {
-    private val client = OkHttpClient().newBuilder().build()
     val activity = Activity()
 
     override fun handle(args: MutableList<String>?, event: GuildMessageReceivedEvent) {
@@ -23,7 +21,7 @@ class YoutubeTogetherCommand: ICommand
         val voiceState = event.member!!.voiceState
         val channel = voiceState!!.channel
 
-        event.channel.sendMessage("${Main.getDatabase().getTextFor("link", event.guild)} -> ${activity.getActivityLink("youtube", channel!!)}").queue()
+        event.channel.sendMessage("${Main.getDatabase().getTextFor("link", event.guild)} -> ${activity.getActivityLink("betrayal", channel!!)}").queue()
     }
 
     override fun getType(): ICommand.Type {
@@ -35,11 +33,11 @@ class YoutubeTogetherCommand: ICommand
     }
 
     override fun getHelp(): MessageEmbed.Field {
-        return MessageEmbed.Field("Starts YouTube Together :)", "Usage: `" + Constants.PREFIX + invoke + "`", false)
+        return MessageEmbed.Field("Starts Betrayal (AmongUS) with your friends :)", "Usage: `" + Constants.PREFIX + invoke + "`", false)
     }
 
     override fun getInvoke(): String {
-        return "youtube"
+        return "betrayal"
     }
 
     override fun haveEvent(): Boolean {
@@ -52,5 +50,9 @@ class YoutubeTogetherCommand: ICommand
 
     override fun requiredDiscordPermission(): List<Permission> {
         return listOf(Permission.CREATE_INSTANT_INVITE)
+    }
+
+    override fun getAlias(): MutableCollection<String> {
+        return listOf("amongus", "amogus").toMutableList()
     }
 }

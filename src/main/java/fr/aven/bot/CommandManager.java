@@ -32,6 +32,7 @@ import java.util.regex.Pattern;
 public class CommandManager {
 
     private final Map<String, ICommand> commands = new HashMap<>();
+    private final Map<String, ICommand> commandsAlias = new HashMap<>();
     private final Map<String, ICommand> commandsWithEvent = new HashMap<>();
     private final Logger COMMANDLOGGER = LoggerFactory.getLogger(this.getClass());
 
@@ -52,7 +53,7 @@ public class CommandManager {
         addCommands(new AFKCommand(), new InviteCommand(), new PatchnoteCommand());
         //addCommands(new LmgtfyCommand(), new HelpCommand(this), new SearchCommand());
         //FUN COMMANDS
-        addCommands(new Base64Command(), new BingoCommand(), new CatCommand(), new CfunCommand(), new ConfusedStonks(), new DogCommand(), new FakebanCommand(), new FakewarnCommand(), new IssouCommand(), new SearchCommand(), new NotStonksCommand(), new NsfwPictureCommand(), new OMDBCommand(), new RollCommand(), new SayCommand(), new StonksCommand(), new YoutubeTogetherCommand());
+        addCommands(new Base64Command(), new BetrayalCommand(), new BingoCommand(), new CatCommand(), new CfunCommand(), new ConfusedStonks(), new DogCommand(), new FakebanCommand(), new FakewarnCommand(), new FishingtonCommand(), new IssouCommand(), new NotStonksCommand(), new NsfwPictureCommand(), new OMDBCommand(), new PokerCommand(), new RollCommand(), new SayCommand(), new SearchCommand(), new StonksCommand(), new YoutubeTogetherCommand());
     }
 
     private void addCommand(ICommand command) {
@@ -60,6 +61,11 @@ public class CommandManager {
             if (command.haveEvent()) {
                 commandsWithEvent.put(command.getInvoke(), command);
             }
+            if (!command.getAlias().isEmpty()) command.getAlias().forEach(alias -> {
+                System.out.println(command.getInvoke());
+                commandsAlias.put(alias, command);
+            });
+
             commands.put(command.getInvoke(), command);
 
             Main.getDatabase().checkCmd(command);
@@ -77,7 +83,7 @@ public class CommandManager {
     }
 
     public ICommand getCommand(@NotNull String name) {
-        return commands.get(name);
+        return commands.containsKey(name) ? commands.get(name) : commandsAlias.get(name);
     }
 
     public void handleCommand(GuildMessageReceivedEvent event, boolean prefixDefaultUsed) {
@@ -90,7 +96,13 @@ public class CommandManager {
                 "(?i)" + Pattern.quote(prefix), "").split(" +");
         final String invoke = split[0].toLowerCase();
 
-        if (!commands.containsKey(invoke)) return;
+        System.out.println(commandsAlias.size());
+
+        if (!commands.containsKey(invoke))
+        {
+            if (!commandsAlias.containsKey(invoke))
+                return;
+        }
 
         if (!Main.getDatabase().checkPermission(event.getGuild(), event.getAuthor(), getCommand(invoke).getPermission(), event.getChannel())) {
             event.getChannel().sendMessage(new EmbedBuilder().setColor(Color.RED).setTitle("Error").setDescription("You don't have the permission to execute this command.").setFooter("Command executed by " + event.getAuthor().getAsTag()).build()).queue();
