@@ -53,7 +53,7 @@ public class CommandManager {
         addCommands(new AFKCommand(), new InviteCommand(), new PatchnoteCommand());
         //addCommands(new LmgtfyCommand(), new HelpCommand(this), new SearchCommand());
         //FUN COMMANDS
-        addCommands(new Base64Command(), new BetrayalCommand(), new BingoCommand(), new CatCommand(), new CfunCommand(), new ConfusedStonks(), new DogCommand(), new FakebanCommand(), new FakewarnCommand(), new FishingtonCommand(), new IssouCommand(), new NotStonksCommand(), new NsfwPictureCommand(), new OMDBCommand(), new PokerCommand(), new RollCommand(), new SayCommand(), new SearchCommand(), new StonksCommand(), new YoutubeTogetherCommand());
+        addCommands(new Base64Command(), new BetrayalCommand(), new BingoCommand(), new BobCommand(), new CatCommand(), new CfunCommand(), new ConfusedStonks(), new DogCommand(), new FakebanCommand(), new FakewarnCommand(), new FishingtonCommand(), new IssouCommand(), new NotStonksCommand(), new NsfwPictureCommand(), new OMDBCommand(), new PokerCommand(), new RollCommand(), new SayCommand(), new SearchCommand(), new StonksCommand(), new YoutubeTogetherCommand());
     }
 
     private void addCommand(ICommand command) {
@@ -62,7 +62,6 @@ public class CommandManager {
                 commandsWithEvent.put(command.getInvoke(), command);
             }
             if (!command.getAlias().isEmpty()) command.getAlias().forEach(alias -> {
-                System.out.println(command.getInvoke());
                 commandsAlias.put(alias, command);
             });
 
