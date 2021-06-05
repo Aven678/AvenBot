@@ -45,8 +45,9 @@ public class TrackScheduler extends AudioEventAdapter
     public Message lastMessageSearch = null;
 
     public int boostPercentage = 0;
-    private static final float[] BASS_BOOST = {-0.05f, 0.07f, 0.16f, 0.03f, -0.05f, -0.11f};
-    public EqualizerFactory equalizer = null;
+    private static final float[] BASS_BOOST = {0.2f, 0.15f, 0.1f, 0.05f, 0.0f, -0.05f, -0.1f, -0.1f, -0.1f, -0.1f, -0.1f,
+            -0.1f, -0.1f, -0.1f, -0.1f};
+    public EqualizerFactory equalizer = new EqualizerFactory();
 
     public TrackScheduler(AudioPlayer player, Guild guild, TextChannel channel)
     {
@@ -86,30 +87,30 @@ public class TrackScheduler extends AudioEventAdapter
         queue.addAll(tQueue);
     }
 
-    public void bassBoost(int percentage, Message message) {
+    public void bassBoost(int diff, Message message) {
         final int previousPercentage = this.boostPercentage;
-        this.boostPercentage = percentage;
+        this.boostPercentage = diff;
 
         // Disable filter factory
-        if (previousPercentage > 0 && percentage == 0) {
+        if (previousPercentage > 0 && diff == 0) {
             this.player.setFilterFactory(null);
             message.addReaction("✅").queue();
             return;
         }
         // Enable filter factory
-        if (previousPercentage == 0 && percentage > 0) {
-            if (this.equalizer == null) {
-                this.equalizer = new EqualizerFactory();
-            }
+        if (previousPercentage == 0 && diff > 0) {
             this.player.setFilterFactory(this.equalizer);
         }
 
-        final float multiplier = percentage / 100.0f;
         for (int i = 0; i < BASS_BOOST.length; i++) {
-            this.equalizer.setGain(i, BASS_BOOST[i] * multiplier);
+            this.equalizer.setGain(i, BASS_BOOST[i] + diff);
         }
 
-        this.boostPercentage = percentage;
+        for (int i = 0; i < BASS_BOOST.length; i++) {
+            equalizer.setGain(i, -BASS_BOOST[i] + diff);
+        }
+
+        this.boostPercentage = diff;
         message.addReaction("✅").queue();
     }
 
