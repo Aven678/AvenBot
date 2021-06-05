@@ -130,6 +130,7 @@ public class Main
     public static void stop()
     {
         try {
+            //salut c'est cool
             //ytNotifs.stop();
             configuration.save();
             StaticLoggerBinder.getSingleton().getLoggerFactory().save();
