@@ -8,10 +8,10 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import fr.aven.bot.Main;
 import fr.aven.bot.util.MessageTask;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.MessageBuilder;
+import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
+import net.dv8tion.jda.api.interactions.components.Button;
 import net.explodingbush.ksoftapi.entities.Lyric;
 
 import java.util.*;
@@ -41,6 +41,7 @@ public class TrackScheduler extends AudioEventAdapter
     public AudioTrack oldTrack = null;
 
     public Message lastMessageStatus = null;
+    public Message lastMessageActions = null;
     public Message lastMessageLyrics = null;
     public Message lastMessageSearch = null;
 
@@ -156,6 +157,7 @@ public class TrackScheduler extends AudioEventAdapter
             //PlayerManager.getInstance().destroyGuildMusicManager(guild);
             channel.sendMessage(Main.getDatabase().getTextFor("stop.confirm", guild)).queue(msg -> new Timer().schedule(new MessageTask(msg), 10000));
             if (lastMessageStatus != null) lastMessageStatus.delete().queue();
+            if (lastMessageActions != null) lastMessageActions.delete().queue();
             guild.getAudioManager().closeAudioConnection();
             this.boostPercentage = 0;
             this.player.setFilterFactory(null);
@@ -198,6 +200,7 @@ public class TrackScheduler extends AudioEventAdapter
 
         if (guild.getTextChannelById(channel.getId()) == null) return;
         if (lastMessageStatus != null) lastMessageStatus.delete().queue(success -> {}, error -> {});
+        if (lastMessageActions != null) lastMessageActions.delete().queue(success -> {}, error -> {});
 
         String repeatPlaylistField = "";
 
@@ -218,17 +221,74 @@ public class TrackScheduler extends AudioEventAdapter
 
         builder.setFooter(Main.getDatabase().getTextFor("music.request", guild)+userRequest.getName(), userRequest.getAvatarUrl());
 
-        channel.sendMessage(builder.build()).queue(msg -> {
-            msg.addReaction("⏮️").queue();
-            msg.addReaction("⏯️").queue();
-            msg.addReaction("⏭️").queue();
-            msg.addReaction("\uD83D\uDD01").queue(); //repeat
-            msg.addReaction("\uD83D\uDD02").queue(); //repeatMusic
-            msg.addReaction("\uD83D\uDCDC").queue(); //scroll/lyrics
-            msg.addReaction("❌").queue(); //stop
+        channel.sendMessageEmbeds(builder.build()).setActionRow(
+                Button.secondary("old","Back").withEmoji(Emoji.fromUnicode("⏮️")),
+                Button.secondary("pause","Pause").withEmoji(Emoji.fromUnicode("⏯️")),
+                Button.secondary("skip", "Skip").withEmoji(Emoji.fromUnicode("⏭️")),
+                //Button.secondary("repeat", Emoji.fromUnicode("\uD83D\uDD01")),
+                //Button.success("repeatOne",Emoji.fromUnicode("\uD83D\uDD02")),
+                //Button.secondary("lyrics", Emoji.fromUnicode("\uD83D\uDCDC")),
+                Button.secondary("stop", "Stop").withEmoji(Emoji.fromUnicode("❌"))
+        )
+                .queue(msg -> {
+                    /**
+                     * msg.addReaction("⏮️").queue();
+                     * msg.addReaction("⏯️").queue();
+                     * msg.addReaction("⏭️").queue();
+                     *
+                     * msg.addReaction("\uD83D\uDD01").queue(); //repeat
+                     * msg.addReaction("\uD83D\uDD02").queue(); //repeatMusic
+                     * msg.addReaction("\uD83D\uDCDC").queue(); //scroll/lyrics
+                     * msg.addReaction("❌").queue(); //stop
+                     * */
 
             lastMessageStatus = msg;
         }, error -> {});
+
+        channel.sendMessageEmbeds(new EmbedBuilder().setDescription("Loading").build()).setActionRow(
+                Button.secondary("repeat", "Repeat").withEmoji(Emoji.fromUnicode("\uD83D\uDD01")),
+                Button.secondary("repeatOne","Repeat track").withEmoji(Emoji.fromUnicode("\uD83D\uDD02")),
+                Button.secondary("lyrics", "Lyrics").withEmoji(Emoji.fromUnicode("\uD83D\uDCDC"))).queue(msg -> {
+                    lastMessageActions = msg;
+                    msg.suppressEmbeds(true).queue();
+        });
+    }
+
+    public void editMessage(ButtonClickEvent event)
+    {
+        AudioTrack track = PlayerManager.getInstance().getGuildMusicManager(guild, channel).player.getPlayingTrack();
+        if (track == null) return;
+
+        User userRequest = guild.getJDA().getUserById(usersRequest.get(track));
+
+        EmbedBuilder builder = new EmbedBuilder();
+        builder.setAuthor(Main.getDatabase().getTextFor(player.isPaused() ? "player.paused" : "music.progress", guild), track.getInfo().uri, guild.getJDA().getSelfUser().getAvatarUrl());
+        builder.setColor(guild.getMember(userRequest).getColor());
+        String repeatMusicField = "";
+        String repeatPlaylistField = "";
+
+        if (repeatMusic)
+            repeatMusicField = "\n❱ "+ Main.getDatabase().getTextFor("music.repeatRequested", guild);
+
+        if (repeatPlaylist)
+            repeatPlaylistField = "\n❱ " + Main.getDatabase().getTextFor("music.repeatPlaylistRequested", guild);
+
+        builder.addField(track.getInfo().title, "❱ "+Main.getDatabase().getTextFor("music.author", guild)
+                +" : "+ track.getInfo().author
+                +"\n❱ "+Main.getDatabase().getTextFor("music.duration", guild)+" : "+ getTimestamp(track.getInfo().length) + repeatPlaylistField + repeatMusicField, false);
+
+        builder.setThumbnail("https://i.ytimg.com/vi/" + track.getInfo().identifier + "/maxresdefault.jpg");
+
+        builder.setFooter(Main.getDatabase().getTextFor("music.request", guild)+userRequest.getName(), userRequest.getAvatarUrl());
+
+        event.editMessage(new MessageBuilder().setEmbeds(builder.build()).build()).setActionRow(
+                Button.secondary("old",Emoji.fromUnicode("⏮️")),
+                Button.secondary("pause",Emoji.fromUnicode("⏯️")),
+                Button.secondary("skip", Emoji.fromUnicode("⏭️")),
+                Button.secondary("repeat", Emoji.fromUnicode("\uD83D\uDD01")),
+                //Button.success("repeatOne",Emoji.fromUnicode("\uD83D\uDD02")),
+                //Button.secondary("lyrics", Emoji.fromUnicode("\uD83D\uDCDC")),
+                Button.secondary("stop", Emoji.fromUnicode("❌"))).queue();
     }
 
     public void editMessage()
@@ -258,7 +318,7 @@ public class TrackScheduler extends AudioEventAdapter
 
         builder.setFooter(Main.getDatabase().getTextFor("music.request", guild)+userRequest.getName(), userRequest.getAvatarUrl());
 
-        lastMessageStatus.getChannel().editMessageById(lastMessageStatus.getId(), builder.build()).queue();
+        lastMessageStatus.editMessage(new MessageBuilder().setEmbeds(builder.build()).build()).queue();
     }
 
     public void clearLyricsMap()

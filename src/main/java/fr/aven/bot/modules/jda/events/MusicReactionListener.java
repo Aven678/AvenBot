@@ -8,8 +8,10 @@ import fr.aven.bot.modules.music.PlayerManager;
 import fr.aven.bot.util.ICommand;
 import fr.aven.bot.util.MessageTask;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import java.awt.*;
@@ -20,8 +22,81 @@ import java.util.Timer;
 public class MusicReactionListener extends ListenerAdapter
 {
     private List<String> emotes = Arrays.asList("⏮️","⏯️", "⏭️", "\uD83D\uDD01", "\uD83D\uDD02", "\uD83D\uDCDC", "❌");
+    private List<String> componentIds = Arrays.asList("old", "pause", "skip", "repeat", "repeatOne", "lyrics", "stop");
 
     @Override
+    public void onButtonClick(@NotNull ButtonClickEvent event) {
+        if (event.getUser().isBot()) return;
+        if (event.getGuild() == null) return;
+        if (!event.getGuild().getAudioManager().isConnected()) return;
+        GuildMusicManager manager = PlayerManager.getInstance().getGuildMusicManager(event.getGuild(), event.getTextChannel());
+
+        if (event.getMessageIdLong() != manager.scheduler.lastMessageStatus.getIdLong())
+            if (event.getMessageIdLong() != manager.scheduler.lastMessageActions.getIdLong())
+                return;
+
+        if (!componentIds.contains(event.getComponentId())) return;
+        AudioTrack track = manager.player.getPlayingTrack();
+
+        //event.deferReply().queue();
+
+        switch (event.getComponentId())
+        {
+            case "old":
+                if (Main.getDatabase().checkPermission(event.getGuild(), event.getUser(), ICommand.Permission.DJ, event.getTextChannel())) {
+                    manager.player.stopTrack();
+                    manager.scheduler.nextTrack(manager.scheduler.oldTrack, true);
+                } else
+                    missingPermission(event);
+                break;
+
+            case "pause":
+                if (manager.player.isPaused()) {
+                    manager.player.setPaused(false);
+                } else {
+                    manager.player.setPaused(true);
+                }
+
+                manager.scheduler.editMessage(event);
+                break;
+            case "skip":
+                if (Main.getDatabase().checkPermission(event.getGuild(), event.getUser(), ICommand.Permission.DJ, event.getTextChannel())) {
+                    manager.player.stopTrack();
+                    manager.scheduler.nextTrack(track, false);
+                } else
+                    missingPermission(event);
+                break;
+            case "repeat":
+                manager.scheduler.repeatPlaylist = !manager.scheduler.repeatPlaylist;
+                manager.scheduler.editMessage(event);
+                break;
+            case "repeatOne":
+                manager.scheduler.repeatMusic = !manager.scheduler.repeatMusic;
+                manager.scheduler.editMessage(event);
+                break;
+            case "lyrics":
+                if (!manager.scheduler.lyricsAlwaysRequested){
+                    event.deferReply().queue(msg -> LyricsCommand.sendLyrics(msg, Main.getkSoft().getLyrics(track.getInfo().title)));
+                    manager.scheduler.lyricsAlwaysRequested = true;
+                } else {
+                    event.deferEdit().queue();
+                }
+                break;
+            case "stop":
+                if (Main.getDatabase().checkPermission(event.getGuild(), event.getUser(), ICommand.Permission.DJ, event.getTextChannel())) {
+                    manager.player.stopTrack();
+                    manager.scheduler.purgeQueue();
+                    manager.scheduler.nextTrack(track, false);
+                    manager.scheduler.alwaysStopped = true;
+                    manager.scheduler.repeatMusic = false;
+                    manager.scheduler.repeatPlaylist = false;
+                } else
+                    missingPermission(event);
+                break;
+        }
+    }
+
+    /*@Override
     public void onGuildMessageReactionAdd(@Nonnull GuildMessageReactionAddEvent event) {
         if (event.getUser().isBot()) return;
         if (!event.getGuild().getAudioManager().isConnected()) return;
@@ -91,7 +166,7 @@ public class MusicReactionListener extends ListenerAdapter
                 break;
         }
 
-    }
+    }*/
 
     public void deleteReaction(GuildMessageReactionAddEvent event)
     {
@@ -100,9 +175,16 @@ public class MusicReactionListener extends ListenerAdapter
         } catch (Exception ignored) {}
     }
 
+    public void missingPermission(ButtonClickEvent event)
+    {
+        event.getTextChannel().sendMessageEmbeds(new EmbedBuilder().setColor(Color.RED).setTitle("Error")
+                .setDescription("You don't have the permission to execute this command.")
+                .setFooter("Command executed by " + event.getUser().getAsTag()).build())
+                .queue(msg -> new Timer().schedule(new MessageTask(msg), 5000)); }
+
     public void missingPermission(GuildMessageReactionAddEvent event)
     {
-        event.getChannel().sendMessage(new EmbedBuilder().setColor(Color.RED).setTitle("Error")
+        event.getChannel().sendMessageEmbeds(new EmbedBuilder().setColor(Color.RED).setTitle("Error")
                 .setDescription("You don't have the permission to execute this command.")
                 .setFooter("Command executed by " + event.getUser().getAsTag()).build())
                 .queue(msg -> new Timer().schedule(new MessageTask(msg), 5000)); }

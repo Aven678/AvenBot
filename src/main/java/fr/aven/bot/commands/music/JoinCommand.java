@@ -22,7 +22,7 @@ public class JoinCommand extends MusicCommands
         channel.sendMessage(Main.getDatabase().getTextFor("join.success", event.getGuild())).queue();
     }
 
-    public static void joinChannel(GuildMessageReceivedEvent event)
+    public static boolean joinChannel(GuildMessageReceivedEvent event)
     {
         TextChannel channel = event.getChannel();
         AudioManager audioManager = event.getGuild().getAudioManager();
@@ -31,7 +31,7 @@ public class JoinCommand extends MusicCommands
         if (!memberVoiceState.inVoiceChannel())
         {
             channel.sendMessage(Main.getDatabase().getTextFor("join.isNotInChannel", event.getGuild())).queue();
-            return;
+            return false;
         }
 
         VoiceChannel voiceChannel = memberVoiceState.getChannel();
@@ -40,11 +40,13 @@ public class JoinCommand extends MusicCommands
         if (!selfMember.hasPermission(voiceChannel, net.dv8tion.jda.api.Permission.VOICE_CONNECT))
         {
             channel.sendMessageFormat(Main.getDatabase().getTextFor("join.missingPerm", event.getGuild()), voiceChannel).queue();
-            return;
+            return false;
         }
 
         audioManager.openAudioConnection(voiceChannel);
         audioManager.setSelfDeafened(true);
+
+        return true;
     }
 
     @Override

@@ -50,7 +50,7 @@ public class CommandManager {
         //INFO COMMANDS
         addCommands(new HelpCommand(), new InfoCommand());
         //UTIL COMMANDS
-        addCommands(new AFKCommand(), new InviteCommand(), new PatchnoteCommand());
+        addCommands(new AFKCommand(), new InviteCommand(), new PatchnoteCommand(), new TestCommand());
         //addCommands(new LmgtfyCommand(), new HelpCommand(this), new SearchCommand());
         //FUN COMMANDS
         addCommands(new Base64Command(), new BetrayalCommand(), new BingoCommand(), new BobCommand(), new CatCommand(), new CfunCommand(), new ConfusedStonks(), new DogCommand(), new FakebanCommand(), new FakewarnCommand(), new FishingtonCommand(), new IssouCommand(), new NotStonksCommand(), new NsfwPictureCommand(), new OMDBCommand(), new PokerCommand(), new RollCommand(), new SayCommand(), new SearchCommand(), new StonksCommand(), new YoutubeTogetherCommand());
