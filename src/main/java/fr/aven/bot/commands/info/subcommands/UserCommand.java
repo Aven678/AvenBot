@@ -1,6 +1,7 @@
 package fr.aven.bot.commands.info.subcommands;
 
 import fr.aven.bot.Constants;
+import fr.aven.bot.Main;
 import fr.aven.bot.util.ICommand;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
@@ -27,6 +28,7 @@ public class UserCommand extends InfoSubCommands {
         _guild = guild;
         //STATUS
         if (!message.getMentionedUsers().isEmpty() || args.size() < 3) {
+            //System.out.println(event.getJDA().getUserById(args.get(0)));
             User target = message.getMentionedUsers().isEmpty() ? ( args.get(0).isEmpty() ? message.getAuthor() : event.getJDA().getUserById(args.get(0))) : message.getMentionedUsers().get(0);
             _target = target;
             /*String status;
@@ -84,7 +86,7 @@ public class UserCommand extends InfoSubCommands {
             }*/
 
             //NICKNAME
-            String nickname = guild.getMember(target).getNickname();
+            String nickname = guild.getMember(target) == null ? null : guild.getMember(target).getNickname();
             String nick;
             if (nickname == null || nickname.isEmpty()) {
                 nick = "No Nickname";
@@ -98,9 +100,10 @@ public class UserCommand extends InfoSubCommands {
             userBuilder.setAuthor(target.getName(), null, target.getAvatarUrl());
             userBuilder.setThumbnail(target.getAvatarUrl());
             userBuilder.addField("User Informations: ",
-                    "Nickname ❱ " + nick +
+                    (guild.getMember(target) == null ? "" : ("Nickname ❱ " + nick)) +
                             "\nID ❱ " + target.getId() +
-                            "\nAccount Type ❱ " + (target.isBot() ? "Bot" : "Human"),
+                            "\nAccount Type ❱ " + (target.isBot() ? "Bot" : "Human") +
+                            "\nMutual servers ❱ " + target.getMutualGuilds().size(),
                     true);
             Emote rpEmote = event.getJDA().getGuildById("361564193226489861").getEmoteById("735623685922095184");
             /*userBuilder.addField("Status: ",
@@ -109,12 +112,12 @@ public class UserCommand extends InfoSubCommands {
                             (guild.getMember(target).getActivities() == null || guild.getMember(target).getActivities().isEmpty() ? "" : (guild.getMember(target).getActivities().get(0).isRich() ? "\n*Click the " + rpEmote.getAsMention() + " emote for more informations*" : "")),
                     false);*/
             userBuilder.addField("Dates: ",
-                    "Creation Date ❱ " + target.getTimeCreated().format(Constants.FORMATTER) +
-                            "\nJoin Date ❱ " + guild.getMember(target).getTimeJoined().format(Constants.FORMATTER),
+                    "Creation Date ❱ " + target.getTimeCreated().format(Constants.FORMATTER) + (guild.getMember(target) == null ? "" :
+                            "\nJoin Date ❱ " + guild.getMember(target).getTimeJoined().format(Constants.FORMATTER)),
                     false);
-            userBuilder.addField("Roles ❱  ", guild.getMember(target).getRoles().size() == 0 ? "No roles found" : guild.getMember(target).getRoles().stream().map(Role::getAsMention).collect(Collectors.joining(", ")), true);
+            if (guild.getMember(target) != null) userBuilder.addField("Roles ❱  ", guild.getMember(target).getRoles().size() == 0 ? "No roles found" : guild.getMember(target).getRoles().stream().map(Role::getAsMention).collect(Collectors.joining(", ")), true);
 
-
+            userBuilder.setFooter(Main.getDatabase().getTextFor("music.request", guild)+event.getAuthor().getName(), event.getAuthor().getAvatarUrl());
 
             event.getChannel().sendMessage(userBuilder.build()).queue(msg -> {
 

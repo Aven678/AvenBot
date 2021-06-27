@@ -19,13 +19,13 @@ public class ServerCommand extends InfoSubCommands {
         Guild guild = event.getGuild();
 
         int humans = 0, bots = 0, total = 0;
-        int online = 0, dnd = 0, idle = 0, invisible = 0;
         String createTime = guild.getTimeCreated().format(Constants.FORMATTER);
+        //int online = 0, dnd = 0, idle = 0, invisible = 0;
         for (int i = 0; i < guild.getMembers().size(); i++) {
             if (guild.getMembers().get(i).getUser().isBot()) {
                 bots++;
             } else {
-                switch (guild.getMembers().get(i).getOnlineStatus()) {
+                /*switch (guild.getMembers().get(i).getOnlineStatus()) {
                     case ONLINE:
                         online++;
                         break;
@@ -38,7 +38,7 @@ public class ServerCommand extends InfoSubCommands {
                     case INVISIBLE:
                         invisible++;
                         break;
-                }
+                }*/
                 humans++;
             }
             total++;
@@ -108,22 +108,34 @@ public class ServerCommand extends InfoSubCommands {
                         "\nHumans ❱ " + humans +
                         "\nBots ❱ " + bots,
                 true);
-        builder.addField("Members Status: ",
+
+        /*builder.addField("Members Status: ",
                 "Online ❱ " + online +
                         "\nDo Not Disturb ❱ " + dnd +
                         "\nIdle ❱ " + idle +
                         "\nInvisible ❱ " + invisible,
-                true);
+                true);*/
+
         builder.addField("Channels: ",
                 "Total ❱ " + guild.getChannels().size() +
                         "\nCategories ❱ " + guild.getCategories().size() +
+                        "\nStore ❱ " + guild.getStoreChannels().size() +
                         "\nText ❱ " + guild.getTextChannels().size() +
                         "\nVoice ❱ " + guild.getVoiceChannels().size(),
                 false);
-        builder.addField("Roles: ", guild.getRoles().size() == 0 ? "No roles found" : guild.getRoles().stream().map(Role::getAsMention).collect(Collectors.joining(", ")), true);
-        builder.addField("Emojis: ", guild.getEmotes().size() == 0 ? "No emojis found" : String.valueOf(guild.getEmotes().size()), false);
 
-        event.getChannel().sendMessage(builder.build()).queue();
+
+        //String roles_collect = guild.getRoles().stream().map(Role::getAsMention).limit(10).collect(Collectors.joining(", "));
+        //System.out.println(roles_collect.length());
+        //builder.addField("Roles: ", guild.getRoles().size() == 0 ? "No roles found" : guild.getRoles().stream().map(Role::getAsMention).collect(Collectors.joining(", ")), true);
+        //builder.addField("Public role: ", guild.getPublicRole().getAsMention(), true);
+
+        builder.addField("Other informations: ", "Roles ❱ "+ guild.getRoles().size() +
+                "\nEmojis ❱ " + (guild.getEmotes().size() == 0 ? "No emojis found" : String.valueOf(guild.getEmotes().size())) +
+                "\nBoosts ❱ " + guild.getBoostCount() + " Boosts (Level " + guild.getBoostTier().getKey() + ")", true);
+        //builder.addField("Emojis: ", ), true);
+
+        event.getMessage().replyEmbeds(builder.build()).queue();
     }
 
     @Override

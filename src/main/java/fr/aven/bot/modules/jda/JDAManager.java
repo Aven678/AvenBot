@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
 import net.dv8tion.jda.api.sharding.ShardManager;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
+import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 public class JDAManager
 {
@@ -21,6 +22,7 @@ public class JDAManager
             return DefaultShardManagerBuilder.createDefault(Main.getConfiguration().getString("token", "Insert your token here."))
                     //.setMemberCachePolicy(MemberCachePolicy.ALL)
                     .setChunkingFilter(ChunkingFilter.ALL)
+                    .enableCache(CacheFlag.ONLINE_STATUS)
                     .enableIntents(GatewayIntent.DIRECT_MESSAGE_REACTIONS,
                             GatewayIntent.DIRECT_MESSAGE_TYPING,
                             GatewayIntent.DIRECT_MESSAGES,
@@ -31,7 +33,8 @@ public class JDAManager
                             GatewayIntent.GUILD_MESSAGE_REACTIONS,
                             GatewayIntent.GUILD_MESSAGE_TYPING,
                             GatewayIntent.GUILD_MESSAGES,
-                            GatewayIntent.GUILD_VOICE_STATES)
+                            GatewayIntent.GUILD_VOICE_STATES,
+                            GatewayIntent.GUILD_PRESENCES)
                     .setAudioSendFactory(new NativeAudioSendFactory())
                     .addEventListeners(new TicketsEvent(), new BingoListener(), new AFKListener(), new ReactRoleListener(), new GuildActivities(), new InteractionsListener())
                     .build();

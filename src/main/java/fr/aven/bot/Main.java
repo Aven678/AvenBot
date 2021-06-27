@@ -59,7 +59,8 @@ public class Main
 
 
         listener = new Listener(commandManager);
-        JDAManager.getShardManager().addEventListener(listener, new MusicReactionListener(), new MemberActivityEvent());
+        JDAManager.getShardManager()
+                .addEventListener(listener, new MusicReactionListener(), new MemberActivityEvent());
         setActivity(Activity.ActivityType.WATCHING, configuration.getString("game",Constants.PREFIX+"help | justaven.xyz"));
 
         //Init Spotify API
