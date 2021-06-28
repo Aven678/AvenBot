@@ -10,12 +10,14 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 
 import java.time.temporal.ChronoUnit;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static net.dv8tion.jda.api.entities.Activity.ActivityType.STREAMING;
 
-public class UserCommand extends InfoSubCommands {
+public class UserCommand implements ICommand {
 
     private User _target;
     private Message _msg;
@@ -29,8 +31,10 @@ public class UserCommand extends InfoSubCommands {
         //STATUS
         if (!message.getMentionedUsers().isEmpty() || args.size() < 3) {
             //System.out.println(event.getJDA().getUserById(args.get(0)));
-            User target = message.getMentionedUsers().isEmpty() ? ( args.get(0).isEmpty() ? message.getAuthor() : event.getJDA().getUserById(args.get(0))) : message.getMentionedUsers().get(0);
+            User target = message.getMentionedUsers().isEmpty() ? (args.isEmpty() ? message.getAuthor() : event.getJDA().getUserById(args.get(0))) : message.getMentionedUsers().get(0);
             _target = target;
+
+            //Missing Gateway Intent
             /*String status;
 
             switch (guild.getMember(target).getOnlineStatus()) {
@@ -105,12 +109,16 @@ public class UserCommand extends InfoSubCommands {
                             "\nAccount Type ❱ " + (target.isBot() ? "Bot" : "Human") +
                             "\nMutual servers ❱ " + target.getMutualGuilds().size(),
                     true);
-            Emote rpEmote = event.getJDA().getGuildById("361564193226489861").getEmoteById("735623685922095184");
+
+
+            //Emote rpEmote = event.getJDA().getGuildById("361564193226489861").getEmoteById("735623685922095184");
+            //Missing Gateway Intent
             /*userBuilder.addField("Status: ",
                     "Status ❱ " + status +
                             "\n" + finalActivity +
                             (guild.getMember(target).getActivities() == null || guild.getMember(target).getActivities().isEmpty() ? "" : (guild.getMember(target).getActivities().get(0).isRich() ? "\n*Click the " + rpEmote.getAsMention() + " emote for more informations*" : "")),
                     false);*/
+
             userBuilder.addField("Dates: ",
                     "Creation Date ❱ " + target.getTimeCreated().format(Constants.FORMATTER) + (guild.getMember(target) == null ? "" :
                             "\nJoin Date ❱ " + guild.getMember(target).getTimeJoined().format(Constants.FORMATTER)),
@@ -119,23 +127,24 @@ public class UserCommand extends InfoSubCommands {
 
             userBuilder.setFooter(Main.getDatabase().getTextFor("music.request", guild)+event.getAuthor().getName(), event.getAuthor().getAvatarUrl());
 
-            event.getChannel().sendMessage(userBuilder.build()).queue(msg -> {
+            event.getMessage().replyEmbeds(userBuilder.build()).queue(msg -> {
+
 
 
                 //RICHPRESENCE
-                if (!target.isBot() && !guild.getMember(target).getActivities().isEmpty() && guild.getMember(target).getActivities().get(0).isRich()) {
-                    /*msg.addReaction(event.getJDA().getGuildById("403193778233409536").getEmoteById("603529803609407499")).queue();
-                    _msg = msg;*/
-                }
+                //if (!target.isBot() && !guild.getMember(target).getActivities().isEmpty() && guild.getMember(target).getActivities().get(0).isRich()) {
+                // /*msg.addReaction(event.getJDA().getGuildById("403193778233409536").getEmoteById("603529803609407499")).queue();
+                    //_msg = msg;
+                //}
             });
         } else {
-            event.getChannel().sendMessage("Please provide an ID or a mention").queue();
+            event.getMessage().reply("Please provide an ID or a mention").queue();
         }
     }
 
     @Override
     public String getInvoke() {
-        return "user";
+        return "userinfo";
     }
 
     @Override
@@ -148,7 +157,8 @@ public class UserCommand extends InfoSubCommands {
         //if (event instanceof MessageReactionAddEvent) onReac((MessageReactionAddEvent) event);
     }
 
-    private void onReac(MessageReactionAddEvent event) {
+    //Missing Gateway Intent
+    /*private void onReac(MessageReactionAddEvent event) {
         if (event.getUser().isBot()) return;
         if (_msg == null) return;
         if (!event.getMessageId().equals(_msg.getId())) return;
@@ -208,15 +218,30 @@ public class UserCommand extends InfoSubCommands {
             _msg = null;
         }
 
+    }*/
+
+    @Override
+    public Collection<net.dv8tion.jda.api.Permission> requiredDiscordPermission() {
+        return Arrays.asList(net.dv8tion.jda.api.Permission.MESSAGE_EMBED_LINKS);
     }
 
     @Override
     public boolean haveEvent() {
-        return true;
+        return false;
     }
 
     @Override
-    public ICommand.Type getType() {
-        return super.getType();
+    public Type getType() {
+        return Type.INFO;
+    }
+
+    @Override
+    public Permission getPermission() {
+        return Permission.USER;
+    }
+
+    @Override
+    public Collection<String> getAlias() {
+        return Arrays.asList("ui");
     }
 }

@@ -2,7 +2,9 @@ package fr.aven.bot.commands.info.subcommands;
 
 import fr.aven.bot.Constants;
 import fr.aven.bot.Main;
+import fr.aven.bot.util.ICommand;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageEmbed;
@@ -11,10 +13,9 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
-public class BotCommand extends InfoSubCommands {
+public class BotCommand implements ICommand {
 
     @Override
     public void handle(List<String> args, GuildMessageReceivedEvent event) {
@@ -54,7 +55,7 @@ public class BotCommand extends InfoSubCommands {
                         "\nInvite Link ❱ " + "https://invite.justaven.xyz" +
                         "\nWebsite ❱ " + "https://www.justaven.xyz",
                 false);
-        event.getChannel().sendMessage(botBuilder.build()).queue();
+        event.getMessage().replyEmbeds(botBuilder.build()).queue();
     }
 
     private String getTimeDiff(Date date1, Date date2) {
@@ -75,7 +76,7 @@ public class BotCommand extends InfoSubCommands {
 
     @Override
     public String getInvoke() {
-        return "bot";
+        return "botinfo";
     }
 
     @Override
@@ -87,13 +88,28 @@ public class BotCommand extends InfoSubCommands {
     public void onEvent(GenericEvent event) {}
 
     @Override
+    public Collection<net.dv8tion.jda.api.Permission> requiredDiscordPermission() {
+        return Arrays.asList(net.dv8tion.jda.api.Permission.MESSAGE_EMBED_LINKS);
+    }
+
+    @Override
     public boolean haveEvent() {
         return false;
     }
 
     @Override
     public Type getType() {
-        return super.getType();
+        return Type.INFO;
+    }
+
+    @Override
+    public Permission getPermission() {
+        return Permission.USER;
+    }
+
+    @Override
+    public Collection<String> getAlias() {
+        return Collections.emptyList();
     }
 
 }

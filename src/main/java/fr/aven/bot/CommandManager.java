@@ -10,7 +10,9 @@ import fr.aven.bot.commands.admin.*;
 import fr.aven.bot.commands.admin.announce.AnnounceCommand;
 import fr.aven.bot.commands.fun.*;
 import fr.aven.bot.commands.info.HelpCommand;
-import fr.aven.bot.commands.info.InfoCommand;
+import fr.aven.bot.commands.info.subcommands.BotCommand;
+import fr.aven.bot.commands.info.subcommands.ServerCommand;
+import fr.aven.bot.commands.info.subcommands.UserCommand;
 import fr.aven.bot.commands.modo.*;
 import fr.aven.bot.commands.music.*;
 /*import fr.aven.bot.commands.util.LmgtfyCommand;
@@ -48,7 +50,7 @@ public class CommandManager {
         //MODO COMMANDS
         addCommands(new BanCommand(), new ClearCommand(), new KickCommand(), new ModlogsCommand(), new MuteCommand(), new UnbanCommand(), new UnmuteCommand(), new WarnCommand(), new WarnsCommand());
         //INFO COMMANDS
-        addCommands(new HelpCommand(), new InfoCommand());
+        addCommands(new HelpCommand(), new BotCommand(), new ServerCommand(), new UserCommand());
         //UTIL COMMANDS
         addCommands(new AFKCommand(), new InviteCommand(), new PatchnoteCommand(), new TestCommand());
         //addCommands(new LmgtfyCommand(), new HelpCommand(this), new SearchCommand());

@@ -1,7 +1,9 @@
 package fr.aven.bot.commands.info.subcommands;
 
 import fr.aven.bot.Constants;
+import fr.aven.bot.util.ICommand;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Emote;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageEmbed;
@@ -9,10 +11,12 @@ import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ServerCommand extends InfoSubCommands {
+public class ServerCommand implements ICommand {
 
     @Override
     public void handle(List<String> args, GuildMessageReceivedEvent event) {
@@ -103,6 +107,15 @@ public class ServerCommand extends InfoSubCommands {
                         "\nVerification Level ❱ " + verif +
                         "\nCreation Date ❱ " + createTime,
                 false);
+
+        builder.addField("Channels: ",
+                "Total ❱ " + guild.getChannels().size() +
+                        "\nCategories ❱ " + guild.getCategories().size() +
+                        "\nStore ❱ " + guild.getStoreChannels().size() +
+                        "\nText ❱ " + guild.getTextChannels().size() +
+                        "\nVoice ❱ " + guild.getVoiceChannels().size(),
+                true);
+
         builder.addField("Members: ",
                 "Total ❱ " + total +
                         "\nHumans ❱ " + humans +
@@ -115,14 +128,6 @@ public class ServerCommand extends InfoSubCommands {
                         "\nIdle ❱ " + idle +
                         "\nInvisible ❱ " + invisible,
                 true);*/
-
-        builder.addField("Channels: ",
-                "Total ❱ " + guild.getChannels().size() +
-                        "\nCategories ❱ " + guild.getCategories().size() +
-                        "\nStore ❱ " + guild.getStoreChannels().size() +
-                        "\nText ❱ " + guild.getTextChannels().size() +
-                        "\nVoice ❱ " + guild.getVoiceChannels().size(),
-                false);
 
 
         //String roles_collect = guild.getRoles().stream().map(Role::getAsMention).limit(10).collect(Collectors.joining(", "));
@@ -140,7 +145,7 @@ public class ServerCommand extends InfoSubCommands {
 
     @Override
     public String getInvoke() {
-        return "server";
+        return "serverinfo";
     }
 
     @Override
@@ -152,12 +157,27 @@ public class ServerCommand extends InfoSubCommands {
     public void onEvent(GenericEvent event) {}
 
     @Override
+    public Collection<net.dv8tion.jda.api.Permission> requiredDiscordPermission() {
+        return Arrays.asList(net.dv8tion.jda.api.Permission.MESSAGE_EMBED_LINKS);
+    }
+
+    @Override
     public boolean haveEvent() {
         return false;
     }
 
     @Override
     public Type getType() {
-        return super.getType();
+        return Type.INFO;
+    }
+
+    @Override
+    public Permission getPermission() {
+        return Permission.USER;
+    }
+
+    @Override
+    public Collection<String> getAlias() {
+        return Arrays.asList("si");
     }
 }
