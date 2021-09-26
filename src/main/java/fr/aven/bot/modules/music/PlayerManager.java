@@ -7,6 +7,9 @@ import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.*;
+import com.sedmelluq.lava.extensions.youtuberotator.YoutubeIpRotatorSetup;
+import com.sedmelluq.lava.extensions.youtuberotator.planner.RotatingNanoIpRoutePlanner;
+import com.sedmelluq.lava.extensions.youtuberotator.tools.ip.Ipv6Block;
 import com.wrapper.spotify.enums.ModelObjectType;
 import com.wrapper.spotify.model_objects.specification.ArtistSimplified;
 import com.wrapper.spotify.model_objects.specification.Paging;
@@ -19,34 +22,43 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.util.*;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class PlayerManager
 {
     private static PlayerManager INSTANCE;
+    private static Logger LOGGER = LoggerFactory.getLogger(PlayerManager.class);
     private final AudioPlayerManager playerManager;
     private final Map<Long, GuildMusicManager> musicManagers;
 
-    private final ExecutorService sched = Executors.newSingleThreadExecutor();
-    private final ExecutorService trackLoaderPool = Executors.newFixedThreadPool(10);
-
-    public static final String PUNCTUATION_REGEX = "[.,/#!$%^&*;:{}=\\-_`~()\"\']";
-    YoutubeAudioSourceManager youtubeAudioSourceManager = new YoutubeAudioSourceManager(true);
+    private YoutubeAudioSourceManager youtubeAudioSourceManager = new YoutubeAudioSourceManager(true);
 
     private PlayerManager()
     {
+        LOGGER.info("Init PlayerManager");
         this.musicManagers = new HashMap<>();
 
         this.playerManager = new DefaultAudioPlayerManager();
 
+        this.playerManager.registerSourceManager(youtubeAudioSourceManager);
+
         AudioSourceManagers.registerLocalSource(playerManager);
         AudioSourceManagers.registerRemoteSources(playerManager);
+
+        LOGGER.info("Init YouTube IP Rotator");
+        String ipv6block = Main.getConfiguration().getString("youtube.ipv6block", "nothing");
+        if (ipv6block.equalsIgnoreCase("nothing"))
+            LOGGER.warn("Skipped, IPv6 Block not found in config.json");
+        else
+            new YoutubeIpRotatorSetup(new RotatingNanoIpRoutePlanner(Arrays.asList(new Ipv6Block(ipv6block))))
+                    .forManager(playerManager)
+                    .withRetryLimit(50)
+                    .setup();
     }
 
     public boolean checkNullForEvent(Guild guild)
@@ -75,134 +87,6 @@ public class PlayerManager
         return musicManager;
     }
 
-    /*public void loadAndPlaySpotifyPlaylist(Message message, Paging<PlaylistTrack> playlistTracks) {
-        final Long[] messageID = {0L};
-
-        message.getChannel().sendMessage("Playlist added ! Please wait...").queue(msg -> messageID[0] = msg.getIdLong());
-
-        List<AudioTrack> audioTracks = new ArrayList<>();
-        GuildMusicManager musicManager = getGuildMusicManager(message.getGuild(), message.getTextChannel());
-
-        for (int i = 0; i < playlistTracks.getTotal(); i++) {
-            PlaylistTrack playlistTrack = playlistTracks.getItems()[i];
-            if (playlistTrack.getIsLocal()) continue;
-            Track track = (Track) playlistTrack.getTrack();
-
-            String search = "ytsearch:" + track.getName() + " " + track.getArtists()[0].getName();
-
-            playerManager.setFrameBufferDuration(5000);
-            int finalI = i;
-            playerManager.loadItemOrdered(musicManager, search, new AudioLoadResultHandler() {
-
-                @Override
-                public void trackLoaded(AudioTrack track) {
-                }
-
-                @Override
-                public void playlistLoaded(AudioPlaylist playlist) {
-                    if (playlist.isSearchResult())
-                        if (playlist.getSelectedTrack() == null)
-                            audioTracks.add(playlist.getTracks().get(1));
-                        else
-                            audioTracks.add(playlist.getSelectedTrack());
-
-
-                    int j = finalI;
-                    j++;
-                    message.getChannel().editMessageById(messageID[0], "Playlist added ! Please wait... ("+j+"/"+playlistTracks.getTotal()+")").queue();
-
-                    if (j == playlistTracks.getTotal())
-                    {
-                        playSpotify();
-                        message.getChannel().editMessageById(messageID[0], "✅ Playlist added ! Please wait... ("+j+"/"+playlistTracks.getTotal()+")").queue();
-                    }
-
-
-                }
-
-                @Override
-                public void noMatches() {
-                }
-
-                @Override
-                public void loadFailed(FriendlyException exception) {
-                    exception.printStackTrace();
-                }
-
-                public void playSpotify()
-                {
-                    AudioTrack firstTrack = audioTracks.get(0);
-                    musicManager.scheduler.usersRequest.put(firstTrack, message.getAuthor().getIdLong());
-
-                    for (int j = 1; j < audioTracks.size(); j++)
-                        musicManager.scheduler.usersRequest.put(audioTracks.get(j), message.getAuthor().getIdLong());
-
-                    play(musicManager, firstTrack, message.getTextChannel());
-                    audioTracks.remove(0);
-                    audioTracks.forEach(musicManager.scheduler::queue);
-
-                };
-        });
-    }
-
-    }*/
-
-    public void loadSpotifyPlaylist(CommandEvent event, Paging<PlaylistTrack> playlistTrackPaging)
-    {
-        List<String> spotifyTrack = new ArrayList<>();
-
-        for (PlaylistTrack playlistTrack : playlistTrackPaging.getItems())
-        {
-            if (playlistTrack.getTrack().getType() != ModelObjectType.TRACK) continue;
-            Track track = (Track) playlistTrack.getTrack();
-
-            final StringBuilder trackNameAndArtists = new StringBuilder();
-            trackNameAndArtists.append(track.getName());
-
-            for (ArtistSimplified artist : track.getArtists()) {
-                trackNameAndArtists.append(" ").append(artist.getName());
-            }
-
-            spotifyTrack.add(trackNameAndArtists.toString());
-        }
-
-        GuildMusicManager musicManager = getGuildMusicManager(event.getGuild(), event.getChannel());
-
-        final List<AudioTrack> trackList = new ArrayList<>();
-        List<CompletableFuture<AudioTrack>> taskList = new ArrayList<>();
-
-
-        for (final String s : spotifyTrack) {
-            final String query = s.replaceAll(PUNCTUATION_REGEX, "");
-            CompletableFuture<AudioItem> future = new CompletableFuture<AudioItem>();
-
-            trackLoaderPool.submit(() -> {
-                AudioReference reference = new AudioReference("ytsearch:"+s, null);
-
-                try {
-                    var result = youtubeAudioSourceManager.loadItem(playerManager, reference);
-                    future.complete(result);
-                } catch (Exception e) {
-                    future.completeExceptionally(e);
-                }
-
-                return future;
-            });
-
-            taskList.add(future.thenApply(ai -> {
-                if (ai instanceof AudioPlaylist) return ((AudioPlaylist) ai).getTracks().get(0);
-                else return (AudioTrack) ai;
-            }));
-        }
-
-        //CompletableFuture.allOf((CompletableFuture<?>) taskList).get()
-    }
-
-    private void searchYoutube()
-    {
-
-    }
-
     public void loadAndPlayDeezerTrack(Message message, deezer.model.Track track)
     {
         String search = "ytsearch:" + track.getTitle()+" "+track.getArtist().getName();
@@ -215,6 +99,59 @@ public class PlayerManager
         String search = "ytsearch:"+ track.getName()+" "+ track.getArtists()[0].getName();
 
         loadAndPlay(message,search, true, false, false);
+    }
+
+    public void loadAndPlaySpotifyPlaylist(Message message, Paging<PlaylistTrack> playlistTracks) {
+        final Long[] messageID = {0L};
+        message.getChannel().sendMessage("Playlist added ! Please wait...").queue(msg -> messageID[0] = msg.getIdLong());
+        List<AudioTrack> audioTracks = new ArrayList<>();
+        GuildMusicManager musicManager = getGuildMusicManager(message.getGuild(), message.getTextChannel());
+        for (int i = 0; i < playlistTracks.getTotal(); i++) {
+            PlaylistTrack playlistTrack = playlistTracks.getItems()[i];
+            if (playlistTrack.getIsLocal()) continue;
+            Track track = (Track) playlistTrack.getTrack();
+            String search = "ytsearch:" + track.getName() + " " + track.getArtists()[0].getName();
+            playerManager.setFrameBufferDuration(5000);
+            int finalI = i;
+            playerManager.loadItemOrdered(musicManager, search, new AudioLoadResultHandler() {
+                @Override
+                public void trackLoaded(AudioTrack track) {
+                }
+                @Override
+                public void playlistLoaded(AudioPlaylist playlist) {
+                    if (playlist.isSearchResult())
+                        if (playlist.getSelectedTrack() == null)
+                            audioTracks.add(playlist.getTracks().get(1));
+                        else
+                            audioTracks.add(playlist.getSelectedTrack());
+                    int j = finalI;
+                    j++;
+                    message.getChannel().editMessageById(messageID[0], "Playlist added ! Please wait... ("+j+"/"+playlistTracks.getTotal()+")").queue();
+                    if (j == playlistTracks.getTotal())
+                    {
+                        playSpotify();
+                        message.getChannel().editMessageById(messageID[0], "✅ Playlist added ! Please wait... ("+j+"/"+playlistTracks.getTotal()+")").queue();
+                    }
+                }
+                @Override
+                public void noMatches() {
+                }
+                @Override
+                public void loadFailed(FriendlyException exception) {
+                    exception.printStackTrace();
+                }
+                public void playSpotify()
+                {
+                    AudioTrack firstTrack = audioTracks.get(0);
+                    musicManager.scheduler.usersRequest.put(firstTrack, message.getAuthor().getIdLong());
+                    for (int j = 1; j < audioTracks.size(); j++)
+                        musicManager.scheduler.usersRequest.put(audioTracks.get(j), message.getAuthor().getIdLong());
+                    play(musicManager, firstTrack, message.getTextChannel());
+                    audioTracks.remove(0);
+                    audioTracks.forEach(musicManager.scheduler::queue);
+                };
+        });
+    }
     }
 
     public void loadAndPlay(Message message, String trackUrl, boolean spotify, boolean deezer, boolean file)

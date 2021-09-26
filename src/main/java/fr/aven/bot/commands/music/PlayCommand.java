@@ -74,10 +74,10 @@ public class PlayCommand extends MusicCommands
             manager.loadAndPlaySpotifyTrack(event.message(), Main.getSpotifyAPI().getTrack(input));
         }
 
-        /*else if (isSpotifyPlaylistURL(input))
+        else if (isSpotifyPlaylistURL(input))
         {
-            manager.loadAndPlaySpotifyPlaylist(event.getMessage(), Main.getSpotifyAPI().getPlaylistTracks(input));
-        }*/
+            manager.loadAndPlaySpotifyPlaylist(event.message(), Main.getSpotifyAPI().getPlaylistTracks(input));
+        }
         else
         {
             if (!isUrl(input))
