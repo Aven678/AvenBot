@@ -2,9 +2,9 @@ package fr.aven.bot.commands.admin;
 
 import fr.aven.bot.Constants;
 import fr.aven.bot.Main;
-import fr.aven.bot.util.ICommand;
+import fr.aven.bot.modules.core.CommandEvent;
+import fr.aven.bot.modules.core.ICommand;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -16,22 +16,22 @@ import java.util.List;
 public class LangCommand implements ICommand
 {
     @Override
-    public void handle(List<String> args, GuildMessageReceivedEvent event) {
+    public void handle(List<String> args, CommandEvent event) {
         if (args.size() == 0)
         {
-            event.getChannel().sendMessage(new EmbedBuilder().addField(getHelp()).build()).queue();
+            event.getChannel().sendMessageEmbeds(new EmbedBuilder().addField(getHelp()).build()).queue();
             return;
         }
 
         if (!args.get(0).equalsIgnoreCase("en"))
             if (!args.get(0).equalsIgnoreCase("fr"))
             {
-                event.getChannel().sendMessage(new EmbedBuilder().addField(getHelp()).build()).queue();
+                event.getChannel().sendMessageEmbeds(new EmbedBuilder().addField(getHelp()).build()).queue();
                 return;
             }
 
         Main.getDatabase().setLang(event.getGuild(), args.get(0));
-        event.getChannel().sendMessage(Main.getDatabase().getTextFor("lang.success", event.getGuild())).queue();
+        event.getChannel().sendMessage(Main.getLanguage().getTextFor("lang.success", event.getGuild())).queue();
     }
 
     @Override

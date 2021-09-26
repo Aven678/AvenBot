@@ -1,10 +1,10 @@
 package fr.aven.bot.commands.fun;
 
 import fr.aven.bot.Constants;
-import fr.aven.bot.util.ICommand;
+import fr.aven.bot.modules.core.CommandEvent;
+import fr.aven.bot.modules.core.ICommand;
 import fr.aven.bot.util.MessageUtil;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -16,10 +16,10 @@ import java.util.List;
 public class StonksCommand implements ICommand
 {
     @Override
-    public void handle(List<String> args, GuildMessageReceivedEvent event) {
+    public void handle(List<String> args, CommandEvent event) {
         String stonks = "https://i.kym-cdn.com/entries/icons/original/000/029/959/Screen_Shot_2019-06-05_at_1.26.32_PM.jpg";
 
-        event.getChannel().sendMessage(new EmbedBuilder().setImage(stonks).setColor(MessageUtil.getRandomColor()).build()).queue();
+        event.getChannel().sendMessageEmbeds(new EmbedBuilder().setImage(stonks).setColor(MessageUtil.getRandomColor()).build()).queue();
     }
 
     @Override

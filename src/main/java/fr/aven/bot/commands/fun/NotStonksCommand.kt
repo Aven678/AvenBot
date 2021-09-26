@@ -1,7 +1,7 @@
 package fr.aven.bot.commands.`fun`
 
-import fr.aven.bot.util.ICommand
-import fr.aven.bot.util.MessageUtil
+import fr.aven.bot.modules.core.CommandEvent
+import fr.aven.bot.modules.core.ICommand
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.entities.MessageEmbed
@@ -11,10 +11,10 @@ import java.awt.Color
 
 class NotStonksCommand: ICommand
 {
-    override fun handle(args: MutableList<String>?, event: GuildMessageReceivedEvent) {
+    override fun handle(args: MutableList<String>?, event: CommandEvent) {
         val url = "https://www.justaven.xyz/gif/not-stonks.png"
 
-        event.channel.sendMessage(EmbedBuilder().setImage(url).setColor(Color.RED).build())
+        event.channel.sendMessageEmbeds(EmbedBuilder().setImage(url).setColor(Color.RED).build())
             .queue()
     }
 

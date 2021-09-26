@@ -87,7 +87,7 @@ public class Configuration
             writer.write(object);
             writer.flush();
         } catch (IOException e) {
-            Main.LOGGER.error(e.getLocalizedMessage());
+            Main.logger.error(e.getLocalizedMessage());
         }
     }
 }

@@ -2,9 +2,9 @@ package fr.aven.bot.commands.fun;
 
 import fr.aven.bot.Constants;
 import fr.aven.bot.Main;
-import fr.aven.bot.util.ICommand;
+import fr.aven.bot.modules.core.CommandEvent;
+import fr.aven.bot.modules.core.ICommand;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -16,14 +16,14 @@ import java.util.List;
 public class NsfwPictureCommand implements ICommand
 {
     @Override
-    public void handle(List<String> args, GuildMessageReceivedEvent event) {
+    public void handle(List<String> args, CommandEvent event) {
         if (!event.getChannel().isNSFW())
         {
-            event.getChannel().sendMessage(Main.getDatabase().getTextFor("isNotNSFW", event.getGuild())).queue();
+            event.getChannel().sendMessage(Main.getLanguage().getTextFor("isNotNSFW", event.getGuild())).queue();
             return;
         }
 
-        event.getChannel().sendMessage(new EmbedBuilder().setImage(Main.getkSoft().getNsfwPicture()).setFooter("Picture by KSoft.SI").build()).queue();
+        event.getChannel().sendMessageEmbeds(new EmbedBuilder().setImage(Main.getkSoft().getNsfwPicture()).setFooter("Picture by KSoft.SI").build()).queue();
     }
 
     @Override

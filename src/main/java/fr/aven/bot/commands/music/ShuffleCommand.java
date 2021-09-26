@@ -2,8 +2,9 @@ package fr.aven.bot.commands.music;
 
 import fr.aven.bot.Constants;
 import fr.aven.bot.Main;
+import fr.aven.bot.modules.core.CommandEvent;
 import fr.aven.bot.modules.music.PlayerManager;
-import fr.aven.bot.util.ICommand;
+import fr.aven.bot.modules.core.ICommand;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -15,10 +16,10 @@ import java.util.List;
 public class ShuffleCommand implements ICommand
 {
     @Override
-    public void handle(List<String> args, GuildMessageReceivedEvent event) {
+    public void handle(List<String> args, CommandEvent event) {
         PlayerManager.getInstance().getGuildMusicManager(event.getGuild(), event.getChannel()).scheduler.shuffleQueue();
 
-        event.getChannel().sendMessage(Main.getDatabase().getTextFor("shuffle.confirm", event.getGuild())).queue();
+        event.getChannel().sendMessage(Main.getLanguage().getTextFor("shuffle.confirm", event.getGuild())).queue();
     }
 
     @Override

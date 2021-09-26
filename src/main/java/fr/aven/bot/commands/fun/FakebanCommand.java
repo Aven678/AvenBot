@@ -1,9 +1,8 @@
 package fr.aven.bot.commands.fun;
 
 import fr.aven.bot.Constants;
-import fr.aven.bot.Main;
-import fr.aven.bot.util.ICommand;
-import net.dv8tion.jda.api.Permission;
+import fr.aven.bot.modules.core.CommandEvent;
+import fr.aven.bot.modules.core.ICommand;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -15,14 +14,14 @@ import java.util.List;
 public class FakebanCommand implements ICommand
 {
     @Override
-    public void handle(List<String> args, GuildMessageReceivedEvent event) {
-        if (event.getMessage().getMentionedUsers().size() > 0)
+    public void handle(List<String> args, CommandEvent event) {
+        if (event.message().getMentionedUsers().size() > 0)
         {
-            var textFinal = event.getMessage().getMentionedUsers().get(0).getAsMention()+" has been banned...";
+            var textFinal = event.message().getMentionedUsers().get(0).getAsMention()+" has been banned...";
             event.getChannel().sendMessage(textFinal).queue();
         }
 
-        if (event.getGuild().getSelfMember().hasPermission(net.dv8tion.jda.api.Permission.MESSAGE_MANAGE)) event.getMessage().delete().queue();
+        if (event.getGuild().getSelfMember().hasPermission(net.dv8tion.jda.api.Permission.MESSAGE_MANAGE)) event.message().delete().queue();
     }
 
     @Override

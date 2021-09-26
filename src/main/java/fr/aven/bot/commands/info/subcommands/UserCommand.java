@@ -2,20 +2,17 @@ package fr.aven.bot.commands.info.subcommands;
 
 import fr.aven.bot.Constants;
 import fr.aven.bot.Main;
-import fr.aven.bot.util.ICommand;
+import fr.aven.bot.modules.core.CommandEvent;
+import fr.aven.bot.modules.core.ICommand;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 
-import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static net.dv8tion.jda.api.entities.Activity.ActivityType.STREAMING;
 
 public class UserCommand implements ICommand {
 
@@ -24,8 +21,8 @@ public class UserCommand implements ICommand {
     private Guild _guild;
 
     @Override
-    public void handle(List<String> args, GuildMessageReceivedEvent event) {
-        Message message = event.getMessage();
+    public void handle(List<String> args, CommandEvent event) {
+        Message message = event.message();
         Guild guild = event.getGuild();
         _guild = guild;
         //STATUS
@@ -125,9 +122,9 @@ public class UserCommand implements ICommand {
                     false);
             if (guild.getMember(target) != null) userBuilder.addField("Roles ❱  ", guild.getMember(target).getRoles().size() == 0 ? "No roles found" : guild.getMember(target).getRoles().stream().map(Role::getAsMention).collect(Collectors.joining(", ")), true);
 
-            userBuilder.setFooter(Main.getDatabase().getTextFor("music.request", guild)+event.getAuthor().getName(), event.getAuthor().getAvatarUrl());
+            userBuilder.setFooter(Main.getLanguage().getTextFor("music.request", guild)+event.getAuthor().getName(), event.getAuthor().getAvatarUrl());
 
-            event.getMessage().replyEmbeds(userBuilder.build()).queue(msg -> {
+            event.message().replyEmbeds(userBuilder.build()).queue(msg -> {
 
 
 
@@ -138,7 +135,7 @@ public class UserCommand implements ICommand {
                 //}
             });
         } else {
-            event.getMessage().reply("Please provide an ID or a mention").queue();
+            event.message().reply("Please provide an ID or a mention").queue();
         }
     }
 

@@ -2,11 +2,9 @@ package fr.aven.bot.commands.info.subcommands;
 
 import fr.aven.bot.Constants;
 import fr.aven.bot.Main;
-import fr.aven.bot.util.ICommand;
+import fr.aven.bot.modules.core.CommandEvent;
+import fr.aven.bot.modules.core.ICommand;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -18,7 +16,7 @@ import java.util.*;
 public class BotCommand implements ICommand {
 
     @Override
-    public void handle(List<String> args, GuildMessageReceivedEvent event) {
+    public void handle(List<String> args, CommandEvent event) {
         RuntimeMXBean rb = ManagementFactory.getRuntimeMXBean();
 
         Runtime rt = Runtime.getRuntime();
@@ -55,7 +53,7 @@ public class BotCommand implements ICommand {
                         "\nInvite Link ❱ " + "https://invite.justaven.xyz" +
                         "\nWebsite ❱ " + "https://www.justaven.xyz",
                 false);
-        event.getMessage().replyEmbeds(botBuilder.build()).queue();
+        event.message().replyEmbeds(botBuilder.build()).queue();
     }
 
     private String getTimeDiff(Date date1, Date date2) {

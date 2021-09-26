@@ -2,6 +2,7 @@ package fr.aven.bot.commands.music;
 
 import fr.aven.bot.Constants;
 import fr.aven.bot.Main;
+import fr.aven.bot.modules.core.CommandEvent;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.GenericEvent;
@@ -15,14 +16,14 @@ import java.util.List;
 public class JoinCommand extends MusicCommands
 {
     @Override
-    public void handle(List<String> args, GuildMessageReceivedEvent event)
+    public void handle(List<String> args, CommandEvent event)
     {
         TextChannel channel = event.getChannel();
         joinChannel(event);
-        channel.sendMessage(Main.getDatabase().getTextFor("join.success", event.getGuild())).queue();
+        channel.sendMessage(Main.getLanguage().getTextFor("join.success", event.getGuild())).queue();
     }
 
-    public static boolean joinChannel(GuildMessageReceivedEvent event)
+    public static boolean joinChannel(CommandEvent event)
     {
         TextChannel channel = event.getChannel();
         AudioManager audioManager = event.getGuild().getAudioManager();
@@ -30,7 +31,7 @@ public class JoinCommand extends MusicCommands
 
         if (!memberVoiceState.inVoiceChannel())
         {
-            channel.sendMessage(Main.getDatabase().getTextFor("join.isNotInChannel", event.getGuild())).queue();
+            channel.sendMessage(Main.getLanguage().getTextFor("join.isNotInChannel", event.getGuild())).queue();
             return false;
         }
 
@@ -39,7 +40,7 @@ public class JoinCommand extends MusicCommands
 
         if (!selfMember.hasPermission(voiceChannel, net.dv8tion.jda.api.Permission.VOICE_CONNECT))
         {
-            channel.sendMessageFormat(Main.getDatabase().getTextFor("join.missingPerm", event.getGuild()), voiceChannel).queue();
+            channel.sendMessageFormat(Main.getLanguage().getTextFor("join.missingPerm", event.getGuild()), voiceChannel).queue();
             return false;
         }
 

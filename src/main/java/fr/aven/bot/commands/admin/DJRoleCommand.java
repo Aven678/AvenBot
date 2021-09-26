@@ -2,9 +2,9 @@ package fr.aven.bot.commands.admin;
 
 import fr.aven.bot.Constants;
 import fr.aven.bot.Main;
-import fr.aven.bot.util.ICommand;
+import fr.aven.bot.modules.core.CommandEvent;
+import fr.aven.bot.modules.core.ICommand;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.GenericEvent;
@@ -17,17 +17,17 @@ import java.util.List;
 public class DJRoleCommand implements ICommand
 {
     @Override
-    public void handle(List<String> args, GuildMessageReceivedEvent event) {
-        if (event.getMessage().getMentionedRoles().size() == 0)
+    public void handle(List<String> args, CommandEvent event) {
+        if (event.message().getMentionedRoles().size() == 0)
         {
-            event.getChannel().sendMessage(new EmbedBuilder().addField(getHelp()).build()).queue();
+            event.getChannel().sendMessageEmbeds(new EmbedBuilder().addField(getHelp()).build()).queue();
             return;
         }
 
-        Role mentionnedRole = event.getMessage().getMentionedRoles().get(0);
+        Role mentionnedRole = event.message().getMentionedRoles().get(0);
         Main.getDatabase().setDjRole(mentionnedRole);
 
-        event.getChannel().sendMessage(Main.getDatabase().getTextFor("dj.success", event.getGuild())+ mentionnedRole.getAsMention()).queue();
+        event.getChannel().sendMessage(Main.getLanguage().getTextFor("dj.success", event.getGuild())+ mentionnedRole.getAsMention()).queue();
     }
 
     @Override

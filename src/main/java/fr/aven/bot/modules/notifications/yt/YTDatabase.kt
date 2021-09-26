@@ -1,7 +1,5 @@
 package fr.aven.bot.modules.notifications.yt
 
-import fr.aven.bot.modules.jda.JDAManager
-import net.dv8tion.jda.api.entities.TextChannel
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 

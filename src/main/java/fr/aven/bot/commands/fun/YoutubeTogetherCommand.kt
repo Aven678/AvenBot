@@ -2,7 +2,8 @@ package fr.aven.bot.commands.`fun`
 
 import fr.aven.bot.Constants
 import fr.aven.bot.Main
-import fr.aven.bot.util.ICommand
+import fr.aven.bot.modules.core.CommandEvent
+import fr.aven.bot.modules.core.ICommand
 import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.entities.MessageEmbed
 import net.dv8tion.jda.api.events.GenericEvent
@@ -14,16 +15,16 @@ class YoutubeTogetherCommand: ICommand
     private val client = OkHttpClient().newBuilder().build()
     val activity = Activity()
 
-    override fun handle(args: MutableList<String>?, event: GuildMessageReceivedEvent) {
+    override fun handle(args: MutableList<String>?, event: CommandEvent) {
         if (!event.member?.voiceState?.inVoiceChannel()!!) {
-            event.channel.sendMessage(Main.getDatabase().getTextFor("join.isNotInChannel", event.guild)).queue()
+            event.channel.sendMessage(Main.getLanguage().getTextFor("join.isNotInChannel", event.guild)).queue()
             return
         }
 
         val voiceState = event.member!!.voiceState
         val channel = voiceState!!.channel
 
-        event.channel.sendMessage("${Main.getDatabase().getTextFor("link", event.guild)} -> ${activity.getActivityLink("youtube", channel!!)}").queue()
+        event.channel.sendMessage("${Main.getLanguage().getTextFor("link", event.guild)} -> ${activity.getActivityLink("youtube", channel!!)}").queue()
     }
 
     override fun getType(): ICommand.Type {

@@ -1,7 +1,6 @@
 package fr.aven.bot.modules.notifications.twitch.entity;
 
 import fr.aven.bot.modules.jda.JDAManager;
-import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
 
 public class TwitchChannel

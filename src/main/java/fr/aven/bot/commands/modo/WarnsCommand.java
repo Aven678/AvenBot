@@ -3,7 +3,8 @@ package fr.aven.bot.commands.modo;
 import fr.aven.bot.Constants;
 import fr.aven.bot.Main;
 import fr.aven.bot.entity.Warn;
-import fr.aven.bot.util.ICommand;
+import fr.aven.bot.modules.core.CommandEvent;
+import fr.aven.bot.modules.core.ICommand;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
@@ -17,8 +18,8 @@ import java.util.List;
 public class WarnsCommand implements ICommand
 {
     @Override
-    public void handle(List<String> args, GuildMessageReceivedEvent event) {
-        if (event.getMessage().getMentionedUsers().isEmpty())
+    public void handle(List<String> args, CommandEvent event) {
+        if (event.message().getMentionedUsers().isEmpty())
         {
             event.getChannel().sendMessage(new EmbedBuilder().addField(getHelp()).build()).queue();
             return;
@@ -26,12 +27,12 @@ public class WarnsCommand implements ICommand
 
         if (args.get(0).equalsIgnoreCase("clear"))
         {
-            Main.getDatabase().clearWarns(event.getGuild(), event.getMessage().getMentionedUsers().get(0));
-            event.getMessage().addReaction("✅").queue();
+            Main.getDatabase().clearWarns(event.getGuild(), event.message().getMentionedUsers().get(0));
+            event.message().addReaction("✅").queue();
             return;
         }
 
-        User _target = event.getMessage().getMentionedUsers().get(0);
+        User _target = event.message().getMentionedUsers().get(0);
 
         List<Warn> warns = Main.getDatabase().listWarns(_target.getId(), event.getGuild().getId());
 
@@ -48,7 +49,7 @@ public class WarnsCommand implements ICommand
         builder.setAuthor("Warns : "+_target.getName()+"#"+_target.getDiscriminator(), "https://justaven.xyz", _target.getAvatarUrl());
         builder.setFooter("AvenBot by Aven#1000");
 
-        event.getChannel().sendMessage(builder.build()).queue();
+        event.getChannel().sendMessageEmbeds(builder.build()).queue();
     }
 
     @Override

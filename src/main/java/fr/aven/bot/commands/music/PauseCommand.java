@@ -2,9 +2,10 @@ package fr.aven.bot.commands.music;
 
 import fr.aven.bot.Constants;
 import fr.aven.bot.Main;
+import fr.aven.bot.modules.core.CommandEvent;
 import fr.aven.bot.modules.music.GuildMusicManager;
 import fr.aven.bot.modules.music.PlayerManager;
-import fr.aven.bot.util.ICommand;
+import fr.aven.bot.modules.core.ICommand;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -18,11 +19,11 @@ import java.util.List;
 public class PauseCommand implements ICommand
 {
     @Override
-    public void handle(List<String> args, GuildMessageReceivedEvent event) {
+    public void handle(List<String> args, CommandEvent event) {
         if (!event.getGuild().getAudioManager().isConnected()) {
-            event.getChannel().sendMessage(new EmbedBuilder()
-                    .setTitle(Main.getDatabase().getTextFor("argsNotFound", event.getGuild()))
-                    .setDescription(Main.getDatabase().getTextFor("pause.notConnected", event.getGuild()))
+            event.getChannel().sendMessageEmbeds(new EmbedBuilder()
+                    .setTitle(Main.getLanguage().getTextFor("argsNotFound", event.getGuild()))
+                    .setDescription(Main.getLanguage().getTextFor("pause.notConnected", event.getGuild()))
                     .build()).queue();
 
             return;
@@ -36,17 +37,17 @@ public class PauseCommand implements ICommand
             manager.getGuildMusicManager(event.getGuild(), event.getChannel()).player.setPaused(true);
             manager.getGuildMusicManager(event.getGuild(), event.getChannel()).scheduler.editMessage();
 
-            event.getChannel().sendMessage(new EmbedBuilder()
-                    .setTitle(Main.getDatabase().getTextFor("success", event.getGuild()))
-                    .setDescription(Main.getDatabase().getTextFor("pause.playerPaused", event.getGuild()))
+            event.getChannel().sendMessageEmbeds(new EmbedBuilder()
+                    .setTitle(Main.getLanguage().getTextFor("success", event.getGuild()))
+                    .setDescription(Main.getLanguage().getTextFor("pause.playerPaused", event.getGuild()))
                     .build()).queue();
         } else {
             manager.getGuildMusicManager(event.getGuild(), event.getChannel()).scheduler.editMessage();
             manager.getGuildMusicManager(event.getGuild(), event.getChannel()).player.setPaused(false);
 
-            event.getChannel().sendMessage(new EmbedBuilder()
-                    .setTitle(Main.getDatabase().getTextFor("success", event.getGuild()))
-                    .setDescription(Main.getDatabase().getTextFor("pause.playerResume", event.getGuild()))
+            event.getChannel().sendMessageEmbeds(new EmbedBuilder()
+                    .setTitle(Main.getLanguage().getTextFor("success", event.getGuild()))
+                    .setDescription(Main.getLanguage().getTextFor("pause.playerResume", event.getGuild()))
                     .build()).queue();
         }
     }

@@ -2,9 +2,9 @@ package fr.aven.bot.commands.admin;
 
 import fr.aven.bot.Constants;
 import fr.aven.bot.Main;
-import fr.aven.bot.util.ICommand;
+import fr.aven.bot.modules.core.CommandEvent;
+import fr.aven.bot.modules.core.ICommand;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -17,16 +17,16 @@ import java.util.List;
 public class ClearConfigCommand implements ICommand
 {
     @Override
-    public void handle(List<String> args, GuildMessageReceivedEvent event) {
+    public void handle(List<String> args, CommandEvent event) {
         if (Main.getDatabase().resetConfig(event.getGuild()))
-            event.getChannel().sendMessage(new EmbedBuilder().setTitle(Main.getDatabase().getTextFor("success", event.getGuild()))
-                    .setDescription(Main.getDatabase().getTextFor("cconfig.success", event.getGuild()))
+            event.getChannel().sendMessageEmbeds(new EmbedBuilder().setTitle(Main.getLanguage().getTextFor("success", event.getGuild()))
+                    .setDescription(Main.getLanguage().getTextFor("cconfig.success", event.getGuild()))
                     .setColor(Color.GREEN)
                     .setFooter("AvenBot by Aven#1000")
                     .build()).queue();
         else
-            event.getChannel().sendMessage(new EmbedBuilder().setTitle(Main.getDatabase().getTextFor("error", event.getGuild()), "https://avenbot.eu")
-                    .setDescription(Main.getDatabase().getTextFor("errordesc", event.getGuild()))
+            event.getChannel().sendMessageEmbeds(new EmbedBuilder().setTitle(Main.getLanguage().getTextFor("error", event.getGuild()), "https://avenbot.eu")
+                    .setDescription(Main.getLanguage().getTextFor("errordesc", event.getGuild()))
             .setColor(Color.RED)
             .setFooter("AvenBot by Aven#1000").build()).queue();
     }

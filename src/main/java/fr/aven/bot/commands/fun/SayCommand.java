@@ -1,9 +1,9 @@
 package fr.aven.bot.commands.fun;
 
 import fr.aven.bot.Constants;
-import fr.aven.bot.util.ICommand;
+import fr.aven.bot.modules.core.CommandEvent;
+import fr.aven.bot.modules.core.ICommand;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -15,17 +15,17 @@ import java.util.List;
 public class SayCommand implements ICommand
 {
     @Override
-    public void handle(List<String> args, GuildMessageReceivedEvent event) {
+    public void handle(List<String> args, CommandEvent event) {
         if (args.isEmpty())
         {
-            event.getChannel().sendMessage(new EmbedBuilder().addField(getHelp()).build()).queue();
+            event.getChannel().sendMessageEmbeds(new EmbedBuilder().addField(getHelp()).build()).queue();
             return;
         }
 
-        String request = event.getMessage().getContentRaw().replaceFirst(Constants.PREFIX + getInvoke(), "");
+        String request = event.message().getContentRaw().replaceFirst(Constants.PREFIX + getInvoke(), "");
 
-        if (event.getGuild().getSelfMember().hasPermission(event.getChannel(), net.dv8tion.jda.api.Permission.MESSAGE_MANAGE)) event.getMessage().delete().queue();
-        event.getChannel().sendMessage(new EmbedBuilder().setDescription(request).setColor(event.getMember().getColor()).build()).queue();
+        if (event.getGuild().getSelfMember().hasPermission(event.getChannel(), net.dv8tion.jda.api.Permission.MESSAGE_MANAGE)) event.message().delete().queue();
+        event.getChannel().sendMessageEmbeds(new EmbedBuilder().setDescription(request).setColor(event.getMember().getColor()).build()).queue();
 
     }
 

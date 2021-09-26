@@ -3,9 +3,10 @@ package fr.aven.bot.commands.music;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import fr.aven.bot.Constants;
 import fr.aven.bot.Main;
+import fr.aven.bot.modules.core.CommandEvent;
 import fr.aven.bot.modules.music.GuildMusicManager;
 import fr.aven.bot.modules.music.PlayerManager;
-import fr.aven.bot.util.ICommand;
+import fr.aven.bot.modules.core.ICommand;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -17,7 +18,7 @@ import java.util.*;
 public class QueueCommand implements ICommand
 {
     @Override
-    public void handle(List<String> args, GuildMessageReceivedEvent event) {
+    public void handle(List<String> args, CommandEvent event) {
         int SideNumbInput = 1;
         if (args.size() > 0)
             SideNumbInput = Integer.parseInt(args.get(0));
@@ -25,11 +26,11 @@ public class QueueCommand implements ICommand
         TextChannel channel = event.getChannel();
         GuildMusicManager manager = PlayerManager.getInstance().getGuildMusicManager(event.getGuild(), channel);
         StringBuilder sb = new StringBuilder();
-        sb.append("**"+Main.getDatabase().getTextFor("music.progress", event.getGuild())+" ** ❱ `["+getTimestamp(manager.player.getPlayingTrack().getInfo().length)+"]` "+manager.player.getPlayingTrack().getInfo().title);
+        sb.append("**"+Main.getLanguage().getTextFor("music.progress", event.getGuild())+" ** ❱ `["+getTimestamp(manager.player.getPlayingTrack().getInfo().length)+"]` "+manager.player.getPlayingTrack().getInfo().title);
 
         if (PlayerManager.getInstance().getGuildMusicManager(event.getGuild(), event.getChannel()).scheduler.getQueue().isEmpty())
         {
-            channel.sendMessage(Main.getDatabase().getTextFor("queue.playerNotActive", event.getGuild())).queue();
+            channel.sendMessage(Main.getLanguage().getTextFor("queue.playerNotActive", event.getGuild())).queue();
             return;
         }
 

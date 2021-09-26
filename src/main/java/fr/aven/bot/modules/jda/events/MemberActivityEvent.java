@@ -9,7 +9,9 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.guild.GuildBanEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent;
+import net.dv8tion.jda.api.events.guild.member.update.GuildMemberUpdatePendingEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -28,7 +30,8 @@ public class MemberActivityEvent extends ListenerAdapter
         Member selfMember = event.getGuild().getSelfMember();
         Role role = Main.getDatabase().getAutoRole(event.getGuild());
         if (role != null)
-            if (selfMember.canInteract(role) && selfMember.hasPermission(Permission.MANAGE_ROLES)) event.getGuild().addRoleToMember(event.getMember(), role).reason("Autorole by AvenBot").queue();
+            if (!event.getMember().isPending())
+                if (selfMember.canInteract(role) && selfMember.hasPermission(Permission.MANAGE_ROLES)) event.getGuild().addRoleToMember(event.getMember(), role).reason("Autorole by AvenBot").queue();
 
         //Texte Join
         if (channelID.equalsIgnoreCase("")) return;
@@ -43,6 +46,21 @@ public class MemberActivityEvent extends ListenerAdapter
 
 
         super.onGuildMemberJoin(event);
+    }
+
+    @Override
+    public void onGuildMemberUpdatePending(@NotNull GuildMemberUpdatePendingEvent event) {
+        autorole(event.getMember());
+
+        super.onGuildMemberUpdatePending(event);
+    }
+
+    private void autorole(Member member) {
+        Member selfMember = member.getGuild().getSelfMember();
+        Role role = Main.getDatabase().getAutoRole(member.getGuild());
+        if (role != null)
+            if (!member.isPending())
+                if (selfMember.canInteract(role) && selfMember.hasPermission(Permission.MANAGE_ROLES)) member.getGuild().addRoleToMember(member, role).reason("Autorole by AvenBot").queue();
     }
 
     @Override

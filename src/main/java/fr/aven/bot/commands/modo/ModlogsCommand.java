@@ -2,9 +2,9 @@ package fr.aven.bot.commands.modo;
 
 import fr.aven.bot.Constants;
 import fr.aven.bot.Main;
-import fr.aven.bot.util.ICommand;
+import fr.aven.bot.modules.core.CommandEvent;
+import fr.aven.bot.modules.core.ICommand;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -16,16 +16,16 @@ import java.util.List;
 public class ModlogsCommand implements ICommand
 {
     @Override
-    public void handle(List<String> args, GuildMessageReceivedEvent event) {
-        if (event.getMessage().getMentionedUsers().size() == 0)
+    public void handle(List<String> args, CommandEvent event) {
+        if (event.message().getMentionedUsers().size() == 0)
         {
-            event.getChannel().sendMessage(new EmbedBuilder().addField(getHelp()).build()).queue();
+            event.getChannel().sendMessageEmbeds(new EmbedBuilder().addField(getHelp()).build()).queue();
             return;
         }
 
-        EmbedBuilder builder = Main.getDatabase().getModLogs(event.getMessage().getMentionedUsers().get(0), event.getGuild());
+        EmbedBuilder builder = Main.getDatabase().getModLogs(event.message().getMentionedUsers().get(0), event.getGuild());
 
-        event.getChannel().sendMessage(builder.build()).queue();
+        event.getChannel().sendMessageEmbeds(builder.build()).queue();
     }
 
     @Override

@@ -1,7 +1,8 @@
 package fr.aven.bot.commands.`fun`
 
 import fr.aven.bot.Constants
-import fr.aven.bot.util.ICommand
+import fr.aven.bot.modules.core.CommandEvent
+import fr.aven.bot.modules.core.ICommand
 import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.entities.MessageEmbed
 import net.dv8tion.jda.api.events.GenericEvent
@@ -10,19 +11,19 @@ import org.apache.commons.lang3.StringUtils
 
 class FakewarnCommand: ICommand
 {
-    override fun handle(args: MutableList<String>, event: GuildMessageReceivedEvent) {
+    override fun handle(args: MutableList<String>, event: CommandEvent) {
         var reason = "Not provided"
 
-        if (event.message.mentionedUsers.size > 0) {
+        if (event.message().mentionedUsers.size > 0) {
             var argsFinal = args.toMutableList()
             argsFinal.removeFirst()
 
             if (args.size > 1) reason = StringUtils.join(argsFinal, " ")
             event.channel.sendMessage(String.format("%s has been warned... Reason: %s",
-                event.message.mentionedUsers[0].asMention, reason)).queue()
+                event.message().mentionedUsers[0].asMention, reason)).queue()
         }
 
-        if (event.guild.selfMember.hasPermission(event.channel, Permission.MESSAGE_MANAGE)) event.message.delete().queue()
+        if (event.guild.selfMember.hasPermission(event.channel, Permission.MESSAGE_MANAGE)) event.message().delete().queue()
     }
 
     override fun getType(): ICommand.Type {

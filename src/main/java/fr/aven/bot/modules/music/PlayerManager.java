@@ -4,12 +4,16 @@ import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
+import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
-import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
-import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
+import com.sedmelluq.discord.lavaplayer.track.*;
+import com.wrapper.spotify.enums.ModelObjectType;
+import com.wrapper.spotify.model_objects.specification.ArtistSimplified;
+import com.wrapper.spotify.model_objects.specification.Paging;
+import com.wrapper.spotify.model_objects.specification.PlaylistTrack;
 import com.wrapper.spotify.model_objects.specification.Track;
 import fr.aven.bot.Main;
+import fr.aven.bot.modules.core.CommandEvent;
 import fr.aven.bot.util.MessageTask;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
@@ -18,6 +22,10 @@ import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.awt.*;
 import java.util.*;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class PlayerManager
 {
@@ -25,18 +33,17 @@ public class PlayerManager
     private final AudioPlayerManager playerManager;
     private final Map<Long, GuildMusicManager> musicManagers;
 
+    private final ExecutorService sched = Executors.newSingleThreadExecutor();
+    private final ExecutorService trackLoaderPool = Executors.newFixedThreadPool(10);
+
+    public static final String PUNCTUATION_REGEX = "[.,/#!$%^&*;:{}=\\-_`~()\"\']";
+    YoutubeAudioSourceManager youtubeAudioSourceManager = new YoutubeAudioSourceManager(true);
+
     private PlayerManager()
     {
         this.musicManagers = new HashMap<>();
 
         this.playerManager = new DefaultAudioPlayerManager();
-        /*YoutubeAudioSourceManager youtubemanger = new YoutubeAudioSourceManager();
-
-        playerManager.registerSourceManager(youtubemanger);
-        playerManager.registerSourceManager(new SpotifyAudioSourceManager(Main.getConfiguration().getString("spotify.clientID", ""),
-                Main.getConfiguration().getString("spotify.clientSecret", ""),
-                Main.getConfiguration().getString("youtubeAPI", ""),
-                youtubemanger));*/
 
         AudioSourceManagers.registerLocalSource(playerManager);
         AudioSourceManagers.registerRemoteSources(playerManager);
@@ -140,6 +147,62 @@ public class PlayerManager
 
     }*/
 
+    public void loadSpotifyPlaylist(CommandEvent event, Paging<PlaylistTrack> playlistTrackPaging)
+    {
+        List<String> spotifyTrack = new ArrayList<>();
+
+        for (PlaylistTrack playlistTrack : playlistTrackPaging.getItems())
+        {
+            if (playlistTrack.getTrack().getType() != ModelObjectType.TRACK) continue;
+            Track track = (Track) playlistTrack.getTrack();
+
+            final StringBuilder trackNameAndArtists = new StringBuilder();
+            trackNameAndArtists.append(track.getName());
+
+            for (ArtistSimplified artist : track.getArtists()) {
+                trackNameAndArtists.append(" ").append(artist.getName());
+            }
+
+            spotifyTrack.add(trackNameAndArtists.toString());
+        }
+
+        GuildMusicManager musicManager = getGuildMusicManager(event.getGuild(), event.getChannel());
+
+        final List<AudioTrack> trackList = new ArrayList<>();
+        List<CompletableFuture<AudioTrack>> taskList = new ArrayList<>();
+
+
+        for (final String s : spotifyTrack) {
+            final String query = s.replaceAll(PUNCTUATION_REGEX, "");
+            CompletableFuture<AudioItem> future = new CompletableFuture<AudioItem>();
+
+            trackLoaderPool.submit(() -> {
+                AudioReference reference = new AudioReference("ytsearch:"+s, null);
+
+                try {
+                    var result = youtubeAudioSourceManager.loadItem(playerManager, reference);
+                    future.complete(result);
+                } catch (Exception e) {
+                    future.completeExceptionally(e);
+                }
+
+                return future;
+            });
+
+            taskList.add(future.thenApply(ai -> {
+                if (ai instanceof AudioPlaylist) return ((AudioPlaylist) ai).getTracks().get(0);
+                else return (AudioTrack) ai;
+            }));
+        }
+
+        //CompletableFuture.allOf((CompletableFuture<?>) taskList).get()
+    }
+
+    private void searchYoutube()
+    {
+
+    }
+
     public void loadAndPlayDeezerTrack(Message message, deezer.model.Track track)
     {
         String search = "ytsearch:" + track.getTitle()+" "+track.getArtist().getName();
@@ -171,8 +234,8 @@ public class PlayerManager
                 title = track.getInfo().title;
                 author = track.getInfo().author;
 
-                message.getChannel().sendMessage(builder.setAuthor(Main.getDatabase().getTextFor("music.add", message.getGuild()), track.getInfo().uri, message.getJDA().getSelfUser().getAvatarUrl())
-                        .addField("❱ "+Main.getDatabase().getTextFor("music.author", message.getGuild())+" : "+author, "❱ "+title, false)
+                message.getChannel().sendMessageEmbeds(builder.setAuthor(Main.getLanguage().getTextFor("music.add", message.getGuild()), track.getInfo().uri, message.getJDA().getSelfUser().getAvatarUrl())
+                        .addField("❱ "+Main.getLanguage().getTextFor("music.author", message.getGuild())+" : "+author, "❱ "+title, false)
                         .setColor(new Color(0, 255, 151))
                         .setFooter("AvenBot by Aven#1000").build()).queue(msg -> {
                             new Timer().schedule(new MessageTask(msg), 10000);
@@ -192,16 +255,16 @@ public class PlayerManager
                     } else {
 
                         EmbedBuilder builder = new EmbedBuilder();
-                        builder.setAuthor(Main.getDatabase().getTextFor("music.searchTitle", message.getGuild()), "https://justaven.xyz", message.getAuthor().getAvatarUrl());
+                        builder.setAuthor(Main.getLanguage().getTextFor("music.searchTitle", message.getGuild()), "https://justaven.xyz", message.getAuthor().getAvatarUrl());
                         builder.setColor(message.getMember().getColor());
-                        builder.setFooter(Main.getDatabase().getTextFor("music.searchFooter", message.getGuild()), message.getJDA().getSelfUser().getAvatarUrl());
+                        builder.setFooter(Main.getLanguage().getTextFor("music.searchFooter", message.getGuild()), message.getJDA().getSelfUser().getAvatarUrl());
 
                         for (int i = 0; i < playlist.getTracks().size() && i < 5; i++) {
                             AudioTrack track = playlist.getTracks().get(i);
                             AudioTrackInfo info = track.getInfo();
                             int nbTrack = i;
                             nbTrack++;
-                            builder.appendDescription("\n`" + nbTrack + "`: **" + info.title + "** | " + Main.getDatabase().getTextFor("music.author", message.getGuild()) + " : " + info.author);
+                            builder.appendDescription("\n`" + nbTrack + "`: **" + info.title + "** | " + Main.getLanguage().getTextFor("music.author", message.getGuild()) + " : " + info.author);
 
                             musicManager.scheduler.search.put(nbTrack, track);
                         }
@@ -221,9 +284,9 @@ public class PlayerManager
                     //message.getChannel().sendMessageFormat(Main.getDatabase().getTextFor("music.playlistAdd", message.getGuild()), firstTrack.getInfo().title, playlist.getName()).queue();
 
                     EmbedBuilder builder = new EmbedBuilder();
-                    builder.setAuthor(Main.getDatabase().getTextFor("playlist.title", message.getGuild()));
+                    builder.setAuthor(Main.getLanguage().getTextFor("playlist.title", message.getGuild()));
                     builder.addField("❱ "+playlist.getName() + " (" + playlist.getTracks().size() + " tracks)",
-                            "❱ "+ Main.getDatabase().getTextFor("playlist.firstTrack", message.getGuild()) + " : " + playlist.getTracks().get(0).getInfo().title,
+                            "❱ "+ Main.getLanguage().getTextFor("playlist.firstTrack", message.getGuild()) + " : " + playlist.getTracks().get(0).getInfo().title,
                             false).setFooter("AvenBot by Aven#1000").setColor(new Color(255, 127, 0));
 
                     message.getChannel().sendMessage(builder.build()).queue(msg -> {
@@ -243,14 +306,14 @@ public class PlayerManager
             @Override
             public void noMatches()
             {
-                message.getChannel().sendMessage(Main.getDatabase().getTextFor("music.notFound", message.getGuild())).queue();
+                message.getChannel().sendMessage(Main.getLanguage().getTextFor("music.notFound", message.getGuild())).queue();
             }
 
             @Override
             public void loadFailed(FriendlyException exception)
             {
                 exception.printStackTrace();
-                message.getChannel().sendMessage(Main.getDatabase().getTextFor("music.couldntPlay", message.getGuild()) + exception.getMessage()).queue();
+                message.getChannel().sendMessage(Main.getLanguage().getTextFor("music.couldntPlay", message.getGuild()) + exception.getMessage()).queue();
             }
         });
 
@@ -268,8 +331,8 @@ public class PlayerManager
         title = audioTrack.getInfo().title;
         author = audioTrack.getInfo().author;
 
-        message.getChannel().sendMessage(builder.setAuthor(Main.getDatabase().getTextFor("music.add", message.getGuild()) + (" ("+platform+")"), audioTrack.getInfo().uri, message.getJDA().getSelfUser().getAvatarUrl())
-                .addField("❱ " + Main.getDatabase().getTextFor("music.author", message.getGuild()) + " : " + author, "❱ " + title, false)
+        message.getChannel().sendMessage(builder.setAuthor(Main.getLanguage().getTextFor("music.add", message.getGuild()) + (" ("+platform+")"), audioTrack.getInfo().uri, message.getJDA().getSelfUser().getAvatarUrl())
+                .addField("❱ " + Main.getLanguage().getTextFor("music.author", message.getGuild()) + " : " + author, "❱ " + title, false)
                 .setColor(new Color(0, 255, 151))
                 .setFooter("AvenBot by Aven#1000").build()).queue(msg -> {
             new Timer().schedule(new MessageTask(msg), 10000);

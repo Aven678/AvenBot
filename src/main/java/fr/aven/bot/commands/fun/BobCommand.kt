@@ -1,7 +1,8 @@
 package fr.aven.bot.commands.`fun`
 
 import fr.aven.bot.Constants
-import fr.aven.bot.util.ICommand
+import fr.aven.bot.modules.core.CommandEvent
+import fr.aven.bot.modules.core.ICommand
 import fr.aven.bot.util.MessageUtil
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.Permission
@@ -11,10 +12,10 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 
 class BobCommand: ICommand
 {
-    override fun handle(args: MutableList<String>?, event: GuildMessageReceivedEvent) {
+    override fun handle(args: MutableList<String>?, event: CommandEvent) {
         val url = "https://static.wikia.nocookie.net/bob-morris/images/1/1e/Lebobbob.png/revision/latest/scale-to-width-down/331?cb=20190501172814&path-prefix=fr"
 
-        event.channel.sendMessage(EmbedBuilder().setImage(url).setColor(MessageUtil.getRandomColor()).build()).queue()
+        event.channel.sendMessageEmbeds(EmbedBuilder().setImage(url).setColor(MessageUtil.getRandomColor()).build()).queue()
     }
 
     override fun getType(): ICommand.Type {

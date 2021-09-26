@@ -1,4 +1,4 @@
-package fr.aven.bot.util;
+package fr.aven.bot.modules.core;
 
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.MessageEmbed;
@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface ICommand
 {
-    void handle(List<String> args, GuildMessageReceivedEvent event);
+    void handle(List<String> args, CommandEvent event);
 
     Type getType();
     Permission getPermission();
@@ -21,7 +21,7 @@ public interface ICommand
     void onEvent(GenericEvent event);
     Collection<net.dv8tion.jda.api.Permission> requiredDiscordPermission();
 
-    public default Collection<String> getAlias() {
+    default Collection<String> getAlias() {
         return Arrays.asList();
     }
 

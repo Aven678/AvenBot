@@ -9,7 +9,7 @@ import fr.aven.bot.entity.Warn;
 import fr.aven.bot.modules.jda.JDAManager;
 import fr.aven.bot.modules.music.GuildMusicManager;
 import fr.aven.bot.modules.music.PlayerManager;
-import fr.aven.bot.util.ICommand;
+import fr.aven.bot.modules.core.ICommand;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import org.slf4j.Logger;
@@ -58,11 +58,11 @@ public class SQL
 
             statement = connection1.createStatement();
 
-            Main.LOGGER.info("Connected to Database!");
+            Main.logger.info("Connected to Database!");
         } catch (ClassNotFoundException e) {
-            Main.LOGGER.error("Une erreur est survenue lors de la connexion à la base de données : ",e);
+            Main.logger.error("Une erreur est survenue lors de la connexion à la base de données : ",e);
         } catch (SQLException e) {
-            Main.LOGGER.error("Une erreur est survenue lors de la connexion à la base de données : ",e);
+            Main.logger.error("Une erreur est survenue lors de la connexion à la base de données : ",e);
         }
 
         return connection1;
@@ -249,7 +249,7 @@ public class SQL
         return null;
     }
 
-    public String getTextFor(String request, Guild guild)
+    /*public String getTextFor(String request, Guild guild)
     {
         try {
             String checkLang = getLang(guild);
@@ -267,7 +267,7 @@ public class SQL
         }
 
         return null;
-    }
+    }*/
 
     public boolean isModerator (Member member, List modRoles, List adminRoles )
     {
@@ -408,9 +408,9 @@ public class SQL
         return true;
     }
 
-    public String getLang(Guild guild)
+    public String getLang(String guildID)
     {
-        String SQL = "SELECT lang FROM guild WHERE guildID="+guild.getId();
+        String SQL = "SELECT lang FROM guild WHERE guildID="+guildID;
         ResultSet resultSet = null;
         try {
             resultSet = getConnection().createStatement().executeQuery(SQL);
@@ -422,6 +422,11 @@ public class SQL
             e.printStackTrace();
             return "en";
         }
+    }
+
+    public String getLang(Guild guild)
+    {
+        return getLang(guild.getId());
     }
 
     public String getMuteRole(Guild guild) {

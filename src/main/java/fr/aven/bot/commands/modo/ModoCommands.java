@@ -1,6 +1,7 @@
 package fr.aven.bot.commands.modo;
 
-import fr.aven.bot.util.ICommand;
+import fr.aven.bot.modules.core.CommandEvent;
+import fr.aven.bot.modules.core.ICommand;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -14,7 +15,7 @@ public abstract class ModoCommands implements ICommand {
     protected Logger MODOLOGGER = LoggerFactory.getLogger("Modo_Command");
 
     @Override
-    public abstract void handle(List<String> args, GuildMessageReceivedEvent event);
+    public abstract void handle(List<String> args, CommandEvent event);
 
     @Override
     public abstract MessageEmbed.Field getHelp();

@@ -5,17 +5,18 @@ import fr.aven.bot.CommandManager;
 import fr.aven.bot.Constants;
 import fr.aven.bot.Main;
 import fr.aven.bot.commands.music.LyricsCommand;
+import fr.aven.bot.modules.core.CommandEvent;
 import fr.aven.bot.modules.jda.JDAManager;
 import fr.aven.bot.modules.music.GuildMusicManager;
 import fr.aven.bot.modules.music.PlayerManager;
-import fr.aven.bot.util.ICommand;
+import fr.aven.bot.modules.core.ICommand;
+import fr.aven.bot.modules.music.lyrics.Lyrics;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
-import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
@@ -89,7 +90,7 @@ public class Listener extends ListenerAdapter
             {
                 event.getMessage().delete().queue();
                 logger.info("Bot stop");
-                event.getChannel().sendMessage(new EmbedBuilder().setAuthor("Bot is shutting down", "https://justaven.xyz", event.getAuthor().getAvatarUrl())
+                event.getChannel().sendMessageEmbeds(new EmbedBuilder().setAuthor("Bot is shutting down", "https://justaven.xyz", event.getAuthor().getAvatarUrl())
                         .setDescription("✅ Good! The bot will be down in 5 seconds!")
                         .build()).queue();
                 Main.stop();
@@ -101,7 +102,7 @@ public class Listener extends ListenerAdapter
             if (rw.startsWith(prefix) || rw.startsWith(Constants.PREFIX))
             {
                 new Thread(() -> {
-                    manager.handleCommand(event, rw.startsWith(Constants.PREFIX));
+                    manager.handleCommand(new CommandEvent(event, null, rw.startsWith(Constants.PREFIX)));
                 }).start();
                 //event.getMessage().delete().queue();
             } else {
@@ -182,7 +183,7 @@ public class Listener extends ListenerAdapter
     private void checkLyric(GuildMessageReceivedEvent e)
     {
         GuildMusicManager musicManager = PlayerManager.getInstance().getGuildMusicManager(e.getGuild(), e.getChannel());
-        Map<Integer, Lyric> lyrics = musicManager.scheduler.lyrics;
+        Map<Integer, Lyrics> lyrics = musicManager.scheduler.lyrics;
         if (lyrics.size() == 0) return;
         if (e.getMessage().getContentDisplay().equalsIgnoreCase("cancel")) {
             lyrics.clear();
@@ -248,12 +249,12 @@ public class Listener extends ListenerAdapter
         if (!event.getReactionEmote().getEmoji().equalsIgnoreCase("❌")) return;
         if (!PlayerManager.getInstance().getGuildMusicManager(event.getGuild(), event.getChannel()).scheduler.search.isEmpty()) {
             PlayerManager.getInstance().getGuildMusicManager(event.getGuild(), event.getChannel()).scheduler.search.clear();
-            event.getChannel().editMessageById(event.getMessageId(), Main.getDatabase().getTextFor("music.canceled", event.getGuild()) + event.getUser().getAsTag()).override(true).queue();
+            event.getChannel().editMessageById(event.getMessageId(), Main.getLanguage().getTextFor("music.canceled", event.getGuild()) + event.getUser().getAsTag()).override(true).queue();
         }
 
         else if (!PlayerManager.getInstance().getGuildMusicManager(event.getGuild(), event.getChannel()).scheduler.lyrics.isEmpty()) {
             PlayerManager.getInstance().getGuildMusicManager(event.getGuild(), event.getChannel()).scheduler.clearLyricsMap();
-            event.getChannel().editMessageById(event.getMessageId(), Main.getDatabase().getTextFor("music.canceled", event.getGuild()) + event.getUser().getAsTag()).override(true).queue();
+            event.getChannel().editMessageById(event.getMessageId(), Main.getLanguage().getTextFor("music.canceled", event.getGuild()) + event.getUser().getAsTag()).override(true).queue();
         }
 
     }
@@ -266,11 +267,11 @@ public class Listener extends ListenerAdapter
             if (!PlayerManager.getInstance().checkNullForEvent(event.getGuild()))
                 if (!PlayerManager.getInstance().getGuildMusicManager(channel.getGuild(), null).scheduler.alwaysStopped) {
                     GuildMusicManager manager = PlayerManager.getInstance().getGuildMusicManager(event.getGuild(), null);
-                    AudioTrack track = manager.player.getPlayingTrack();
+                    //AudioTrack track = manager.player.getPlayingTrack();
 
                     manager.player.stopTrack();
                     manager.scheduler.purgeQueue();
-                    manager.scheduler.nextTrack(track, false);
+                    //manager.scheduler.nextTrack(track, false);
                     manager.scheduler.alwaysStopped = true;
                 }
         }

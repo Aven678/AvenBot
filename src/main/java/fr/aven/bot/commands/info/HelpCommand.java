@@ -2,9 +2,9 @@ package fr.aven.bot.commands.info;
 
 import fr.aven.bot.Constants;
 import fr.aven.bot.Main;
-import fr.aven.bot.util.ICommand;
+import fr.aven.bot.modules.core.CommandEvent;
+import fr.aven.bot.modules.core.ICommand;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -16,7 +16,7 @@ import java.util.List;
 public class HelpCommand implements ICommand
 {
     @Override
-    public void handle(List<String> args, GuildMessageReceivedEvent event) {
+    public void handle(List<String> args, CommandEvent event) {
         StringBuilder adminCommands = new StringBuilder();
         StringBuilder funCommands = new StringBuilder();
         StringBuilder infoCommands = new StringBuilder();
@@ -90,7 +90,7 @@ public class HelpCommand implements ICommand
         builder.addField("For more informations about a command", "Do `-help` after a command : =help -help", false);
         builder.setFooter("AvenBot by Aven#1000", event.getJDA().getSelfUser().getAvatarUrl());
 
-        event.getChannel().sendMessage(builder.build()).queue();
+        event.replyEmbeds(builder.build());
 
     }
 

@@ -5,7 +5,9 @@ import fr.aven.bot.Main;
 import fr.aven.bot.commands.music.LyricsCommand;
 import fr.aven.bot.modules.music.GuildMusicManager;
 import fr.aven.bot.modules.music.PlayerManager;
-import fr.aven.bot.util.ICommand;
+import fr.aven.bot.modules.core.ICommand;
+import fr.aven.bot.modules.music.lyrics.GeniusAPI;
+import fr.aven.bot.modules.music.lyrics.Lyrics;
 import fr.aven.bot.util.MessageTask;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
@@ -13,8 +15,8 @@ import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEve
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Timer;
@@ -32,13 +34,16 @@ public class MusicReactionListener extends ListenerAdapter
         GuildMusicManager manager = PlayerManager.getInstance().getGuildMusicManager(event.getGuild(), event.getTextChannel());
 
         if (event.getMessageIdLong() != manager.scheduler.lastMessageStatus.getIdLong())
-            if (event.getMessageIdLong() != manager.scheduler.lastMessageActions.getIdLong())
-                return;
+            return;
 
         if (!componentIds.contains(event.getComponentId())) return;
         AudioTrack track = manager.player.getPlayingTrack();
 
-        //event.deferReply().queue();
+        if (!checkUserVoiceChannel(event))
+        {
+            event.deferEdit().queue();
+            return;
+        }
 
         switch (event.getComponentId())
         {
@@ -76,7 +81,13 @@ public class MusicReactionListener extends ListenerAdapter
                 break;
             case "lyrics":
                 if (!manager.scheduler.lyricsAlwaysRequested){
-                    event.deferReply().queue(msg -> LyricsCommand.sendLyrics(msg, Main.getkSoft().getLyrics(track.getInfo().title)));
+                    StringBuilder builder = new StringBuilder(track.getInfo().title);
+                    if (track.getInfo().title.contains("[")) builder.delete(track.getInfo().title.indexOf("["), track.getInfo().title.indexOf("]"));
+                    if (track.getInfo().title.contains("(")) builder.delete(track.getInfo().title.indexOf("("), track.getInfo().title.indexOf(")"));
+
+                    ArrayList<Lyrics> tempList = GeniusAPI.search(builder.toString());
+                    Lyrics temp = tempList.get(0);
+                    event.deferReply().queue(msg -> LyricsCommand.sendLyrics(msg, GeniusAPI.fromURL(temp.getURL(), temp.getArtist(), temp.getTitle())));
                     manager.scheduler.lyricsAlwaysRequested = true;
                 } else {
                     event.deferEdit().queue();
@@ -94,6 +105,12 @@ public class MusicReactionListener extends ListenerAdapter
                     missingPermission(event);
                 break;
         }
+    }
+
+    private boolean checkUserVoiceChannel(ButtonClickEvent event) {
+        if (event.getMember().getVoiceState() == null) return false;
+        if (!event.getMember().getVoiceState().inVoiceChannel()) return false;
+        return event.getMember().getVoiceState().getChannel() == event.getGuild().getAudioManager().getConnectedChannel();
     }
 
     /*@Override

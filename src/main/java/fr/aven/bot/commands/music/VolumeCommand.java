@@ -2,8 +2,9 @@ package fr.aven.bot.commands.music;
 
 import fr.aven.bot.Constants;
 import fr.aven.bot.Main;
+import fr.aven.bot.modules.core.CommandEvent;
 import fr.aven.bot.modules.music.PlayerManager;
-import fr.aven.bot.util.ICommand;
+import fr.aven.bot.modules.core.ICommand;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.GenericEvent;
@@ -16,7 +17,7 @@ import java.util.List;
 public class VolumeCommand  implements ICommand
 {
     @Override
-    public void handle(List<String> args, GuildMessageReceivedEvent event) {
+    public void handle(List<String> args, CommandEvent event) {
         if (args.isEmpty())
         {
             event.getChannel().sendMessage(new EmbedBuilder().addField(getHelp()).build()).queue();
@@ -28,12 +29,12 @@ public class VolumeCommand  implements ICommand
 
             if (volume > 200)
             {
-                event.getChannel().sendMessage(Main.getDatabase().getTextFor("volume.exceed", event.getGuild())).queue();
+                event.getChannel().sendMessage(Main.getLanguage().getTextFor("volume.exceed", event.getGuild())).queue();
                 return;
             }
 
             PlayerManager.getInstance().getGuildMusicManager(event.getGuild(), event.getChannel()).player.setVolume(volume);
-            event.getChannel().sendMessageFormat(Main.getDatabase().getTextFor("volume.confirm", event.getGuild()), volume).queue();
+            event.getChannel().sendMessageFormat(Main.getLanguage().getTextFor("volume.confirm", event.getGuild()), volume).queue();
         } catch (NumberFormatException nfe)
         {
             event.getChannel().sendMessage(new EmbedBuilder().addField(getHelp()).build()).queue();

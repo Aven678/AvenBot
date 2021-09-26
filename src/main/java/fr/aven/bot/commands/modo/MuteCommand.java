@@ -2,8 +2,8 @@ package fr.aven.bot.commands.modo;
 
 import fr.aven.bot.Constants;
 import fr.aven.bot.Main;
+import fr.aven.bot.modules.core.CommandEvent;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -20,17 +20,17 @@ public class MuteCommand extends ModoCommands {
     private int counter = 0; //pr la bdd
 
     @Override
-    public void handle(List<String> args, GuildMessageReceivedEvent event) {
+    public void handle(List<String> args, CommandEvent event) {
 
         TextChannel channel = event.getChannel();
-        Message message = event.getMessage();
+        Message message = event.message();
         Guild guild = event.getGuild();
 
         if (!guild.getSelfMember().hasPermission(net.dv8tion.jda.api.Permission.MANAGE_ROLES))
         {
-            channel.sendMessage(new EmbedBuilder()
-                    .setTitle(Main.getDatabase().getTextFor("error", event.getGuild()))
-                    .setDescription(Main.getDatabase().getTextFor("hasNotPermission", event.getGuild()))
+            channel.sendMessageEmbeds(new EmbedBuilder()
+                    .setTitle(Main.getLanguage().getTextFor("error", event.getGuild()))
+                    .setDescription(Main.getLanguage().getTextFor("hasNotPermission", event.getGuild()))
                     .setColor(Color.RED)
                     .setFooter("Command executed by "+event.getAuthor().getAsTag())
                     .build()
@@ -45,10 +45,10 @@ public class MuteCommand extends ModoCommands {
         mutedRole = guild.getRoleById(Main.getDatabase().getMuteRole(guild));
 
         if (args.isEmpty()) {
-            channel.sendMessage(Main.getDatabase().getTextFor("argsNotFound", event.getGuild())).queue();
+            channel.sendMessage(Main.getLanguage().getTextFor("argsNotFound", event.getGuild())).queue();
             return;
         } else if (message.getMentionedUsers().isEmpty()) {
-            channel.sendMessage(Main.getDatabase().getTextFor("mute.notMentionned", event.getGuild())).queue();
+            channel.sendMessage(Main.getLanguage().getTextFor("mute.notMentionned", event.getGuild())).queue();
 
             return;
         }
@@ -57,7 +57,7 @@ public class MuteCommand extends ModoCommands {
 
         if (mutedMember.getId().equalsIgnoreCase(message.getAuthor().getId()))
         {
-            channel.sendMessage(new EmbedBuilder().setDescription("You can't mute yourself!").setColor(Color.RED).build()).queue();
+            channel.sendMessageEmbeds(new EmbedBuilder().setDescription("You can't mute yourself!").setColor(Color.RED).build()).queue();
             return;
         }
 
@@ -76,7 +76,7 @@ public class MuteCommand extends ModoCommands {
 
             MODOLOGGER.info(event.getAuthor().getName() + " muted " + message.getMentionedMembers().get(0).getEffectiveName() + " for: " + reason);
 
-            channel.sendMessage(Main.getDatabase().getTextFor("mute.confirm", event.getGuild()) + " : "+message.getMentionedMembers().get(0).getUser().getAsTag()).queue();
+            channel.sendMessage(Main.getLanguage().getTextFor("mute.confirm", event.getGuild()) + " : "+message.getMentionedMembers().get(0).getUser().getAsTag()).queue();
 
         }
     }
@@ -102,7 +102,7 @@ public class MuteCommand extends ModoCommands {
                             }
 
                             Main.getDatabase().setMuteRole(mutedRole);
-                            Main.LOGGER.info("Muted Role created on server: " + guild.getName());
+                            Main.logger.info("Muted Role created on server: " + guild.getName());
                         }
                 );
     }

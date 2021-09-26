@@ -1,9 +1,9 @@
 package fr.aven.bot.commands.util;
 
 import fr.aven.bot.Constants;
-import fr.aven.bot.util.ICommand;
+import fr.aven.bot.modules.core.CommandEvent;
+import fr.aven.bot.modules.core.ICommand;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -15,7 +15,7 @@ import java.util.List;
 public class PatchnoteCommand implements ICommand
 {
     @Override
-    public void handle(List<String> args, GuildMessageReceivedEvent event) {
+    public void handle(List<String> args, CommandEvent event) {
         EmbedBuilder builder = new EmbedBuilder();
         builder.setAuthor("AvenBot's patchnotes. (only in French)", "https://www.justaven.xyz", event.getJDA().getSelfUser().getAvatarUrl());
         builder.addField("2.5.1 (30/04/21):", "• Ajout commande **=betrayal**, **=poker** et **=fishington**.", false);

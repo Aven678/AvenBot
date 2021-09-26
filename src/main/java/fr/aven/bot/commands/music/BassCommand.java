@@ -2,6 +2,7 @@ package fr.aven.bot.commands.music;
 
 import fr.aven.bot.Constants;
 import fr.aven.bot.Main;
+import fr.aven.bot.modules.core.CommandEvent;
 import fr.aven.bot.modules.music.PlayerManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
@@ -14,12 +15,12 @@ import java.util.List;
 public class BassCommand extends MusicCommands
 {
     @Override
-    public void handle(List<String> args, GuildMessageReceivedEvent event) {
+    public void handle(List<String> args, CommandEvent event) {
         var channel = event.getChannel();
 
         if (args.isEmpty())
         {
-            channel.sendMessage(new EmbedBuilder().addField(getHelp()).build()).queue();
+            channel.sendMessageEmbeds(new EmbedBuilder().addField(getHelp()).build()).queue();
             return;
         }
 
@@ -28,7 +29,7 @@ public class BassCommand extends MusicCommands
 
         if (!audioManager.isConnected())
         {
-            channel.sendMessage(Main.getDatabase().getTextFor("stop.botNotConnected", event.getGuild())).queue();
+            channel.sendMessage(Main.getLanguage().getTextFor("stop.botNotConnected", event.getGuild())).queue();
             return;
         }
 
@@ -36,16 +37,16 @@ public class BassCommand extends MusicCommands
 
         if (!voiceChannel.getMembers().contains(event.getMember()))
         {
-            channel.sendMessage(Main.getDatabase().getTextFor("stop.isNotInSameChannel", event.getGuild())).queue();
+            channel.sendMessage(Main.getLanguage().getTextFor("stop.isNotInSameChannel", event.getGuild())).queue();
             return;
         }
 
         try {
             var choice = Integer.parseInt(args.get(0));
-            manager.scheduler.bassBoost(choice, event.getMessage());
+            manager.scheduler.bassBoost(choice, event.message());
         } catch (NumberFormatException nfe)
         {
-            channel.sendMessage(new EmbedBuilder().addField(getHelp()).build()).queue();
+            channel.sendMessageEmbeds(new EmbedBuilder().addField(getHelp()).build()).queue();
         }
     }
 

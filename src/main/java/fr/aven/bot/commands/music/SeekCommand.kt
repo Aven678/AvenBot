@@ -2,9 +2,10 @@ package fr.aven.bot.commands.music
 
 import fr.aven.bot.Constants
 import fr.aven.bot.Main
+import fr.aven.bot.modules.core.CommandEvent
 import fr.aven.bot.modules.music.PlayerManager
 import fr.aven.bot.util.FormatUtils
-import fr.aven.bot.util.ICommand
+import fr.aven.bot.modules.core.ICommand
 import fr.aven.bot.util.NumberUtils
 import fr.aven.bot.util.TimeUtils
 import net.dv8tion.jda.api.Permission
@@ -16,13 +17,13 @@ import java.util.concurrent.TimeUnit
 
 class SeekCommand : ICommand
 {
-    override fun handle(args: MutableList<String>, event: GuildMessageReceivedEvent) {
+    override fun handle(args: MutableList<String>, event: CommandEvent) {
         val musicManager = PlayerManager.getInstance().getGuildMusicManager(event.guild, event.channel)
         val player = musicManager.player
 
         if (!event.guild.audioManager.isConnected)
         {
-            event.channel.sendMessage(Main.getDatabase().getTextFor("stop.botNotConnected", event.guild)).queue()
+            event.channel.sendMessage(Main.getLanguage().getTextFor("stop.botNotConnected", event.guild)).queue()
             return
         }
 
@@ -38,7 +39,7 @@ class SeekCommand : ICommand
         }
 
         if (!event.guild.selfMember.voiceState?.channel?.members?.contains(event.member)!!) {
-            event.channel.sendMessage(Main.getDatabase().getTextFor("stop.isNotInSameChannel", event.guild)).queue()
+            event.channel.sendMessage(Main.getLanguage().getTextFor("stop.isNotInSameChannel", event.guild)).queue()
             return
         }
 
@@ -58,7 +59,7 @@ class SeekCommand : ICommand
         val newPosition = NumberUtils.truncateBetween(track.position + num, 0, track.duration -1)
         track.position = newPosition
 
-        event.channel.sendMessage(String.format("Position has been %s now!", FormatUtils.formatDuration(newPosition))).queue()
+        event.channel.sendMessage(String.format("The position has been updated to %s!", FormatUtils.formatDuration(newPosition))).queue()
     }
 
     override fun getType(): ICommand.Type {

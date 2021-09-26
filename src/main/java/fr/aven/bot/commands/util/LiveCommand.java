@@ -1,8 +1,8 @@
 package fr.aven.bot.commands.util;
 
 import fr.aven.bot.Constants;
-import fr.aven.bot.util.ICommand;
-import net.dv8tion.jda.api.Permission;
+import fr.aven.bot.modules.core.CommandEvent;
+import fr.aven.bot.modules.core.ICommand;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -14,7 +14,7 @@ import java.util.List;
 public class LiveCommand implements ICommand
 {
     @Override
-    public void handle(List<String> args, GuildMessageReceivedEvent event) {
+    public void handle(List<String> args, CommandEvent event) {
 
     }
 

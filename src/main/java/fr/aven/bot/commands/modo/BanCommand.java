@@ -2,6 +2,7 @@ package fr.aven.bot.commands.modo;
 
 import fr.aven.bot.Constants;
 import fr.aven.bot.Main;
+import fr.aven.bot.modules.core.CommandEvent;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
@@ -20,15 +21,15 @@ import java.util.List;
 public class BanCommand extends ModoCommands {
 
     @Override
-    public void handle(List<String> args, GuildMessageReceivedEvent event) {
+    public void handle(List<String> args, CommandEvent event) {
         TextChannel channel = event.getChannel();
-        Message message = event.getMessage();
+        Message message = event.message();
 
         if (!message.getGuild().getSelfMember().hasPermission(net.dv8tion.jda.api.Permission.BAN_MEMBERS))
         {
-            channel.sendMessage(new EmbedBuilder()
-                    .setTitle(Main.getDatabase().getTextFor("error", event.getGuild()))
-                    .setDescription(Main.getDatabase().getTextFor("hasNotPermission", event.getGuild()))
+            channel.sendMessageEmbeds(new EmbedBuilder()
+                    .setTitle(Main.getLanguage().getTextFor("error", event.getGuild()))
+                    .setDescription(Main.getLanguage().getTextFor("hasNotPermission", event.getGuild()))
                     .setColor(Color.RED)
                     .setFooter("Command executed by "+event.getAuthor().getAsTag())
                     .build()
@@ -38,19 +39,19 @@ public class BanCommand extends ModoCommands {
 
         if (args.isEmpty())
         {
-            channel.sendMessage(Main.getDatabase().getTextFor("argsNotFound", event.getGuild())).queue();
+            channel.sendMessage(Main.getLanguage().getTextFor("argsNotFound", event.getGuild())).queue();
 
             return;
         } else if (message.getMentionedMembers().isEmpty()) {
 
-            channel.sendMessage(Main.getDatabase().getTextFor("ban.notMentionned", event.getGuild())).queue();
+            channel.sendMessage(Main.getLanguage().getTextFor("ban.notMentionned", event.getGuild())).queue();
 
             return;
         }
 
         if (message.getMentionedUsers().get(0).getId().equalsIgnoreCase(message.getAuthor().getId()))
         {
-            channel.sendMessage(new EmbedBuilder().setDescription("You can't ban yourself!").setColor(Color.RED).build()).queue();
+            channel.sendMessageEmbeds(new EmbedBuilder().setDescription("You can't ban yourself!").setColor(Color.RED).build()).queue();
             return;
         }
 
@@ -61,7 +62,7 @@ public class BanCommand extends ModoCommands {
             Main.getDatabase().addBan(message.getMentionedUsers().get(0).getId(), event.getGuild().getId(), message.getAuthor().getId(), message.getTimeCreated().format(DateTimeFormatter.RFC_1123_DATE_TIME), reason);
             event.getGuild().ban(message.getMentionedMembers().get(0), 0, reason).queue();
 
-            channel.sendMessage(Main.getDatabase().getTextFor("ban.confirm", event.getGuild())).queue();
+            channel.sendMessage(Main.getLanguage().getTextFor("ban.confirm", event.getGuild())).queue();
 
             MODOLOGGER.info(event.getAuthor().getName() + " banned " + message.getMentionedMembers().get(0).getEffectiveName() + " for: " + reason);
         }

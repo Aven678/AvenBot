@@ -5,7 +5,6 @@ import fr.aven.bot.modules.database.SQL;
 import fr.aven.bot.modules.jda.JDAManager;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.TextChannel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

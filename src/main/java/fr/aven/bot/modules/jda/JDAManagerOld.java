@@ -10,7 +10,7 @@ import net.dv8tion.jda.api.sharding.ShardManager;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
-public class JDAManager
+public class JDAManagerOld
 {
     private static ShardManager shardManager = createShardManager();
 
@@ -36,12 +36,12 @@ public class JDAManager
                             GatewayIntent.GUILD_VOICE_STATES,
                             GatewayIntent.GUILD_PRESENCES)
                     .setAudioSendFactory(new NativeAudioSendFactory())
-                    .addEventListeners(new TicketsEvent(), new BingoListener(), new AFKListener(), new ReactRoleListener(), new GuildActivities(), new InteractionsListener())
+                    .addEventListeners(new TicketsEvent(), new BingoListener(), new AFKListener(), new ReactRoleListener(), new GuildActivities(), new InteractionListener())
                     .build();
         } catch (Exception e)
         {
             Main.getConfiguration().save();
-            Main.LOGGER.error("Token erroné.");
+            //Main.logger.error("Token erroné.");
         }
 
         return null;

@@ -2,9 +2,9 @@ package fr.aven.bot.commands.fun;
 
 import fr.aven.bot.Constants;
 import fr.aven.bot.Main;
-import fr.aven.bot.util.ICommand;
+import fr.aven.bot.modules.core.CommandEvent;
+import fr.aven.bot.modules.core.ICommand;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -17,7 +17,7 @@ import java.util.Random;
 public class BingoCommand implements ICommand
 {
     @Override
-    public void handle(List<String> args, GuildMessageReceivedEvent event) {
+    public void handle(List<String> args, CommandEvent event) {
         if (Main.getBingoMap().channelHasBingo(event.getChannel()))
         {
             event.getChannel().sendMessage("A bingo has already started!").queue();
@@ -31,7 +31,7 @@ public class BingoCommand implements ICommand
         try {
             if (args.size() > 0) limit = random.nextInt(Integer.parseInt(args.get(0)));
         } catch (Exception e) {
-            event.getChannel().sendMessage(new EmbedBuilder().addField(getHelp()).build()).queue();
+            event.getChannel().sendMessageEmbeds(new EmbedBuilder().addField(getHelp()).build()).queue();
         }
 
 

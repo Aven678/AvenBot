@@ -3,6 +3,7 @@ package fr.aven.bot.commands.music;
 import deezer.client.DeezerClient;
 import fr.aven.bot.Constants;
 import fr.aven.bot.Main;
+import fr.aven.bot.modules.core.CommandEvent;
 import fr.aven.bot.modules.music.PlayerManager;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -21,7 +22,7 @@ public class PlayCommand extends MusicCommands
     private DeezerClient deezerClient = new DeezerClient();
 
     @Override
-    public void handle(List<String> args, GuildMessageReceivedEvent event)
+    public void handle(List<String> args, CommandEvent event)
     {
         if (!event.getGuild().getAudioManager().isConnected()) {
                 if (!JoinCommand.joinChannel(event)) return;
@@ -32,21 +33,21 @@ public class PlayCommand extends MusicCommands
 
         if (args.isEmpty())
         {
-            if (event.getMessage().getAttachments().size() > 0)
+            if (event.message().getAttachments().size() > 0)
             {
-                manager.loadAndPlay(event.getMessage(), event.getMessage().getAttachments().get(0).getUrl(), false, false, true);
+                manager.loadAndPlay(event.message(), event.message().getAttachments().get(0).getUrl(), false, false, true);
                 return;
             }
 
             if (manager.getGuildMusicManager(event.getGuild(), event.getChannel()).scheduler.getQueue().isEmpty())
-                channel.sendMessage(Main.getDatabase().getTextFor("argsNotFound", event.getGuild())).queue();
+                channel.sendMessage(Main.getLanguage().getTextFor("argsNotFound", event.getGuild())).queue();
 
             return;
         }
 
         if (!manager.getGuildMusicManager(event.getGuild(), event.getChannel()).scheduler.search.isEmpty())
         {
-            channel.sendMessage(Main.getDatabase().getTextFor("play.confirmChoice", event.getGuild())).queue();
+            channel.sendMessage(Main.getLanguage().getTextFor("play.confirmChoice", event.getGuild())).queue();
             return;
         }
 
@@ -65,12 +66,12 @@ public class PlayCommand extends MusicCommands
 
         if (isDeezerTrackURL(input))
         {
-            manager.loadAndPlayDeezerTrack(event.getMessage(), deezerClient.getTrack(getDeezerTrackId(input)));
+            manager.loadAndPlayDeezerTrack(event.message(), deezerClient.getTrack(getDeezerTrackId(input)));
         }
 
         else if (isSpotifyTrackURL(input))
         {
-            manager.loadAndPlaySpotifyTrack(event.getMessage(), Main.getSpotifyAPI().getTrack(input));
+            manager.loadAndPlaySpotifyTrack(event.message(), Main.getSpotifyAPI().getTrack(input));
         }
 
         /*else if (isSpotifyPlaylistURL(input))
@@ -82,7 +83,7 @@ public class PlayCommand extends MusicCommands
             if (!isUrl(input))
                 input = "ytsearch: "+input;
 
-            manager.loadAndPlay(event.getMessage(), input, false, false, false);
+            manager.loadAndPlay(event.message(), input, false, false, false);
         }
 
     }

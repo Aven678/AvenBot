@@ -64,7 +64,7 @@ public class TicketsEvent extends ListenerAdapter
                             .setContent(member.getAsMention())
                             .setEmbed(new EmbedBuilder()
                                     .setAuthor(name, "https://justaven.xyz")
-                                    .setDescription(Main.getDatabase().getTextFor("ticket.closeText", channel.getGuild()))
+                                    .setDescription(Main.getLanguage().getTextFor("ticket.closeText", channel.getGuild()))
                                     .setColor(member.getColor())
                                     .setFooter("AvenBot by Aven#1000")
                                     .build())
@@ -115,8 +115,8 @@ public class TicketsEvent extends ListenerAdapter
                 Main.getTicketsDB().closeTicket(channel);
                     channel.getManager().setName("closed-"+ticketId).removePermissionOverride(author).queue();
                     channel.sendMessage(new EmbedBuilder()
-                            .setAuthor(Main.getDatabase().getTextFor("ticket.closeTitle", channel.getGuild()), "https://www.justaven.xyz")
-                            .setDescription(Main.getDatabase().getTextFor("ticket.closeDesc", channel.getGuild()))
+                            .setAuthor(Main.getLanguage().getTextFor("ticket.closeTitle", channel.getGuild()), "https://www.justaven.xyz")
+                            .setDescription(Main.getLanguage().getTextFor("ticket.closeDesc", channel.getGuild()))
                             .setColor(event.getMember().getColor())
                             .setFooter("AvenBot by Aven#1000")
                             .build())
@@ -149,7 +149,7 @@ public class TicketsEvent extends ListenerAdapter
                 if (!Main.getTicketsDB().isTicketClosed(channel)) return;
 
                 Main.getTicketsDB().ticketDeleted(channel);
-                channel.sendMessage(new EmbedBuilder().setDescription(Main.getDatabase().getTextFor("tickets.closeConfirm", event.getGuild())).build()).queue();
+                channel.sendMessage(new EmbedBuilder().setDescription(Main.getLanguage().getTextFor("tickets.closeConfirm", event.getGuild())).build()).queue();
                 new Timer().schedule(new TicketsCloseTask(channel), 5000);
                 break;
         }

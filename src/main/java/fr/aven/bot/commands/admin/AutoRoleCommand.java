@@ -2,9 +2,9 @@ package fr.aven.bot.commands.admin;
 
 import fr.aven.bot.Constants;
 import fr.aven.bot.Main;
-import fr.aven.bot.util.ICommand;
+import fr.aven.bot.modules.core.CommandEvent;
+import fr.aven.bot.modules.core.ICommand;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.GenericEvent;
@@ -17,30 +17,30 @@ import java.util.List;
 public class AutoRoleCommand implements ICommand
 {
     @Override
-    public void handle(List<String> args, GuildMessageReceivedEvent event)
+    public void handle(List<String> args, CommandEvent event)
     {
         if (args.isEmpty())
         {
-            event.getChannel().sendMessage(new EmbedBuilder().addField(getHelp()).build()).queue();
+            event.getChannel().sendMessageEmbeds(new EmbedBuilder().addField(getHelp()).build()).queue();
             return;
         }
 
         if (args.get(0).equalsIgnoreCase("off"))
         {
             Main.getDatabase().setAutoRole(event.getGuild(), null);
-            event.getChannel().sendMessage(new EmbedBuilder().setDescription("✅ The autorole has been disabled").build()).queue();
+            event.getChannel().sendMessageEmbeds(new EmbedBuilder().setDescription("✅ The autorole has been disabled").build()).queue();
             return;
         }
 
-        if (event.getMessage().getMentionedRoles().isEmpty())
+        if (event.message().getMentionedRoles().isEmpty())
         {
-            event.getChannel().sendMessage(new EmbedBuilder().addField(getHelp()).build()).queue();
+            event.getChannel().sendMessageEmbeds(new EmbedBuilder().addField(getHelp()).build()).queue();
             return;
         }
 
-        Role role = event.getMessage().getMentionedRoles().get(0);
+        Role role = event.message().getMentionedRoles().get(0);
         Main.getDatabase().setAutoRole(event.getGuild(), role.getId());
-        event.getChannel().sendMessage(new EmbedBuilder().setDescription("✅ The autorole has been set to "+role.getName()).build()).queue();
+        event.getChannel().sendMessageEmbeds(new EmbedBuilder().setDescription("✅ The autorole has been set to "+role.getName()).build()).queue();
     }
 
     @Override

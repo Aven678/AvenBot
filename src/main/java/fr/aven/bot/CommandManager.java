@@ -18,7 +18,8 @@ import fr.aven.bot.commands.music.*;
 /*import fr.aven.bot.commands.util.LmgtfyCommand;
 import fr.aven.bot.commands.util.search.subcommands.SearchSubCommands;*/
 import fr.aven.bot.commands.util.*;
-import fr.aven.bot.util.ICommand;
+import fr.aven.bot.modules.core.CommandEvent;
+import fr.aven.bot.modules.core.ICommand;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -52,7 +53,7 @@ public class CommandManager {
         //INFO COMMANDS
         addCommands(new HelpCommand(), new BotCommand(), new ServerCommand(), new UserCommand());
         //UTIL COMMANDS
-        addCommands(new AFKCommand(), new InviteCommand(), new PatchnoteCommand(), new TestCommand());
+        addCommands(new AFKCommand(), new InviteCommand(), new PatchnoteCommand());
         //addCommands(new LmgtfyCommand(), new HelpCommand(this), new SearchCommand());
         //FUN COMMANDS
         addCommands(new Base64Command(), new BetrayalCommand(), new BingoCommand(), new BobCommand(), new CatCommand(), new CfunCommand(), new ConfusedStonks(), new DogCommand(), new FakebanCommand(), new FakewarnCommand(), new FishingtonCommand(), new IssouCommand(), new NotStonksCommand(), new NsfwPictureCommand(), new OMDBCommand(), new PokerCommand(), new RollCommand(), new SayCommand(), new SearchCommand(), new StonksCommand(), new YoutubeTogetherCommand());
@@ -87,9 +88,9 @@ public class CommandManager {
         return commands.containsKey(name) ? commands.get(name) : commandsAlias.get(name);
     }
 
-    public void handleCommand(GuildMessageReceivedEvent event, boolean prefixDefaultUsed) {
+    public void handleCommand(CommandEvent event) {
         //final String prefix = "&";
-        String prefix = Constants.PREFIX;
+        /*String prefix = Constants.PREFIX;
         if (!prefixDefaultUsed)
             prefix = Main.getDatabase().getGuildPrefix(event.getGuild());//Constants.PREFIXES.get(event.getGuild().getIdLong());
 
@@ -97,34 +98,34 @@ public class CommandManager {
                 "(?i)" + Pattern.quote(prefix), "").split(" +");
         final String invoke = split[0].toLowerCase();
 
-        System.out.println(commandsAlias.size());
+        System.out.println(commandsAlias.size());*/
 
-        if (!commands.containsKey(invoke))
+        if (!commands.containsKey(event.getInvoke()))
         {
-            if (!commandsAlias.containsKey(invoke))
+            if (!commandsAlias.containsKey(event.getInvoke()))
                 return;
         }
 
-        if (!Main.getDatabase().checkPermission(event.getGuild(), event.getAuthor(), getCommand(invoke).getPermission(), event.getChannel())) {
-            event.getChannel().sendMessage(new EmbedBuilder().setColor(Color.RED).setTitle("Error").setDescription("You don't have the permission to execute this command.").setFooter("Command executed by " + event.getAuthor().getAsTag()).build()).queue();
+        if (!Main.getDatabase().checkPermission(event.getGuild(), event.getAuthor(), getCommand(event.getInvoke()).getPermission(), event.getChannel())) {
+            event.getChannel().sendMessageEmbeds(new EmbedBuilder().setColor(Color.RED).setTitle("Error").setDescription("You don't have the permission to execute this command.").setFooter("Command executed by " + event.getAuthor().getAsTag()).build()).queue();
             return;
         }
 
-        final List<String> args = Arrays.asList(split).subList(1, split.length);
+        //final List<String> args = Arrays.asList(event.split).subList(1, event.split.length);
 
-        if (args.size() != 0 && args.get(0).equals("-help")) {
-            event.getChannel().sendMessage(new EmbedBuilder().addField(getCommand(invoke).getHelp()).build()).queue();
+        if (event.getArgs().size() != 0 && event.getArgs().get(0).equals("-help")) {
+            event.getChannel().sendMessageEmbeds(new EmbedBuilder().addField(getCommand(event.getInvoke()).getHelp()).build()).queue();
         } else {
             if (event.getGuild().getSelfMember().hasPermission(event.getChannel(), Permission.MESSAGE_WRITE)) {
-                if (!event.getGuild().getSelfMember().hasPermission(getCommand(invoke).requiredDiscordPermission()))
+                if (!event.getGuild().getSelfMember().hasPermission(getCommand(event.getInvoke()).requiredDiscordPermission()))
                     if (!event.getGuild().getSelfMember().hasPermission(Permission.ADMINISTRATOR)) {
-                        event.getChannel().sendMessage(Main.getDatabase().getTextFor("missingPermissions", event.getGuild())).queue();
+                        event.getChannel().sendMessage(Main.getLanguage().getTextFor("missingPermissions", event.getGuild())).queue();
                         return;
                     }
             }
 
-            getCommand(invoke).handle(args, event);
-            COMMANDLOGGER.info("[Command] "+event.getAuthor().getAsTag()+" ("+event.getAuthor().getId()+") - "+event.getGuild().getName()+" ("+event.getGuild().getId()+") => "+event.getMessage().getContentRaw());
+            getCommand(event.getInvoke()).handle(event.getArgs(), event);
+            COMMANDLOGGER.info("[Command] "+event.getAuthor().getAsTag()+" ("+event.getAuthor().getId()+") - "+event.getGuild().getName()+" ("+event.getGuild().getId()+") => "+(event.isMessageEvent() ? event.message().getContentRaw() : event.getSlashCommandEvent().getCommandString()+" (SlashCommand)"));
             //if (event.getGuild().getSelfMember().hasPermission(Permission.MESSAGE_MANAGE)) event.getMessage().delete().queue();
         }
     }

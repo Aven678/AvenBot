@@ -1,22 +1,15 @@
 package fr.aven.bot.commands.util;
 
 import fr.aven.bot.Constants;
-import fr.aven.bot.Main;
-import fr.aven.bot.util.ICommand;
+import fr.aven.bot.modules.core.CommandEvent;
+import fr.aven.bot.modules.core.ICommand;
 import fr.aven.bot.util.MessageUtil;
 import fr.aven.bot.util.OMDB;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.apache.commons.lang3.StringUtils;
-import org.brianodisho.omdb.OmdbAPI;
-import org.brianodisho.omdb.OmdbAPIFactory;
-import org.brianodisho.omdb.OmdbException;
-import org.brianodisho.omdb.Query;
-import org.brianodisho.omdb.model.DetailedListing;
-import org.brianodisho.omdb.model.SearchResponse;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -28,7 +21,7 @@ public class OMDBCommand implements ICommand
     private OMDB omdb = new OMDB();
 
     @Override
-    public void handle(List<String> args, GuildMessageReceivedEvent event) {
+    public void handle(List<String> args, CommandEvent event) {
         if (args.size() == 0)
         {
             event.getChannel().sendMessage(new EmbedBuilder().addField(getHelp()).build()).queue();
@@ -38,7 +31,6 @@ public class OMDBCommand implements ICommand
         try
         {
             var movie = omdb.findMovie(StringUtils.join(args, " "));
-            System.out.println("salut x1");
 
             if (!movie.success())
             {
@@ -54,11 +46,13 @@ public class OMDBCommand implements ICommand
         }
     }
 
-    public void sendMessage(OMDB.OMDBMovie movie, GuildMessageReceivedEvent event)
+    public void sendMessage(OMDB.OMDBMovie movie, CommandEvent event)
     {
         EmbedBuilder builder = new EmbedBuilder();
         builder.setAuthor(upperCaseFirst(movie.Type)+": "+movie.Title, "https://www.justaven.xyz", event.getAuthor().getAvatarUrl());
-        builder.setImage(movie.Poster);
+
+
+        builder.setImage(movie.Poster.equals("N/A") ? null : movie.Poster);
         builder.addField("Released", movie.Released, true);
         builder.addField("Director", movie.Director, true);
         builder.addField("Genre", movie.Genre, false);
@@ -70,7 +64,7 @@ public class OMDBCommand implements ICommand
         builder.addField("Box-Office", movie.BoxOffice, true);
         builder.addField("Plot", movie.Plot, false);
 
-        builder.setFooter("AvenBot by Aven#1000");
+        builder.setFooter("omdbapi.com | AvenBot by Aven#1000");
 
         builder.setColor(MessageUtil.getRandomColor());
 

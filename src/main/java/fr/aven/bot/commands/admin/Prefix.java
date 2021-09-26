@@ -2,9 +2,9 @@ package fr.aven.bot.commands.admin;
 
 import fr.aven.bot.Constants;
 import fr.aven.bot.Main;
-import fr.aven.bot.util.ICommand;
+import fr.aven.bot.modules.core.CommandEvent;
+import fr.aven.bot.modules.core.ICommand;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -16,16 +16,16 @@ import java.util.List;
 public class Prefix implements ICommand
 {
     @Override
-    public void handle(List<String> args, GuildMessageReceivedEvent event) {
+    public void handle(List<String> args, CommandEvent event) {
         if (args.isEmpty())
         {
-            event.getChannel().sendMessage(new EmbedBuilder().addField(getHelp()).build()).queue();
+            event.getChannel().sendMessageEmbeds(new EmbedBuilder().addField(getHelp()).build()).queue();
             return;
         }
 
         Main.getDatabase().setPrefix(event.getGuild(), args.get(0));
-        event.getChannel().sendMessage(new EmbedBuilder().addField(Main.getDatabase().getTextFor("prefix.successtitle", event.getGuild())
-                , Main.getDatabase().getTextFor("prefix.successdescription", event.getGuild())+args.get(0), false).build()).queue();
+        event.getChannel().sendMessageEmbeds(new EmbedBuilder().addField(Main.getLanguage().getTextFor("prefix.successtitle", event.getGuild())
+                , Main.getLanguage().getTextFor("prefix.successdescription", event.getGuild())+args.get(0), false).build()).queue();
     }
 
     @Override

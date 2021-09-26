@@ -5,7 +5,7 @@ import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.model.SearchListResponse;
 import com.google.api.services.youtube.model.SearchResult;
@@ -19,7 +19,7 @@ import java.util.List;
 public class YoutubeAPI {
 
     public static final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
-    public static final JsonFactory JSON_FACTORY = new JacksonFactory();
+    public static final JsonFactory JSON_FACTORY = new GsonFactory();
 
     private static final String PROPERTIES_FILENAME = "youtube.properties";
     private static final long NUMBER_OF_VIDEOS_RETURNED = 5;

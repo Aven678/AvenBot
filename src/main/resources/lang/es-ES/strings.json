@@ -1,0 +1,113 @@
+{
+    "link": "Enlace",
+    "music": {
+        "repeatPlaylistRequested": "Repeticíon de la lista de repróducion activado.",
+        "repeatRequested": "La música se repetirá.",
+        "couldntPlay": "Leyendo es imposible.",
+        "notFound": "Ningún resultado buscado, intenta de nuevo (enlace recomendado).",
+        "canceled": "Búsqueda cancelada por ",
+        "request": "Requesta de ",
+        "duration": "Duración",
+        "progess": "Música en curso",
+        "playlistAdd": "Agregado a la lista: %s (primera pista de lista de reproducción %s)",
+        "searchFooter": "Entrez le numéro de votre choix.",
+        "searchTitle": "Buscando músicas.",
+        "author": "Autor",
+        "add": "Música adicionada"
+    },
+    "tickets": {
+        "closeConfirm": "Le salon va être supprimé dans 5 secondes.",
+        "closeDesc": "🔓 Pour réouvrir le ticket. \n❌ Pour supprimer le salon.",
+        "closeTitle": "Ticket fermé.",
+        "closeText": "Pour clore ce ticket, cliquez sur la réaction."
+    },
+    "warn": {
+        "mpDisabled": "Cet utilisateur a désactivé ses messages privés.",
+        "mp": "Tu as été averti dans %s",
+        "reason": "Motivo: ",
+        "moderator": "Moderador: ",
+        "user": "Utilizador: ",
+        "title": "Utilisateur averti"
+    },
+    "player": {
+        "paused": "Le player est en pause."
+    },
+    "missingPermissions": "Je n'ai pas la permission d'utiliser cette commande.",
+    "isNotNSFW": "Le salon n'est pas un salon NSFW.",
+    "playlist": {
+        "firstTrack": "Première piste",
+        "title": "Playlist ajoutée"
+    },
+    "invite": {
+        "text": "Vous pouvez m'ajouter en utilisant ce lien: "
+    },
+    "hasNotPermission": "Je n'ai pas la permission de faire cela.",
+    "lang": {
+        "success:": "La langue a bien été changée avec succès."
+    },
+    "lyrics": {
+        "searchTitle": "Recherches de paroles.",
+        "title": "Paroles de: "
+    },
+    "pause": {
+        "playerResume": "La lecture a été reprise.",
+        "playerPaused": "Le player a bien été mis en pause.",
+        "notConnected": "Le player n'est pas connecté."
+    },
+    "notFound": "Non trouvé",
+    "shuffle": {
+        "confirm": "La queue a bien été mélangée."
+    },
+    "queue": {
+        "playerNotActive": "Le player ne joue pas de musique."
+    },
+    "volume": {
+        "confirm": "Le volume est désormais à %s.",
+        "exceed": "Le volume ne peut pas dépasser 200."
+    },
+    "stop": {
+        "confirm": "Déconnecté de votre salon vocal.",
+        "isNotInSameChannel": "Vous devez être connecté dans le même salon vocal que moi.",
+        "botNotConnected": "Je ne suis pas connecté dans un salon vocal."
+    },
+    "skip": {
+        "confirm": "Musique passée."
+    },
+    "play": {
+        "confirmChoice": "Veuillez confirmer la musique de votre choix."
+    },
+    "join": {
+        "success": "He conectado a tu canal de voz.",
+        "isNotInChannel": "Veuillez vous connecter à un salon vocal.",
+        "missingPerm": "No tengo la autorización para conectarme a %s"
+    },
+    "unmute": {
+        "isNotMute": "Ce membre n'est pas mute.",
+        "confirm": "Membre démuté.",
+        "notMentionned": "Veuillez indiquer le membre à démuter."
+    },
+    "mute": {
+        "confirm": "Membre mute.",
+        "notMentionned": "Veuillez indiquer le membre à mute."
+    },
+    "kick": {
+        "confirm": "Membre expulsé.",
+        "notMentionned": "Veuillez indiquer le membre à expulser."
+    },
+    "ban": {
+        "confirm": "Membre banni.",
+        "notMentionned": "Veuillez indiquer le membre à bannir."
+    },
+    "argsNotFound": "Veuillez fournir les arguments requis.",
+    "cc.success": "Configuration réinitialisée.",
+    "success": "Éxito",
+    "errordesc": "Ha ocurrido un error. Por favor intente otra vez.",
+    "error": "Error",
+    "dj": {
+        "success": "Le DJ rôle est désormais : "
+    },
+    "prefix": {
+        "sucesstitle": "¡Prefijo cambiado!",
+        "sucessdescription": "El nuevo prefijo es: "
+    }
+}

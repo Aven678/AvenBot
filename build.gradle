@@ -11,7 +11,7 @@ apply plugin: 'kotlin'
 
 group 'fr.aven'
 //version '2.2_'+System.properties['build.number']
-version '2.2-SNAPSHOT'
+version '2.6-SNAPSHOT'
 
 sourceCompatibility = 11
 
@@ -31,18 +31,25 @@ repositories {
 
 jar {
     manifest {
-        attributes 'Main-Class': 'fr.aven.bot.Main'
+        attributes 'Main-Class': 'fr.aven.bot.Launcher'
     }
 }
 
+compileKotlin {
+    kotlinOptions.jvmTarget = "11"
+}
+
 dependencies {
-    compile 'com.google.apis:google-api-services-youtube:v3-rev20200526-1.30.9'
+    // https://mvnrepository.com/artifact/com.google.http-client/google-http-client-jackson2
+    implementation group: 'com.google.http-client', name: 'google-http-client-jackson2', version: '1.39.2-sp.1'
+
+    compile 'com.google.apis:google-api-services-youtube:v3-rev20210706-1.32.1'
     compile 'net.explodingbush.KSoft4J:KSoft4J:1.0.6'
-    compile 'net.dv8tion:JDA:4.3.0_285'
+    compile 'net.dv8tion:JDA:4.3.0_331'
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.7'
     //implementation 'com.github.Devoxin:lavaplayer:1.3.59'
 
-    implementation 'com.sedmelluq:lavaplayer:1.3.76'
+    implementation 'com.sedmelluq:lavaplayer:1.3.78'
 
     // https://mvnrepository.com/artifact/org.json/json
     compile group: 'org.json', name: 'json', version: '20180813'
@@ -57,23 +64,25 @@ dependencies {
 
     implementation 'com.github.top-gg:java-sdk:2.0.1'
 
-    compile 'se.michaelthelin.spotify:spotify-web-api-java:6.4.1'
+    compile 'se.michaelthelin.spotify:spotify-web-api-java:6.5.4'
     //implementation 'me.shib.java.lib:omdb-java:1.2.0'
     compile 'org.brianodisho.omdb:omdb:1.1'
     compile 'com.squareup.retrofit2:retrofit:2.9.0'
-    implementation("com.squareup.okhttp3:logging-interceptor:4.9.0")
+    implementation('com.squareup.okhttp3:logging-interceptor:4.9.1')
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
 
     implementation group: 'com.github.twitch4j', name: 'twitch4j', version: '1.2.0'
 
-    implementation ("org.ktorm:ktorm-support-mysql:3.3.0")
-    implementation ("org.ktorm:ktorm-core:3.3.0")
+    implementation ('org.ktorm:ktorm-support-mysql:3.4.1')
+    implementation ('org.ktorm:ktorm-core:3.4.1')
 
     implementation 'com.apptastic:rssreader:2.5.0'
 
-    implementation("org.jetbrains.exposed:exposed-core:0.31.1")
-    implementation("org.jetbrains.exposed:exposed-dao:0.31.1")
-    implementation("org.jetbrains.exposed:exposed-jdbc:0.31.1")
+    implementation('org.jetbrains.exposed:exposed-core:0.33.1')
+    implementation('org.jetbrains.exposed:exposed-dao:0.33.1')
+    implementation('org.jetbrains.exposed:exposed-jdbc:0.33.1')
+
+    implementation 'org.jsoup:jsoup:1.14.2'
 }
 
 compileJava.options.encoding = 'UTF-8'

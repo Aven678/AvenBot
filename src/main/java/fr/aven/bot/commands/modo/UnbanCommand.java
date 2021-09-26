@@ -1,6 +1,7 @@
 package fr.aven.bot.commands.modo;
 
 import fr.aven.bot.Constants;
+import fr.aven.bot.modules.core.CommandEvent;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
@@ -15,10 +16,10 @@ import java.util.List;
 public class UnbanCommand extends ModoCommands
 {
     @Override
-    public void handle(List<String> args, GuildMessageReceivedEvent event) {
+    public void handle(List<String> args, CommandEvent event) {
         if (args.isEmpty())
         {
-            event.getChannel().sendMessage(new EmbedBuilder().addField(getHelp()).build()).queue();
+            event.getChannel().sendMessageEmbeds(new EmbedBuilder().addField(getHelp()).build()).queue();
             return;
         }
 

@@ -16,6 +16,7 @@ import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.google.api.client.json.gson.GsonFactory;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import org.apache.http.impl.client.HttpClientBuilder;
 
@@ -89,7 +90,7 @@ public class SpotifyAudioSourceManager implements AudioSourceManager, HttpConfig
     private YouTube getYouTubeService() {
         try {
             return new YouTube.Builder(GoogleNetHttpTransport.newTrustedTransport(),
-                    JacksonFactory.getDefaultInstance(), (unused) -> {
+                    GsonFactory.getDefaultInstance(), (unused) -> {
             }).setApplicationName("AvenBot-youtube-search").build();
         } catch (GeneralSecurityException | IOException e) {
             LOGGER.error(e.getMessage());

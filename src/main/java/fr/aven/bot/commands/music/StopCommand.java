@@ -3,6 +3,7 @@ package fr.aven.bot.commands.music;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import fr.aven.bot.Constants;
 import fr.aven.bot.Main;
+import fr.aven.bot.modules.core.CommandEvent;
 import fr.aven.bot.modules.music.PlayerManager;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageEmbed;
@@ -19,14 +20,14 @@ import java.util.List;
 public class StopCommand extends MusicCommands
 {
     @Override
-    public void handle(List<String> args, GuildMessageReceivedEvent event)
+    public void handle(List<String> args, CommandEvent event)
     {
         TextChannel channel = event.getChannel();
         AudioManager audioManager = event.getGuild().getAudioManager();
 
         if (!audioManager.isConnected())
         {
-            channel.sendMessage(Main.getDatabase().getTextFor("stop.botNotConnected", event.getGuild())).queue();
+            channel.sendMessage(Main.getLanguage().getTextFor("stop.botNotConnected", event.getGuild())).queue();
             return;
         }
 
@@ -34,7 +35,7 @@ public class StopCommand extends MusicCommands
 
         if (!voiceChannel.getMembers().contains(event.getMember()))
         {
-            channel.sendMessage(Main.getDatabase().getTextFor("stop.isNotInSameChannel", event.getGuild())).queue();
+            channel.sendMessage(Main.getLanguage().getTextFor("stop.isNotInSameChannel", event.getGuild())).queue();
             return;
         }
 

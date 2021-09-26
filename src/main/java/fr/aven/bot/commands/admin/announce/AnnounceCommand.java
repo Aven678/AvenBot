@@ -2,9 +2,9 @@ package fr.aven.bot.commands.admin.announce;
 
 import fr.aven.bot.Constants;
 import fr.aven.bot.Main;
-import fr.aven.bot.util.ICommand;
+import fr.aven.bot.modules.core.CommandEvent;
+import fr.aven.bot.modules.core.ICommand;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.GenericEvent;
@@ -20,32 +20,32 @@ public class AnnounceCommand implements ICommand
     private List<String> possibility = Arrays.asList("ban", "join", "leave");
 
     @Override
-    public void handle(List<String> args, GuildMessageReceivedEvent event) {
+    public void handle(List<String> args, CommandEvent event) {
         if (args.isEmpty())
         {
-            event.getChannel().sendMessage(new EmbedBuilder().addField(getHelp()).build()).queue();
+            event.getChannel().sendMessageEmbeds(new EmbedBuilder().addField(getHelp()).build()).queue();
             return;
         }
 
         if (args.get(0).equalsIgnoreCase("channel"))
         {
-            if (event.getMessage().getMentionedChannels().size() == 0)
+            if (event.message().getMentionedChannels().size() == 0)
             {
-                event.getChannel().sendMessage(new EmbedBuilder().addField(getHelp()).build()).queue();
+                event.getChannel().sendMessageEmbeds(new EmbedBuilder().addField(getHelp()).build()).queue();
                 return;
             }
 
-            TextChannel channel = event.getMessage().getMentionedChannels().get(0);
+            TextChannel channel = event.message().getMentionedChannels().get(0);
             Main.getDatabase().setAnnounceChannel(channel, event.getGuild());
 
-            event.getMessage().addReaction("\uD83D\uDC4C").queue();
+            event.message().addReaction("\uD83D\uDC4C").queue();
 
             return;
         }
 
         if (!possibility.contains(args.get(0)))
         {
-            event.getChannel().sendMessage(new EmbedBuilder().addField(getHelp()).build()).queue();
+            event.getChannel().sendMessageEmbeds(new EmbedBuilder().addField(getHelp()).build()).queue();
             return;
         }
 
@@ -53,10 +53,10 @@ public class AnnounceCommand implements ICommand
         {
             try {
                 Main.getDatabase().setTextJLB(event.getGuild().getId(), "", args.get(0));
-                event.getMessage().addReaction("\uD83D\uDC4C").queue();
+                event.message().addReaction("\uD83D\uDC4C").queue();
             } catch (SQLException sqlException) {
                 event.getChannel().sendMessage("An error has occured, please retry.").queue();
-                event.getJDA().getTextChannelById(463270369550139422L).sendMessage("Nouvelle erreur : " +
+                event.getJDA().getTextChannelById(871509862109020191L).sendMessage("Nouvelle erreur : " +
                         "\n```java \n"+sqlException.getMessage()+"\n```").queue();
             }
 

@@ -1,7 +1,8 @@
 package fr.aven.bot.commands.admin;
 
 import fr.aven.bot.Constants;
-import fr.aven.bot.util.ICommand;
+import fr.aven.bot.modules.core.CommandEvent;
+import fr.aven.bot.modules.core.ICommand;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.GenericEvent;
@@ -10,14 +11,13 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import java.awt.*;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class RolesCommand implements ICommand
 {
     @Override
-    public void handle(List<String> args, GuildMessageReceivedEvent event) {
+    public void handle(List<String> args, CommandEvent event) {
         if (args.isEmpty())
         {
             sendHelpMessage(event.getChannel());
@@ -43,17 +43,17 @@ public class RolesCommand implements ICommand
                 builder.setDescription(guild.getRoles().stream().map(Role::getAsMention).collect(Collectors.joining(", ")));
                 builder.setFooter("Command executed by "+author.getAsTag(), author.getAvatarUrl());
 
-                channel.sendMessage(builder.build()).queue();
+                channel.sendMessageEmbeds(builder.build()).queue();
                 break;
 
             case "add":
-                if (event.getMessage().getMentionedRoles().isEmpty())
+                if (event.message().getMentionedRoles().isEmpty())
                 {
                     sendHelpMessage(channel);
                     return;
                 }
 
-                role = event.getMessage().getMentionedRoles().get(0);
+                role = event.message().getMentionedRoles().get(0);
                 if (args.size() == 2) {
                     sendHelpMessage(channel);
                     return;
@@ -103,10 +103,10 @@ public class RolesCommand implements ICommand
                         }
                     });
                 }
-                else if (event.getMessage().getMentionedRoles().size() > 0)
+                else if (event.message().getMentionedRoles().size() > 0)
                 {
-                    List<Role> destinationRoles = event.getMessage().getMentionedRoles();
-                    destinationRoles.remove(event.getMessage().getMentionedRoles().get(0));
+                    List<Role> destinationRoles = event.message().getMentionedRoles();
+                    destinationRoles.remove(event.message().getMentionedRoles().get(0));
                     event.getChannel().sendMessage("Progress...").queue(msg ->
                     {
                         for (int i = 0; i < guild.getMembersWithRoles(destinationRoles).size(); i++)
@@ -118,16 +118,16 @@ public class RolesCommand implements ICommand
                         }
                     });
                 }
-                else if (!event.getMessage().getMentionedMembers().isEmpty())
+                else if (!event.message().getMentionedMembers().isEmpty())
                 {
                     event.getChannel().sendMessage("Progress...").queue(msg ->
                     {
-                        for (int i = 0; i < event.getMessage().getMentionedMembers().size(); i++)
+                        for (int i = 0; i < event.message().getMentionedMembers().size(); i++)
                         {
-                            guild.addRoleToMember(event.getMessage().getMentionedMembers().get(i), finalRole).reason("Command executed by "+author.getAsTag()).queue();
-                            msg.editMessage("Progress... " + (i+1) + "/" + event.getMessage().getMentionedMembers().size()).queue();
+                            guild.addRoleToMember(event.message().getMentionedMembers().get(i), finalRole).reason("Command executed by "+author.getAsTag()).queue();
+                            msg.editMessage("Progress... " + (i+1) + "/" + event.message().getMentionedMembers().size()).queue();
 
-                            if ((i+1) == event.getMessage().getMentionedMembers().size()) msg.editMessage("Role has been added to "+event.getMessage().getMentionedMembers().size()+ "members.").queue();
+                            if ((i+1) == event.message().getMentionedMembers().size()) msg.editMessage("Role has been added to "+event.message().getMentionedMembers().size()+ "members.").queue();
                         }
                     });
 
@@ -139,13 +139,13 @@ public class RolesCommand implements ICommand
                 break;
 
             case "remove":
-                if (event.getMessage().getMentionedRoles().isEmpty())
+                if (event.message().getMentionedRoles().isEmpty())
                 {
                     sendHelpMessage(channel);
                     return;
                 }
 
-                role = event.getMessage().getMentionedRoles().get(0);
+                role = event.message().getMentionedRoles().get(0);
                 if (args.size() == 2) {
                     sendHelpMessage(channel);
                     return;
@@ -158,12 +158,12 @@ public class RolesCommand implements ICommand
                     guild.getMembers().forEach(member -> { if (member.getUser().isBot()) guild.removeRoleFromMember(member, removeRole).reason("Command executed by "+author.getAsTag()).queue(); });
                 } else if (args.get(2).equals("humans")) {
                     guild.getMembers().forEach(member -> { if (!member.getUser().isBot()) guild.removeRoleFromMember(member, removeRole).reason("Command executed by "+author.getAsTag()).queue(); });
-                } else if (event.getMessage().getMentionedRoles().size() > 0) {
-                    List<Role> destinationRoles = event.getMessage().getMentionedRoles();
-                    destinationRoles.remove(event.getMessage().getMentionedRoles().get(0));
+                } else if (event.message().getMentionedRoles().size() > 0) {
+                    List<Role> destinationRoles = event.message().getMentionedRoles();
+                    destinationRoles.remove(event.message().getMentionedRoles().get(0));
                     guild.getMembersWithRoles(destinationRoles).forEach(member -> guild.removeRoleFromMember(member, removeRole).reason("Command executed by "+author.getAsTag()).queue());
-                } else if (!event.getMessage().getMentionedMembers().isEmpty()) {
-                    event.getMessage().getMentionedMembers().forEach(member -> guild.removeRoleFromMember(member, removeRole).reason("Command executed by "+author.getAsTag()).queue());
+                } else if (!event.message().getMentionedMembers().isEmpty()) {
+                    event.message().getMentionedMembers().forEach(member -> guild.removeRoleFromMember(member, removeRole).reason("Command executed by "+author.getAsTag()).queue());
                 } else {
                     sendHelpMessage(channel);
                     return;
@@ -208,23 +208,23 @@ public class RolesCommand implements ICommand
                 break;
 
             case "delete":
-                if (event.getMessage().getMentionedRoles().isEmpty())
+                if (event.message().getMentionedRoles().isEmpty())
                 {
                     sendHelpMessage(channel);
                     return;
                 }
 
-                event.getMessage().getMentionedRoles().get(0).delete().reason("Command role executed by "+author.getAsTag()).queue(success -> channel.sendMessage("Role successfully deleted!").queue());
+                event.message().getMentionedRoles().get(0).delete().reason("Command role executed by "+author.getAsTag()).queue(success -> channel.sendMessage("Role successfully deleted!").queue());
                 break;
 
             case "info":
-                if (event.getMessage().getMentionedRoles().isEmpty())
+                if (event.message().getMentionedRoles().isEmpty())
                 {
                     sendHelpMessage(channel);
                     return;
                 }
 
-                role = event.getMessage().getMentionedRoles().get(0);
+                role = event.message().getMentionedRoles().get(0);
                 builder.setAuthor("Roleinfo", "https://justaven.xyz", author.getAvatarUrl());
                 builder.addField("Name", role.getName(), true);
                 builder.addField("ID", role.getId(), true);
@@ -237,17 +237,17 @@ public class RolesCommand implements ICommand
                 builder.setColor(role.getColor());
                 builder.setFooter("Command executed by "+author.getAsTag(), author.getAvatarUrl());
 
-                channel.sendMessage(builder.build()).queue();
+                channel.sendMessageEmbeds(builder.build()).queue();
                 break;
 
             case "color":
-                if (event.getMessage().getMentionedRoles().isEmpty())
+                if (event.message().getMentionedRoles().isEmpty())
                 {
                     sendHelpMessage(channel);
                     return;
                 }
 
-                role = event.getMessage().getMentionedRoles().get(0);
+                role = event.message().getMentionedRoles().get(0);
 
                 if (args.size() == 2)
                 {
@@ -255,7 +255,7 @@ public class RolesCommand implements ICommand
                     builder.setColor(role.getColor());
                     builder.setDescription("Color of "+role.getName()+" is "+hex);
 
-                    channel.sendMessage(builder.build()).queue();
+                    channel.sendMessageEmbeds(builder.build()).queue();
                     return;
                 }
 
@@ -269,23 +269,23 @@ public class RolesCommand implements ICommand
 
                 builder.setDescription("Color has been successfully changed!");
                 builder.setColor(color);
-                event.getChannel().sendMessage(builder.build()).queue();
+                event.getChannel().sendMessageEmbeds(builder.build()).queue();
                 break;
 
             case "hoist":
-                if (event.getMessage().getMentionedRoles().isEmpty())
+                if (event.message().getMentionedRoles().isEmpty())
                 {
                     sendHelpMessage(channel);
                     return;
                 }
 
-                role = event.getMessage().getMentionedRoles().get(0);
+                role = event.message().getMentionedRoles().get(0);
 
                 if (args.size() == 2)
                 {
                     builder.setDescription(role.getName()+(role.isHoisted() ? "is hoisted": "isn't hoisted"));
 
-                    channel.sendMessage(builder.build()).queue();
+                    channel.sendMessageEmbeds(builder.build()).queue();
                     return;
                 }
 
@@ -300,23 +300,23 @@ public class RolesCommand implements ICommand
                 role.getManager().setHoisted(hoisted).reason("Command roles executed by "+author.getAsTag()).queue();
 
                 builder.setDescription("Role has been successfully changed!");
-                event.getChannel().sendMessage(builder.build()).queue();
+                event.getChannel().sendMessageEmbeds(builder.build()).queue();
                 break;
 
             case "mentionable":
-                if (event.getMessage().getMentionedRoles().isEmpty())
+                if (event.message().getMentionedRoles().isEmpty())
                 {
                     sendHelpMessage(channel);
                     return;
                 }
 
-                role = event.getMessage().getMentionedRoles().get(0);
+                role = event.message().getMentionedRoles().get(0);
 
                 if (args.size() == 2)
                 {
                     builder.setDescription(role.getName()+(role.isMentionable() ? "is mentionable": "isn't mentionable"));
 
-                    channel.sendMessage(builder.build()).queue();
+                    channel.sendMessageEmbeds(builder.build()).queue();
                     return;
                 }
 
@@ -331,23 +331,23 @@ public class RolesCommand implements ICommand
                 role.getManager().setMentionable(hoisted).reason("Command roles executed by "+author.getAsTag()).queue();
 
                 builder.setDescription("Role has been successfully changed!");
-                event.getChannel().sendMessage(builder.build()).queue();
+                event.getChannel().sendMessageEmbeds(builder.build()).queue();
                 break;
 
             case "name":
-                if (event.getMessage().getMentionedRoles().isEmpty())
+                if (event.message().getMentionedRoles().isEmpty())
                 {
                     sendHelpMessage(channel);
                     return;
                 }
 
-                role = event.getMessage().getMentionedRoles().get(0);
+                role = event.message().getMentionedRoles().get(0);
 
                 if (args.size() == 2)
                 {
                     builder.setDescription("The role name is: "+role.getName());
 
-                    channel.sendMessage(builder.build()).queue();
+                    channel.sendMessageEmbeds(builder.build()).queue();
                     return;
                 }
 
@@ -356,18 +356,17 @@ public class RolesCommand implements ICommand
                 role.getManager().setName(choice).reason("Command roles executed by "+author.getAsTag()).queue();
 
                 builder.setDescription("Role name has been successfully changed!");
-                event.getChannel().sendMessage(builder.build()).queue();
+                event.getChannel().sendMessageEmbeds(builder.build()).queue();
                 break;
 
             default:
                 sendHelpMessage(channel);
-                return;
         }
     }
 
     private void sendHelpMessage(TextChannel channel)
     {
-        channel.sendMessage(new EmbedBuilder().addField(getHelp()).build()).queue();
+        channel.sendMessageEmbeds(new EmbedBuilder().addField(getHelp()).build()).queue();
     }
 
     @Override

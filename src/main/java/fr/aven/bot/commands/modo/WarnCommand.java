@@ -3,7 +3,8 @@ package fr.aven.bot.commands.modo;
 import fr.aven.bot.Constants;
 import fr.aven.bot.Main;
 import fr.aven.bot.entity.Warn;
-import fr.aven.bot.util.ICommand;
+import fr.aven.bot.modules.core.CommandEvent;
+import fr.aven.bot.modules.core.ICommand;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
@@ -23,47 +24,47 @@ import java.util.List;
 public class WarnCommand implements ICommand
 {
     @Override
-    public void handle(List<String> args, GuildMessageReceivedEvent event) {
+    public void handle(List<String> args, CommandEvent event) {
         if (args.isEmpty())
         {
-            event.getChannel().sendMessage(new EmbedBuilder().addField(getHelp()).build()).queue();
+            event.getChannel().sendMessageEmbeds(new EmbedBuilder().addField(getHelp()).build()).queue();
             return;
         }
 
-        if (event.getMessage().getMentionedUsers().isEmpty())
+        if (event.message().getMentionedUsers().isEmpty())
         {
-            event.getChannel().sendMessage(new EmbedBuilder().addField(getHelp()).build()).queue();
+            event.getChannel().sendMessageEmbeds(new EmbedBuilder().addField(getHelp()).build()).queue();
             return;
         }
 
-        User user = event.getMessage().getMentionedUsers().get(0);
+        User user = event.message().getMentionedUsers().get(0);
 
-        if (user.getId().equalsIgnoreCase(event.getMessage().getAuthor().getId()))
+        if (user.getId().equalsIgnoreCase(event.message().getAuthor().getId()))
         {
-            event.getChannel().sendMessage(new EmbedBuilder().setDescription("You can't warn yourself!").setColor(Color.RED).build()).queue();
+            event.getChannel().sendMessageEmbeds(new EmbedBuilder().setDescription("You can't warn yourself!").setColor(Color.RED).build()).queue();
             return;
         }
 
         String reason = StringUtils.join(args, " ").replaceFirst(user.getAsTag(), "");
-        Warn warn = new Warn(user.getId(), event.getGuild().getId(), event.getAuthor().getId(), reason, event.getMessage().getTimeCreated().format(DateTimeFormatter.RFC_1123_DATE_TIME));
+        Warn warn = new Warn(user.getId(), event.getGuild().getId(), event.getAuthor().getId(), reason, event.message().getTimeCreated().format(DateTimeFormatter.RFC_1123_DATE_TIME));
         Main.getDatabase().addWarn(warn);
 
         EmbedBuilder builder = new EmbedBuilder()
-                .setAuthor(Main.getDatabase().getTextFor("warn.title",event.getGuild()), "https://justaven.xyz")
-                .addField(Main.getDatabase().getTextFor("warn.user", event.getGuild()), user.getAsTag(), true)
-                .addField(Main.getDatabase().getTextFor("warn.moderator", event.getGuild()), event.getAuthor().getAsTag(), true)
-                .addField(Main.getDatabase().getTextFor("warn.reason", event.getGuild()), reason, false)
-                .setFooter("Date: "+ event.getMessage().getTimeCreated().format(DateTimeFormatter.RFC_1123_DATE_TIME))
+                .setAuthor(Main.getLanguage().getTextFor("warn.title",event.getGuild()), "https://justaven.xyz")
+                .addField(Main.getLanguage().getTextFor("warn.user", event.getGuild()), user.getAsTag(), true)
+                .addField(Main.getLanguage().getTextFor("warn.moderator", event.getGuild()), event.getAuthor().getAsTag(), true)
+                .addField(Main.getLanguage().getTextFor("warn.reason", event.getGuild()), reason, false)
+                .setFooter("Date: "+ event.message().getTimeCreated().format(DateTimeFormatter.RFC_1123_DATE_TIME))
                 .setThumbnail(user.getAvatarUrl());
 
-        event.getChannel().sendMessage(builder.build()).queue();
+        event.getChannel().sendMessageEmbeds(builder.build()).queue();
         user.openPrivateChannel().queue(pc -> pc.sendMessage(new MessageBuilder()
-                .appendFormat(Main.getDatabase().getTextFor("warn.mp", event.getGuild()), event.getGuild().getName())
-                .setEmbed(builder.build()).build()).queue(success -> {}, error -> {
+                .appendFormat(Main.getLanguage().getTextFor("warn.mp", event.getGuild()), event.getGuild().getName())
+                .setEmbeds(builder.build()).build()).queue(success -> {}, error -> {
                     var errorException = (ErrorResponseException) error;
 
                     if (errorException.getErrorResponse().equals(ErrorResponse.CANNOT_SEND_TO_USER))
-                        event.getChannel().sendMessage(Main.getDatabase().getTextFor("warn.mpDisabled", event.getGuild())).queue();
+                        event.getChannel().sendMessage(Main.getLanguage().getTextFor("warn.mpDisabled", event.getGuild())).queue();
         }));
 
 

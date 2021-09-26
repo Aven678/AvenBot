@@ -1,10 +1,10 @@
 package fr.aven.bot.commands.util;
 
 import fr.aven.bot.Constants;
-import fr.aven.bot.util.ICommand;
+import fr.aven.bot.modules.core.CommandEvent;
+import fr.aven.bot.modules.core.ICommand;
 import fr.aven.bot.util.MessageUtil;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -20,7 +20,7 @@ import java.util.List;
 public class Base64Command implements ICommand
 {
     @Override
-    public void handle(List<String> args, GuildMessageReceivedEvent event) {
+    public void handle(List<String> args, CommandEvent event) {
         if (args.size() == 0)
         {
             event.getChannel().sendMessage(new EmbedBuilder().addField(getHelp()).build()).queue();
