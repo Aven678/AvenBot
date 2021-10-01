@@ -156,12 +156,9 @@ public class TrackScheduler extends AudioEventAdapter
             repeatMusic = false;
             //player.destroy();
             //PlayerManager.getInstance().destroyGuildMusicManager(guild);
-            channel.sendMessage(Main.getLanguage().getTextFor("stop.confirm", guild)).queue(msg -> new Timer().schedule(new MessageTask(msg), 10000));
-            if (lastMessageStatus != null) lastMessageStatus.delete().queue();
-            guild.getAudioManager().closeAudioConnection();
-            this.boostPercentage = 0;
-            this.player.setFilterFactory(null);
 
+            //Disconnect the voice channel after 30 sec
+            new Timer().schedule(new DisconnectTask(),30000);
             return;
         }
         // Start the next track, regardless of if something is already playing or not. In case queue was empty, we are
@@ -171,6 +168,21 @@ public class TrackScheduler extends AudioEventAdapter
 
         player.setPaused(false);
         player.startTrack(queue.poll(), false);
+    }
+
+    private class DisconnectTask extends TimerTask
+    {
+        @Override
+        public void run() {
+            if (player.getPlayingTrack() != null) return;
+
+            channel.sendMessage(Main.getLanguage().getTextFor("stop.confirm", guild)).queue(msg -> new Timer().schedule(new MessageTask(msg), 10000));
+            if (lastMessageStatus != null) lastMessageStatus.delete().queue();
+            guild.getAudioManager().closeAudioConnection();
+            boostPercentage = 0;
+            player.setFilterFactory(null);
+
+        }
     }
 
     private String getTimestamp(long milis) {
