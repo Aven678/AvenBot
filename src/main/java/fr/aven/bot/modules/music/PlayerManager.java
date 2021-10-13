@@ -8,7 +8,7 @@ import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.*;
 import com.sedmelluq.lava.extensions.youtuberotator.YoutubeIpRotatorSetup;
-import com.sedmelluq.lava.extensions.youtuberotator.planner.RotatingNanoIpRoutePlanner;
+import com.sedmelluq.lava.extensions.youtuberotator.planner.RotatingIpRoutePlanner;
 import com.sedmelluq.lava.extensions.youtuberotator.tools.ip.Ipv6Block;
 import com.wrapper.spotify.enums.ModelObjectType;
 import com.wrapper.spotify.model_objects.specification.ArtistSimplified;
@@ -50,7 +50,7 @@ public class PlayerManager
         if (ipv6block.equalsIgnoreCase("nothing"))
             LOGGER.warn("Skipped, IPv6 Block not found in config.json");
         else
-            new YoutubeIpRotatorSetup(new RotatingNanoIpRoutePlanner(Arrays.asList(new Ipv6Block(ipv6block))))
+            new YoutubeIpRotatorSetup(new RotatingIpRoutePlanner(Arrays.asList(new Ipv6Block(ipv6block))))
                     .forSource(youtubeAudioSourceManager)
                     .withRetryLimit(50)
                     .setup();
