@@ -41,7 +41,6 @@ public class TicketsEvent extends ListenerAdapter
         event.getChannel().retrieveMessageById(event.getMessageId()).queue(msg -> {
             if (!msg.getAuthor().equals(event.getGuild().getSelfMember().getUser())) return;
 
-            System.out.println("ça c'est ok x1");
             checkReact(event, channel, channelName);
         });
 

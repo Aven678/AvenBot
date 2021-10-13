@@ -89,9 +89,9 @@ public class LyricsCommand implements ICommand
                 }
 
                 thirdBuilder.setDescription(thirdPart);
-                thirdBuilder.setFooter("Lyrics by KSoft.Si");
+                thirdBuilder.setFooter("Lyrics by Genius");
             } else {
-                secondPartBuilder.setFooter("Lyrics by KSoft.Si");
+                secondPartBuilder.setFooter("Lyrics by Genius");
             }
 
             builder.setDescription(firstLyrics.toString());
@@ -102,7 +102,7 @@ public class LyricsCommand implements ICommand
 
         } else {
             builder.setDescription(lyrics.getText());
-            builder.setFooter("Lyrics by KSoft.Si");
+            builder.setFooter("Lyrics by Genius");
             sendLyrics(event.getChannel(), builder);
         }
     }
@@ -171,9 +171,9 @@ public class LyricsCommand implements ICommand
                 }
 
                 thirdBuilder.setDescription(thirdPart);
-                thirdBuilder.setFooter("Lyrics by KSoft.Si");
+                thirdBuilder.setFooter("Lyrics by Genius");
             } else {
-                secondPartBuilder.setFooter("Lyrics by KSoft.Si");
+                secondPartBuilder.setFooter("Lyrics by Genius");
             }
 
             builder.setDescription(firstLyrics.toString());
@@ -184,7 +184,7 @@ public class LyricsCommand implements ICommand
 
         } else {
             builder.setDescription(lyrics.getText());
-            builder.setFooter("Lyrics by KSoft.Si");
+            builder.setFooter("Lyrics by Genius");
             sendLyrics(event.getChannel(), builder);
         }
     }
