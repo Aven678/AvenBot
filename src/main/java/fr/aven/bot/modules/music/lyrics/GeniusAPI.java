@@ -34,13 +34,13 @@ public class GeniusAPI {
         query = Normalizer.normalize(query, Normalizer.Form.NFD).replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
         JsonObject response = null;
         try {
-            URL queryURL = new URL(String.format("http://api.genius.com/search?q=%s", URLEncoder.encode(query, "UTF-8")));
+            URL queryURL = new URL(String.format("https://api.genius.com/search?q=%s", URLEncoder.encode(query, "UTF-8")));
             Connection connection = Jsoup.connect(queryURL.toExternalForm())
                     .header("Authorization", "Bearer " + Main.getConfiguration().getString("genius.key", ""))
                     .timeout(0)
                     .ignoreContentType(true);
             Document document = connection.userAgent(USER_AGENT).get();
-            response = new JsonParser().parse(document.text()).getAsJsonObject();
+            response = JsonParser.parseString(document.text()).getAsJsonObject();
         } catch (JsonSyntaxException e) {
             e.printStackTrace();
         } catch (IOException e) {

@@ -45,20 +45,20 @@ public class PlayerManager
 
         this.playerManager = new DefaultAudioPlayerManager();
 
-        this.playerManager.registerSourceManager(youtubeAudioSourceManager);
-
-        AudioSourceManagers.registerLocalSource(playerManager);
-        AudioSourceManagers.registerRemoteSources(playerManager);
-
         LOGGER.info("Init YouTube IP Rotator");
         String ipv6block = Main.getConfiguration().getString("youtube.ipv6block", "nothing");
         if (ipv6block.equalsIgnoreCase("nothing"))
             LOGGER.warn("Skipped, IPv6 Block not found in config.json");
         else
             new YoutubeIpRotatorSetup(new RotatingNanoIpRoutePlanner(Arrays.asList(new Ipv6Block(ipv6block))))
-                    .forManager(playerManager)
+                    .forSource(youtubeAudioSourceManager)
                     .withRetryLimit(50)
                     .setup();
+
+        this.playerManager.registerSourceManager(youtubeAudioSourceManager);
+
+        AudioSourceManagers.registerLocalSource(playerManager);
+        AudioSourceManagers.registerRemoteSources(playerManager);
     }
 
     public boolean checkNullForEvent(Guild guild)
