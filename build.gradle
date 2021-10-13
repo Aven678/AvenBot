@@ -15,7 +15,7 @@ version '2.6-SNAPSHOT'
 
 sourceCompatibility = 11
 
-mainClassName = 'fr.aven.bot.Launcher'
+mainClassName = 'fr.aven.bot.LauncherKt'
 
 repositories {
     jcenter()
@@ -31,7 +31,7 @@ repositories {
 
 jar {
     manifest {
-        attributes 'Main-Class': 'fr.aven.bot.Launcher'
+        attributes 'Main-Class': 'fr.aven.bot.LauncherKt'
     }
 }
 
