@@ -15,7 +15,7 @@ version '2.6-SNAPSHOT'
 
 sourceCompatibility = 11
 
-mainClassName = 'fr.aven.bot.Main'
+mainClassName = 'fr.aven.bot.Launcher'
 
 repositories {
     jcenter()
