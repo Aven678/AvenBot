@@ -40,6 +40,8 @@ compileKotlin {
 }
 
 dependencies {
+    implementation 'com.github.jagrosh:JLyrics:-SNAPSHOT'
+
     // https://mvnrepository.com/artifact/com.google.http-client/google-http-client-jackson2
     implementation group: 'com.google.http-client', name: 'google-http-client-jackson2', version: '1.39.2-sp.1'
 

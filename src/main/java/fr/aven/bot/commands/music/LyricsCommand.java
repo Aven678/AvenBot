@@ -6,8 +6,8 @@ import fr.aven.bot.modules.core.CommandEvent;
 import fr.aven.bot.modules.music.GuildMusicManager;
 import fr.aven.bot.modules.music.PlayerManager;
 import fr.aven.bot.modules.core.ICommand;
-import fr.aven.bot.modules.music.lyrics.GeniusAPI;
 import fr.aven.bot.modules.music.lyrics.Lyrics;
+import fr.aven.bot.modules.music.lyrics.LyricsAPI;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
@@ -24,89 +24,6 @@ import java.util.List;
 
 public class LyricsCommand implements ICommand
 {
-
-    public static void sendLyrics(GuildMessageReceivedEvent event, Lyrics lyrics)
-    {
-        EmbedBuilder builder = new EmbedBuilder();
-        builder.setAuthor(Main.getLanguage().getTextFor("lyrics.title", event.getGuild()) + lyrics.getTitle(), "https://justaven.xyz", lyrics.getCoverURL());
-
-        if (lyrics.getText().length() > MessageEmbed.TEXT_MAX_LENGTH)
-        {
-            String[] lyricsLine = lyrics.getText().split("\n");
-            int totalLine = lyricsLine.length;
-            StringBuilder firstLyrics = new StringBuilder();
-            StringBuilder secondPart = new StringBuilder();
-
-            System.out.println(lyricsLine.length);
-            int i1 = 0;
-            while (firstLyrics.length() < 2048) {
-                if (!firstLyrics.toString().equalsIgnoreCase(""))
-                    firstLyrics.append("\n");
-                firstLyrics.append(lyricsLine[i1]);
-                i1 = i1 + 1;
-            }
-
-            if (firstLyrics.length() > 2048){
-                i1 = i1 - 1;
-                firstLyrics.setLength(firstLyrics.length() - lyricsLine[i1].length());
-            }
-
-            while (secondPart.length() < 2048)
-            {
-                if (i1 < totalLine)
-                {
-
-                if (!secondPart.toString().equalsIgnoreCase(""))
-                    secondPart.append("\n");
-                    secondPart.append(lyricsLine[i1]);
-                i1 = i1 + 1;
-                } else {
-                    break;
-                }
-            }
-
-            EmbedBuilder secondPartBuilder = new EmbedBuilder();
-            EmbedBuilder thirdBuilder = new EmbedBuilder();
-
-            if (secondPart.length() > 2048)
-            {
-                StringBuilder thirdPart = new StringBuilder();
-                i1 = i1 -1;
-                secondPart.setLength(secondPart.length() - lyricsLine[i1].length());
-
-                while (thirdPart.length() < 2048)
-                {
-                    if (i1 < totalLine)
-                    {
-
-                        if (!thirdPart.toString().equalsIgnoreCase(""))
-                            thirdPart.append("\n");
-                        thirdPart.append(lyricsLine[i1]);
-                        i1 = i1 + 1;
-                    } else {
-                        break;
-                    }
-                }
-
-                thirdBuilder.setDescription(thirdPart);
-                thirdBuilder.setFooter("Lyrics by Genius");
-            } else {
-                secondPartBuilder.setFooter("Lyrics by Genius");
-            }
-
-            builder.setDescription(firstLyrics.toString());
-            secondPartBuilder.setDescription(secondPart.toString());
-
-            sendLyrics(event.getChannel(), builder, secondPartBuilder, thirdBuilder);
-
-
-        } else {
-            builder.setDescription(lyrics.getText());
-            builder.setFooter("Lyrics by Genius");
-            sendLyrics(event.getChannel(), builder);
-        }
-    }
-
     private void sendLyrics(CommandEvent event, Lyrics lyrics)
     {
         EmbedBuilder builder = new EmbedBuilder();
@@ -171,9 +88,9 @@ public class LyricsCommand implements ICommand
                 }
 
                 thirdBuilder.setDescription(thirdPart);
-                thirdBuilder.setFooter("Lyrics by Genius");
+                thirdBuilder.setFooter("Lyrics by evan.lol");
             } else {
-                secondPartBuilder.setFooter("Lyrics by Genius");
+                secondPartBuilder.setFooter("Lyrics by evan.lol");
             }
 
             builder.setDescription(firstLyrics.toString());
@@ -184,7 +101,7 @@ public class LyricsCommand implements ICommand
 
         } else {
             builder.setDescription(lyrics.getText());
-            builder.setFooter("Lyrics by Genius");
+            builder.setFooter("Lyrics by evan.lol");
             sendLyrics(event.getChannel(), builder);
         }
     }
@@ -253,9 +170,9 @@ public class LyricsCommand implements ICommand
                 }
 
                 thirdBuilder.setDescription(thirdPart);
-                thirdBuilder.setFooter("Lyrics by Genius");
+                thirdBuilder.setFooter("Lyrics by evan.lol");
             } else {
-                secondPartBuilder.setFooter("Lyrics by Genius");
+                secondPartBuilder.setFooter("Lyrics by evan.lol");
             }
 
             builder.setDescription(firstLyrics.toString());
@@ -266,7 +183,7 @@ public class LyricsCommand implements ICommand
 
         } else {
             builder.setDescription(lyrics.getText());
-            builder.setFooter("Lyrics by Genius");
+            builder.setFooter("Lyrics by evan.lol");
             replyLyrics(buttonMessage, builder);
         }
     }
@@ -296,12 +213,17 @@ public class LyricsCommand implements ICommand
 
     @Override
     public void handle(List<String> args, CommandEvent event) {
+
         GuildMusicManager manager = PlayerManager.getInstance().getGuildMusicManager(event.getGuild(), event.getChannel());
 
         if (args.size() == 0)
         {
             if (!manager.scheduler.getQueue().isEmpty()) {
-                sendLyrics(event, GeniusAPI.search(PlayerManager.getInstance().getGuildMusicManager(event.getGuild(), event.getChannel()).player.getPlayingTrack().getInfo().title).get(0));
+                Lyrics l = LyricsAPI.search(PlayerManager.getInstance().getGuildMusicManager(event.getGuild(), event.getChannel()).player.getPlayingTrack().getInfo().title);
+                if (l == null)
+                    event.reply("Lyrics not found.");
+                else
+                    sendLyrics(event, l);
             } else{
                 event.getChannel().sendMessage(Main.getLanguage().getTextFor("argsNotFound", event.getGuild())).queue();
             }
@@ -310,30 +232,13 @@ public class LyricsCommand implements ICommand
         }
 
         String input = String.join(" ", args);
+        Lyrics l = LyricsAPI.search(input);
 
-        EmbedBuilder builder = new EmbedBuilder();
-        builder.setAuthor(Main.getLanguage().getTextFor("lyrics.searchTitle", event.getGuild()), "https://justaven.xyz", event.getAuthor().getAvatarUrl());
-        builder.setColor(event.getMember().getColor());
-        builder.setFooter(Main.getLanguage().getTextFor("music.searchFooter", event.getGuild()), event.getJDA().getSelfUser().getAvatarUrl());
+        if (l == null)
+            event.reply("Song not found, please retry.");
+        else
+            sendLyrics(event, l);
 
-        List<Lyrics> lyricsList = GeniusAPI.search(input);
-        for (int i = 0; i < lyricsList.size() && i < 5; i++)
-        {
-            System.out.println(lyricsList.get(i).getURL());
-            Lyrics lyrics = GeniusAPI.fromURL(lyricsList.get(i).getURL(), lyricsList.get(i).getArtist(), lyricsList.get(i).getTitle());
-            System.out.println(lyrics.getFlag());
-            int nbTrack = i;
-            nbTrack++;
-            builder.appendDescription("\n`" + nbTrack + "`: **"+ lyrics.getTitle() + "** | " + Main.getLanguage().getTextFor("music.author", event.getGuild()) + " : " + lyrics.getArtist());
-            manager.scheduler.putLyricsMap(nbTrack, lyrics);
-        }
-
-
-
-        event.getChannel().sendMessageEmbeds(builder.build()).queue(msg -> {
-            msg.addReaction("❌").queue();
-            manager.scheduler.lastMessageLyrics = msg;
-        });
     }
 
     @Override

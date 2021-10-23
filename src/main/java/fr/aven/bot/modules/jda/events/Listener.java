@@ -106,7 +106,7 @@ public class Listener extends ListenerAdapter
                 }).start();
                 //event.getMessage().delete().queue();
             } else {
-                if (!checkMusic(event)) checkLyric(event);
+                checkMusic(event);
             }
         }
 
@@ -178,29 +178,6 @@ public class Listener extends ListenerAdapter
         }
 
         return false;
-    }
-
-    private void checkLyric(GuildMessageReceivedEvent e)
-    {
-        GuildMusicManager musicManager = PlayerManager.getInstance().getGuildMusicManager(e.getGuild(), e.getChannel());
-        Map<Integer, Lyrics> lyrics = musicManager.scheduler.lyrics;
-        if (lyrics.size() == 0) return;
-        if (e.getMessage().getContentDisplay().equalsIgnoreCase("cancel")) {
-            lyrics.clear();
-            return;
-        }
-
-        try {
-            int choix = Integer.parseInt(e.getMessage().getContentDisplay());
-            if (!lyrics.containsKey(choix)) return;
-            LyricsCommand.sendLyrics(e, lyrics.get(choix));
-            lyrics.clear();
-            if (musicManager.scheduler.lastMessageLyrics != null) e.getChannel().deleteMessageById(musicManager.scheduler.lastMessageLyrics.getId()).queue();
-            e.getMessage().delete().queue();
-        } catch (NumberFormatException nfe)
-        {
-            return;
-        }
     }
 
         public static void createMutedRole(Guild guild) {

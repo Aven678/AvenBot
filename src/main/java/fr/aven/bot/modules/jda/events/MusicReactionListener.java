@@ -6,8 +6,8 @@ import fr.aven.bot.commands.music.LyricsCommand;
 import fr.aven.bot.modules.music.GuildMusicManager;
 import fr.aven.bot.modules.music.PlayerManager;
 import fr.aven.bot.modules.core.ICommand;
-import fr.aven.bot.modules.music.lyrics.GeniusAPI;
 import fr.aven.bot.modules.music.lyrics.Lyrics;
+import fr.aven.bot.modules.music.lyrics.LyricsAPI;
 import fr.aven.bot.util.MessageTask;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
@@ -48,6 +48,7 @@ public class MusicReactionListener extends ListenerAdapter
         switch (event.getComponentId())
         {
             case "old":
+                event.deferEdit().queue();
                 if (Main.getDatabase().checkPermission(event.getGuild(), event.getUser(), ICommand.Permission.DJ, event.getTextChannel())) {
                     manager.player.stopTrack();
                     manager.scheduler.nextTrack(manager.scheduler.oldTrack, true);
@@ -65,6 +66,7 @@ public class MusicReactionListener extends ListenerAdapter
                 manager.scheduler.editMessage(event);
                 break;
             case "skip":
+                event.deferEdit().queue();
                 if (Main.getDatabase().checkPermission(event.getGuild(), event.getUser(), ICommand.Permission.DJ, event.getTextChannel())) {
                     manager.player.stopTrack();
                     manager.scheduler.nextTrack(track, false);
@@ -85,15 +87,23 @@ public class MusicReactionListener extends ListenerAdapter
                     if (track.getInfo().title.contains("[")) builder.delete(track.getInfo().title.indexOf("["), track.getInfo().title.indexOf("]"));
                     if (track.getInfo().title.contains("(")) builder.delete(track.getInfo().title.indexOf("("), track.getInfo().title.indexOf(")"));
 
-                    ArrayList<Lyrics> tempList = GeniusAPI.search(builder.toString());
-                    Lyrics temp = tempList.get(0);
-                    event.deferReply().queue(msg -> LyricsCommand.sendLyrics(msg, GeniusAPI.fromURL(temp.getURL(), temp.getArtist(), temp.getTitle())));
+                    Lyrics temp = LyricsAPI.search(builder.toString());
+
+                    event.deferReply().queue(msg -> {
+                        if (temp == null)
+                            msg.editOriginal("Lyrics not found.").queue();
+                        else
+                            LyricsCommand.sendLyrics(msg, temp);
+                    });
+
                     manager.scheduler.lyricsAlwaysRequested = true;
                 } else {
                     event.deferEdit().queue();
                 }
                 break;
             case "stop":
+                event.deferEdit().queue();
+
                 if (Main.getDatabase().checkPermission(event.getGuild(), event.getUser(), ICommand.Permission.DJ, event.getTextChannel())) {
                     manager.player.stopTrack();
                     manager.scheduler.purgeQueue();
@@ -103,6 +113,7 @@ public class MusicReactionListener extends ListenerAdapter
                     manager.scheduler.repeatPlaylist = false;
                 } else
                     missingPermission(event);
+
                 break;
         }
     }
