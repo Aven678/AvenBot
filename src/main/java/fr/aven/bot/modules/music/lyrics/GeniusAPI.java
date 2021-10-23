@@ -37,7 +37,6 @@ public class GeniusAPI {
             URL queryURL = new URL(String.format("https://api.genius.com/search?q=%s", URLEncoder.encode(query, "UTF-8")));
             Connection connection = Jsoup.connect(queryURL.toExternalForm())
                     .header("Authorization", "Bearer " + Main.getConfiguration().getString("genius.key", ""))
-                    .timeout(0)
                     .ignoreContentType(true);
             Document document = connection.userAgent(USER_AGENT).get();
             response = JsonParser.parseString(document.text()).getAsJsonObject();
