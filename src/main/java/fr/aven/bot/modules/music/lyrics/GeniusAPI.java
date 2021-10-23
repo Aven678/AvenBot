@@ -28,7 +28,8 @@ import java.util.regex.Pattern;
 public class GeniusAPI {
 
     public static final String domain = "genius.com";
-    public static String USER_AGENT = "Mozilla/5.0 (Linux; U; Android 6.0.1; ko-kr; Build/IML74K) AppleWebkit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30";
+    //public static String USER_AGENT = "Mozilla/5.0 (Linux; U; Android 6.0.1; ko-kr; Build/IML74K) AppleWebkit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30";
+    public static String USER_AGENT = "curl/7.55.1";
 
     public static ArrayList<Lyrics> search(String query) {
         ArrayList<Lyrics> results = new ArrayList<>();
