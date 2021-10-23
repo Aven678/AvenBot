@@ -321,6 +321,7 @@ public class LyricsCommand implements ICommand
         {
             System.out.println(lyricsList.get(i).getURL());
             Lyrics lyrics = GeniusAPI.fromURL(lyricsList.get(i).getURL(), lyricsList.get(i).getArtist(), lyricsList.get(i).getTitle());
+            System.out.println(lyrics.getFlag());
             int nbTrack = i;
             nbTrack++;
             builder.appendDescription("\n`" + nbTrack + "`: **"+ lyrics.getTitle() + "** | " + Main.getLanguage().getTextFor("music.author", event.getGuild()) + " : " + lyrics.getArtist());
