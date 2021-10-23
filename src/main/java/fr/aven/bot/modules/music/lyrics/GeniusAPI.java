@@ -42,7 +42,7 @@ public class GeniusAPI {
             Connection connection = Jsoup.connect(queryURL.toExternalForm())
                     .header("Authorization", "Bearer " + Main.getConfiguration().getString("genius.key", ""))
                     .ignoreContentType(true)
-                    .proxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress("51.195.201.93", 80)));
+                    .proxy(new Proxy(Proxy.Type.SOCKS, new InetSocketAddress("54.38.29.64", 1080)));
             Document document = connection.userAgent(USER_AGENT).get();
             response = JsonParser.parseString(document.text()).getAsJsonObject();
 
