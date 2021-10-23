@@ -69,8 +69,6 @@ public class CommandManager {
             });
 
             commands.put(command.getInvoke(), command);
-
-            Main.getDatabase().checkCmd(command);
         }
     }
 

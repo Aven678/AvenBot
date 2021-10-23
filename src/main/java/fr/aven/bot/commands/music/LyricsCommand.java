@@ -319,6 +319,7 @@ public class LyricsCommand implements ICommand
         List<Lyrics> lyricsList = GeniusAPI.search(input);
         for (int i = 0; i < lyricsList.size() && i < 5; i++)
         {
+            System.out.println(lyricsList.get(i).getURL());
             Lyrics lyrics = GeniusAPI.fromURL(lyricsList.get(i).getURL(), lyricsList.get(i).getArtist(), lyricsList.get(i).getTitle());
             int nbTrack = i;
             nbTrack++;

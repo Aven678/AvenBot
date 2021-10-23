@@ -40,11 +40,15 @@ public class GeniusAPI {
                     .ignoreContentType(true);
             Document document = connection.userAgent(USER_AGENT).get();
             response = JsonParser.parseString(document.text()).getAsJsonObject();
+
+            System.out.println("ok");
         } catch (JsonSyntaxException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        System.out.println(response);
 
         if (response == null || response.getAsJsonObject("meta").get("status").getAsInt() != 200)
             return results;
