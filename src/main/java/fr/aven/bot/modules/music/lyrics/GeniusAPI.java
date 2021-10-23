@@ -96,6 +96,7 @@ public class GeniusAPI {
             else
                 text = Jsoup.clean(lyricsDiv.html(), Safelist.none().addTags("br")).trim();
         } catch (HttpStatusException e) {
+            Main.logger.warn("ALED ERREUR GENIUS CODE: "+e.getStatusCode()+" | URL: "+e.getUrl());
             return new Lyrics(Lyrics.NO_RESULT);
         } catch (IOException | StringIndexOutOfBoundsException e) {
             e.printStackTrace();
