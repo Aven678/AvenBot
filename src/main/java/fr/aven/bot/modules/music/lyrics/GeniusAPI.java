@@ -14,6 +14,8 @@ import org.jsoup.safety.Whitelist;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.text.Normalizer;
@@ -39,7 +41,8 @@ public class GeniusAPI {
             URL queryURL = new URL(String.format("https://api.genius.com/search?q=%s", URLEncoder.encode(query, "UTF-8")));
             Connection connection = Jsoup.connect(queryURL.toExternalForm())
                     .header("Authorization", "Bearer " + Main.getConfiguration().getString("genius.key", ""))
-                    .ignoreContentType(true);
+                    .ignoreContentType(true)
+                    .proxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress("51.195.201.93", 80)));
             Document document = connection.userAgent(USER_AGENT).get();
             response = JsonParser.parseString(document.text()).getAsJsonObject();
 
