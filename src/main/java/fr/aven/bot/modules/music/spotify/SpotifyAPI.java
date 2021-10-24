@@ -69,6 +69,15 @@ public class SpotifyAPI
         LOGGER.info("Spotify connected.");
     }
 
+    public Paging<Track> searchLyrics(String name)
+    {
+        try {
+            return getApi().searchTracks(name).build().execute();
+        } catch (IOException | SpotifyWebApiException | ParseException e) {}
+
+        return null;
+    }
+
     public SpotifyApi getApi() {
         return api;
     }

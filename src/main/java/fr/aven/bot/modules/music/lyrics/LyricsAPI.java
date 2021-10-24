@@ -28,14 +28,17 @@ public class LyricsAPI
             Document document = connection.userAgent(USER_AGENT).get();
             response = JsonParser.parseString(document.text()).getAsJsonObject();
 
-        } catch (JsonSyntaxException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (JsonSyntaxException | IOException e) {
+            var lst = GeniusAPI.search(query);
+
+            return lst.isEmpty() ? null : lst.get(0);
         }
 
         if (response == null)
-            return null;
+        {
+            var lst = GeniusAPI.search(query);
+            return lst.isEmpty() ? null : lst.get(0);
+        }
 
         Lyrics l = new Lyrics(Lyrics.SEARCH_ITEM);
         JsonArray artists = response.getAsJsonArray("artists");
@@ -44,6 +47,32 @@ public class LyricsAPI
         l.setCoverURL(response.getAsJsonObject("album").getAsJsonObject("icon").get("url").getAsString());
         l.setText(response.get("lyrics").getAsString());
         l.setSource("evan.lol");
+
+        return l;
+    }
+
+    public static Lyrics search(String artist, String name, String coverURL) {
+        JsonObject response;
+        try {
+            URL queryURL = new URL(String.format("https://api.lyrics.ovh/v1/%s/%s", URLEncoder.encode(artist, "UTF-8"), URLEncoder.encode(name, "UTF-8")));
+            Connection connection = Jsoup.connect(queryURL.toExternalForm())
+                    .ignoreContentType(true);
+            Document document = connection.userAgent(USER_AGENT).get();
+            response = JsonParser.parseString(document.text()).getAsJsonObject();
+
+        } catch (JsonSyntaxException | IOException e) {
+            return search(artist+" "+name);
+        }
+
+        if (response == null)
+            return search(artist+" "+name);
+
+        Lyrics l = new Lyrics(Lyrics.SEARCH_ITEM);
+        l.setArtist(artist);
+        l.setTitle(name);
+        l.setCoverURL(coverURL);
+        l.setText(response.get("lyrics").getAsString().replaceFirst(".+\r", ""));
+        l.setSource("lyrics.ovh");
 
         return l;
     }

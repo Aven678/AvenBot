@@ -64,6 +64,12 @@ object Main
         db = SQL()
         ticketsDb = TicketsChannelDB()
 
+        logger.info("Init Spotify.")
+        spotify = SpotifyAPI(
+            config.getString("spotify.clientID", ""),
+            config.getString("spotify.clientSecret", "")
+        )
+
         cmdManager = CommandManager()
         logger.info("CommandManager initialized.")
 
@@ -71,12 +77,6 @@ object Main
         mainListener = Listener(cmdManager)
         JDAManager.manager.addEventListener(mainListener, MusicReactionListener(), MemberActivityEvent())
         setActivity(Activity.ActivityType.WATCHING, config.getString("game", Constants.PREFIX + "help | justaven.xyz"))
-
-        logger.info("Init Spotify.")
-        spotify = SpotifyAPI(
-            config.getString("spotify.clientID", ""),
-            config.getString("spotify.clientSecret", "")
-        )
 
         config.save()
     }

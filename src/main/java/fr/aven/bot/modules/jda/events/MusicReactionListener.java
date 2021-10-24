@@ -1,6 +1,8 @@
 package fr.aven.bot.modules.jda.events;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import com.wrapper.spotify.model_objects.specification.Paging;
+import com.wrapper.spotify.model_objects.specification.Track;
 import fr.aven.bot.Main;
 import fr.aven.bot.commands.music.LyricsCommand;
 import fr.aven.bot.modules.music.GuildMusicManager;
@@ -87,7 +89,9 @@ public class MusicReactionListener extends ListenerAdapter
                     if (track.getInfo().title.contains("[")) builder.delete(track.getInfo().title.indexOf("["), track.getInfo().title.indexOf("]"));
                     if (track.getInfo().title.contains("(")) builder.delete(track.getInfo().title.indexOf("("), track.getInfo().title.indexOf(")"));
 
-                    Lyrics temp = LyricsAPI.search(builder.toString());
+                    Paging<Track> paging = Main.getSpotifyAPI().searchLyrics(builder.toString());
+                    Track tempTrack = paging.getItems()[0];
+                    Lyrics temp = LyricsAPI.search(tempTrack.getArtists()[0].getName(), tempTrack.getName(), tempTrack.getAlbum().getImages()[0].getUrl());
 
                     event.deferReply().queue(msg -> {
                         if (temp == null)
