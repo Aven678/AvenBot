@@ -320,7 +320,8 @@ public class LyricsCommand implements ICommand
         if (args.size() == 0)
         {
             if (!manager.scheduler.getQueue().isEmpty()) {
-                Lyrics l = LyricsAPI.search(PlayerManager.getInstance().getGuildMusicManager(event.getGuild(), event.getChannel()).player.getPlayingTrack().getInfo().title);
+                var info = PlayerManager.getInstance().getGuildMusicManager(event.getGuild(), event.getChannel()).player.getPlayingTrack().getInfo();
+                Lyrics l = LyricsAPI.search(info.author, info.title, event.getJDA().getSelfUser().getAvatarUrl());
                 if (l == null)
                     event.reply("Lyrics not found.");
                 else
