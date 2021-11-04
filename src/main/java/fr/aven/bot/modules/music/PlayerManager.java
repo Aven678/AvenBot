@@ -106,7 +106,7 @@ public class PlayerManager
         message.getChannel().sendMessage("Playlist added ! Please wait...").queue(msg -> messageID[0] = msg.getIdLong());
         List<AudioTrack> audioTracks = new ArrayList<>();
         GuildMusicManager musicManager = getGuildMusicManager(message.getGuild(), message.getTextChannel());
-        for (int i = 0; i < playlistTracks.getTotal(); i++) {
+        for (int i = 0; i < playlistTracks.getTotal()-1; i++) {
             PlaylistTrack playlistTrack = playlistTracks.getItems()[i];
             if (playlistTrack.getIsLocal()) continue;
             Track track = (Track) playlistTrack.getTrack();
