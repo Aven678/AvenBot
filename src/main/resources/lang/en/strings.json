@@ -8,7 +8,7 @@
         "canceled": "Search canceled by ",
         "request": "Request from ",
         "duration": "Duration",
-        "progess": "Music in progress",
+        "progress": "Music in progress",
         "playlistAdd": "Adding to queue : %s (first track of playlist %s)",
         "searchFooter": "Enter the number of your choice.",
         "searchTitle": "Music search.",
