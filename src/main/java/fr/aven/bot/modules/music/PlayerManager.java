@@ -132,7 +132,7 @@ public class PlayerManager
                     int j = finalI;
                     j++;
                     message.getChannel().editMessageById(messageID[0], "Playlist added (limit 50 tracks) ! Please wait... ("+j+"/"+total+")").queue();
-                    if (j == playlistTracks.getTotal())
+                    if (j == total)
                     {
                         playSpotify();
                         message.getChannel().editMessageById(messageID[0], "✅ Playlist added (limit 50 tracks) ! Please wait... ("+j+"/"+total+")").queue();
