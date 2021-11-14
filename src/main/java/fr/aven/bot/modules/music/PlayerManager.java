@@ -103,10 +103,13 @@ public class PlayerManager
 
     public void loadAndPlaySpotifyPlaylist(Message message, Paging<PlaylistTrack> playlistTracks) {
         final Long[] messageID = {0L};
-        message.getChannel().sendMessage("Playlist added ! Please wait...").queue(msg -> messageID[0] = msg.getIdLong());
+        message.getChannel().sendMessage("Playlist added (limit 50 tracks) ! Please wait...").queue(msg -> messageID[0] = msg.getIdLong());
         List<AudioTrack> audioTracks = new ArrayList<>();
         GuildMusicManager musicManager = getGuildMusicManager(message.getGuild(), message.getTextChannel());
-        for (int i = 0; i < playlistTracks.getTotal(); i++) {
+
+        var total = playlistTracks.getTotal() <= 50 ? playlistTracks.getTotal() : 50; // Max 50 tracks
+
+        for (int i = 0; i < total; i++) {
             PlaylistTrack playlistTrack = playlistTracks.getItems()[i];
             if (playlistTrack.getIsLocal()) continue;
             Track track = (Track) playlistTrack.getTrack();
@@ -114,9 +117,11 @@ public class PlayerManager
             playerManager.setFrameBufferDuration(5000);
             int finalI = i;
             playerManager.loadItemOrdered(musicManager, search, new AudioLoadResultHandler() {
+
                 @Override
                 public void trackLoaded(AudioTrack track) {
                 }
+
                 @Override
                 public void playlistLoaded(AudioPlaylist playlist) {
                     if (playlist.isSearchResult())
@@ -126,11 +131,11 @@ public class PlayerManager
                             audioTracks.add(playlist.getSelectedTrack());
                     int j = finalI;
                     j++;
-                    message.getChannel().editMessageById(messageID[0], "Playlist added ! Please wait... ("+j+"/"+playlistTracks.getTotal()+")").queue();
+                    message.getChannel().editMessageById(messageID[0], "Playlist added (limit 50 tracks) ! Please wait... ("+j+"/"+total+")").queue();
                     if (j == playlistTracks.getTotal())
                     {
                         playSpotify();
-                        message.getChannel().editMessageById(messageID[0], "✅ Playlist added ! Please wait... ("+j+"/"+playlistTracks.getTotal()+")").queue();
+                        message.getChannel().editMessageById(messageID[0], "✅ Playlist added (limit 50 tracks) ! Please wait... ("+j+"/"+total+")").queue();
                     }
                 }
                 @Override
@@ -226,7 +231,7 @@ public class PlayerManager
                             "❱ "+ Main.getLanguage().getTextFor("playlist.firstTrack", message.getGuild()) + " : " + playlist.getTracks().get(0).getInfo().title,
                             false).setFooter("AvenBot by Aven#1000").setColor(new Color(255, 127, 0));
 
-                    message.getChannel().sendMessage(builder.build()).queue(msg -> {
+                    message.getChannel().sendMessageEmbeds(builder.build()).queue(msg -> {
                         new Timer().schedule(new MessageTask(msg), 10000);
                     });
 
