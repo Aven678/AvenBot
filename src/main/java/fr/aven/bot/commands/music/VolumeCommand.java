@@ -53,12 +53,17 @@ public class VolumeCommand  implements ICommand
 
     @Override
     public MessageEmbed.Field getHelp() {
-        return new MessageEmbed.Field("Set the player volume.", "Usage: `" + Constants.PREFIX + getInvoke() + "`", false);
+        return new MessageEmbed.Field(getDescription(), "Usage: `" + Constants.PREFIX + getInvoke() + "`", false);
     }
 
     @Override
     public String getInvoke() {
         return "volume";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Set the player volume.";
     }
 
     @Override

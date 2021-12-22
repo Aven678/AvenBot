@@ -27,11 +27,15 @@ class IssouCommand: ICommand
     }
 
     override fun getHelp(): MessageEmbed.Field {
-        return MessageEmbed.Field("Issou !", "Usage: `$invoke`", false)
+        return MessageEmbed.Field(description, "Usage: `$invoke`", false)
     }
 
     override fun getInvoke(): String {
         return "issou"
+    }
+
+    override fun getDescription(): String {
+        return "An issou picture."
     }
 
     override fun haveEvent(): Boolean {

@@ -106,12 +106,17 @@ public class HelpCommand implements ICommand
 
     @Override
     public MessageEmbed.Field getHelp() {
-        return new MessageEmbed.Field("Sends the list of all commands.", "Usage : `"+ Constants.PREFIX + getInvoke() + "`", false);
+        return new MessageEmbed.Field(getDescription(), "Usage : `"+ Constants.PREFIX + getInvoke() + "`", false);
     }
 
     @Override
     public String getInvoke() {
         return "help";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Sends the list of all commands.";
     }
 
     @Override

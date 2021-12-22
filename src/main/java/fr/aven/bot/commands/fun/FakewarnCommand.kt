@@ -35,11 +35,15 @@ class FakewarnCommand: ICommand
     }
 
     override fun getHelp(): MessageEmbed.Field {
-        return MessageEmbed.Field("FakeWarn a member", "Usage: `" + Constants.PREFIX + invoke + " <@member>`", false)
+        return MessageEmbed.Field(description, "Usage: `" + Constants.PREFIX + invoke + " <@member>`", false)
     }
 
     override fun getInvoke(): String {
         return "fakewarn"
+    }
+
+    override fun getDescription(): String {
+        return "FakeWarn a member"
     }
 
     override fun haveEvent(): Boolean {

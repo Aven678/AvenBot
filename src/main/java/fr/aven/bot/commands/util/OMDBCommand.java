@@ -89,12 +89,17 @@ public class OMDBCommand implements ICommand
 
     @Override
     public MessageEmbed.Field getHelp() {
-        return new MessageEmbed.Field("Shows informations of a movie/serie.", "Usage: `"+ Constants.PREFIX + getInvoke() +"` <title>", false);
+        return new MessageEmbed.Field(getDescription(), "Usage: `"+ Constants.PREFIX + getInvoke() +"` <title>", false);
     }
 
     @Override
     public String getInvoke() {
         return "omdb";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Shows informations of a movie/serie.";
     }
 
     @Override

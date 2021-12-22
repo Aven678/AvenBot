@@ -56,12 +56,17 @@ public class BingoCommand implements ICommand
 
     @Override
     public MessageEmbed.Field getHelp() {
-        return new MessageEmbed.Field("Launch a bingo (limit is default 100)", "Usage: `"+ Constants.PREFIX + getInvoke() + " [limit]`", false);
+        return new MessageEmbed.Field(getDescription(), "Usage: `"+ Constants.PREFIX + getInvoke() + " [limit]`", false);
     }
 
     @Override
     public String getInvoke() {
         return "bingo";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Launch a bingo (limit is default 100)";
     }
 
     @Override

@@ -145,8 +145,13 @@ public class UserCommand implements ICommand {
     }
 
     @Override
+    public String getDescription() {
+        return "Get informations about a user";
+    }
+
+    @Override
     public MessageEmbed.Field getHelp() {
-        return new MessageEmbed.Field("Get informations about a user", "Usage: `" + Constants.PREFIX + "info " + getInvoke() + " <@user/id>`", false);
+        return new MessageEmbed.Field(getDescription(), "Usage: `" + Constants.PREFIX + "info " + getInvoke() + " <@user/id>`", false);
     }
 
     @Override

@@ -34,12 +34,17 @@ public class StonksCommand implements ICommand
 
     @Override
     public MessageEmbed.Field getHelp() {
-        return new MessageEmbed.Field("Stoooonks", "Usage: `" + Constants.PREFIX + getInvoke() + "`", false);
+        return new MessageEmbed.Field(getDescription(), "Usage: `" + Constants.PREFIX + getInvoke() + "`", false);
     }
 
     @Override
     public String getInvoke() {
         return "stonks";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Sends a stonks player";
     }
 
     @Override

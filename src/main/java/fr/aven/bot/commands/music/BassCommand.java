@@ -52,12 +52,17 @@ public class BassCommand extends MusicCommands
 
     @Override
     public MessageEmbed.Field getHelp() {
-        return new MessageEmbed.Field("Boost the bass.", "Usage: `" + Constants.PREFIX + getInvoke() + "` <percentage> \nExample: "+Constants.PREFIX + getInvoke() +" 20", false);
+        return new MessageEmbed.Field(getDescription(), "Usage: `" + Constants.PREFIX + getInvoke() + "` <percentage> \nExample: "+Constants.PREFIX + getInvoke() +" 20", false);
     }
 
     @Override
     public String getInvoke() {
         return "bass";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Boost the bass.";
     }
 
     @Override

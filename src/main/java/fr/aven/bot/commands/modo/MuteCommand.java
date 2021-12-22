@@ -109,7 +109,7 @@ public class MuteCommand extends ModoCommands {
 
     @Override
     public MessageEmbed.Field getHelp() {
-        return new MessageEmbed.Field("Mute a member", "Usage: `" + Constants.PREFIX + getInvoke() + " <@user> [reason]`", false);
+        return new MessageEmbed.Field(getDescription(), "Usage: `" + Constants.PREFIX + getInvoke() + " <@user> [reason]`", false);
     }
 
     @Override
@@ -123,6 +123,11 @@ public class MuteCommand extends ModoCommands {
     @Override
     public String getInvoke() {
         return "mute";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Mute a member";
     }
 
     @Override

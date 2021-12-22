@@ -55,12 +55,17 @@ public class AutoRoleCommand implements ICommand
 
     @Override
     public MessageEmbed.Field getHelp() {
-        return new MessageEmbed.Field("Set the autorole", "Usage: `"+ Constants.PREFIX + getInvoke() +" <@Role/off>`", false);
+        return new MessageEmbed.Field(getDescription(), "Usage: `"+ Constants.PREFIX + getInvoke() +" <@Role/off>`", false);
     }
 
     @Override
     public String getInvoke() {
         return "autorole";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Set the autorole";
     }
 
     @Override

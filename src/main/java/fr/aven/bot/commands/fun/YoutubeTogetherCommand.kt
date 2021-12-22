@@ -36,11 +36,15 @@ class YoutubeTogetherCommand: ICommand
     }
 
     override fun getHelp(): MessageEmbed.Field {
-        return MessageEmbed.Field("Starts YouTube Together :)", "Usage: `" + Constants.PREFIX + invoke + "`", false)
+        return MessageEmbed.Field(description, "Usage: `" + Constants.PREFIX + invoke + "`", false)
     }
 
     override fun getInvoke(): String {
         return "youtube"
+    }
+
+    override fun getDescription(): String {
+        return "Starts YouTube Together"
     }
 
     override fun haveEvent(): Boolean {

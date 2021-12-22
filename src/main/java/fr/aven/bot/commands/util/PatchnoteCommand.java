@@ -46,12 +46,17 @@ public class PatchnoteCommand implements ICommand
 
     @Override
     public MessageEmbed.Field getHelp() {
-        return new MessageEmbed.Field("Get lasts updates of AvenBot.", "Usage: `"+ Constants.PREFIX + getInvoke() +"`", false);
+        return new MessageEmbed.Field(getDescription(), "Usage: `"+ Constants.PREFIX + getInvoke() +"`", false);
     }
 
     @Override
     public String getInvoke() {
         return "patchnote";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Get lasts updates of AvenBot. (ONLY FRENCH)";
     }
 
     @Override

@@ -159,13 +159,18 @@ public class PlayCommand extends MusicCommands
     @Override
     public MessageEmbed.Field getHelp()
     {
-        return new MessageEmbed.Field("Plays a song", "Usage: `" + Constants.PREFIX + getInvoke() + " <song url>`", false);
+        return new MessageEmbed.Field(getDescription(), "Usage: `" + Constants.PREFIX + getInvoke() + " <song url>`", false);
     }
 
     @Override
     public String getInvoke()
     {
         return "play";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Plays a song";
     }
 
     @Override

@@ -38,12 +38,17 @@ public class NsfwPictureCommand implements ICommand
 
     @Override
     public MessageEmbed.Field getHelp() {
-        return new MessageEmbed.Field("Sends a NSWF picture (oof)", "Usage: `" + Constants.PREFIX + getInvoke() + "`", false);
+        return new MessageEmbed.Field(getDescription(), "Usage: `" + Constants.PREFIX + getInvoke() + "`", false);
     }
 
     @Override
     public String getInvoke() {
         return "nsfw";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Sends a NSWF picture - ⚠ Only in a NSFW Channel";
     }
 
     @Override

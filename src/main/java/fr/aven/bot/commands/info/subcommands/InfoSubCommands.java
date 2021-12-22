@@ -22,6 +22,9 @@ public abstract class InfoSubCommands implements ICommand {
     public abstract String getInvoke();
 
     @Override
+    public abstract String getDescription();
+
+    @Override
     public abstract boolean haveEvent();
 
     @Override

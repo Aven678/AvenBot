@@ -32,12 +32,17 @@ public class CatCommand implements ICommand
 
     @Override
     public MessageEmbed.Field getHelp() {
-        return new MessageEmbed.Field("Sends a beautiful picture of cats", "Usage: `" + Constants.PREFIX + getInvoke() + "`", false);
+        return new MessageEmbed.Field(getDescription(), "Usage: `" + Constants.PREFIX + getInvoke() + "`", false);
     }
 
     @Override
     public String getInvoke() {
         return "cat";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Sends a beautiful picture of cats";
     }
 
     @Override

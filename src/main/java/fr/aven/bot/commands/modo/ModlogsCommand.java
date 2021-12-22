@@ -40,12 +40,17 @@ public class ModlogsCommand implements ICommand
 
     @Override
     public MessageEmbed.Field getHelp() {
-        return new MessageEmbed.Field("Shows moderation logs for a user", "Usage: `" + Constants.PREFIX + getInvoke() + " <@user>`", false);
+        return new MessageEmbed.Field(getDescription(), "Usage: `" + Constants.PREFIX + getInvoke() + " <@user>`", false);
     }
 
     @Override
     public String getInvoke() {
         return "modlogs";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Shows moderation logs for a user";
     }
 
     @Override

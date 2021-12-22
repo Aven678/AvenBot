@@ -27,11 +27,15 @@ class NotStonksCommand: ICommand
     }
 
     override fun getHelp(): MessageEmbed.Field {
-        return MessageEmbed.Field("NotStonks :(", "Usage: `$invoke`", false)
+        return MessageEmbed.Field(description, "Usage: `$invoke`", false)
     }
 
     override fun getInvoke(): String {
         return "notstonks"
+    }
+
+    override fun getDescription(): String {
+        return "Sends a NotStonks picture"
     }
 
     override fun haveEvent(): Boolean {

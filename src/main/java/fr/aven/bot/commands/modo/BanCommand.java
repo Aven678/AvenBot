@@ -70,7 +70,7 @@ public class BanCommand extends ModoCommands {
 
     @Override
     public MessageEmbed.Field getHelp() {
-        return new MessageEmbed.Field("Ban a member", "Usage: `" + Constants.PREFIX + getInvoke() + " <@user> [reason]`", false);
+        return new MessageEmbed.Field(getDescription(), "Usage: `" + Constants.PREFIX + getInvoke() + " <@user> [reason]`", false);
     }
 
     @Override
@@ -84,6 +84,11 @@ public class BanCommand extends ModoCommands {
     @Override
     public String getInvoke() {
         return "ban";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Ban a member";
     }
 
     @Override

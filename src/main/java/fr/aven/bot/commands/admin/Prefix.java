@@ -40,12 +40,17 @@ public class Prefix implements ICommand
 
     @Override
     public MessageEmbed.Field getHelp() {
-        return new MessageEmbed.Field("Changes the prefix of the bot.", "Usage : `"+ Constants.PREFIX+ getInvoke()+"`", false);
+        return new MessageEmbed.Field(getDescription(), "Usage : `"+ Constants.PREFIX+ getInvoke()+"`", false);
     }
 
     @Override
     public String getInvoke() {
         return "prefix";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Changes the prefix of the bot.";
     }
 
     @Override

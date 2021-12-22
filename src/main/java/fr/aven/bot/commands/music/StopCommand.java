@@ -58,7 +58,7 @@ public class StopCommand extends MusicCommands
     @Override
     public MessageEmbed.Field getHelp()
     {
-        return new MessageEmbed.Field("Bot leaves the voice channel and stops track", "Usage: `" + Constants.PREFIX + getInvoke() + "`", false);
+        return new MessageEmbed.Field(getDescription(), "Usage: `" + Constants.PREFIX + getInvoke() + "`", false);
     }
 
     @Override
@@ -73,6 +73,11 @@ public class StopCommand extends MusicCommands
     public String getInvoke()
     {
         return "stop";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Bot leaves the voice channel and stops track";
     }
 
     @Override

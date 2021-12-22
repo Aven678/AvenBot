@@ -31,12 +31,17 @@ public class CfunCommand implements ICommand
 
     @Override
     public MessageEmbed.Field getHelp() {
-        return new MessageEmbed.Field("Sends a CFUN gif.", "Usage: `" + Constants.PREFIX + getInvoke() + "`", false);
+        return new MessageEmbed.Field(getDescription(), "Usage: `" + Constants.PREFIX + getInvoke() + "`", false);
     }
 
     @Override
     public String getInvoke() {
         return "cfun";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Sends a CFUN gif.";
     }
 
     @Override

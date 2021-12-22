@@ -37,12 +37,17 @@ public class AFKCommand implements ICommand
 
     @Override
     public MessageEmbed.Field getHelp() {
-        return new MessageEmbed.Field("Put an AFK message when you are mentioned.","Usage: `"+ Constants.PREFIX + getInvoke() +" [reason]`", false);
+        return new MessageEmbed.Field(getDescription(),"Usage: `"+ Constants.PREFIX + getInvoke() +" [reason]`", false);
     }
 
     @Override
     public String getInvoke() {
         return "afk";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Put an AFK message when you are mentioned.";
     }
 
     @Override

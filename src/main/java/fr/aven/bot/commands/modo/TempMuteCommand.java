@@ -37,6 +37,11 @@ public class TempMuteCommand implements ICommand
     }
 
     @Override
+    public String getDescription() {
+        return null;
+    }
+
+    @Override
     public boolean haveEvent() {
         return false;
     }

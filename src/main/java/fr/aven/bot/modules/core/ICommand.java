@@ -17,6 +17,7 @@ public interface ICommand
     Permission getPermission();
     MessageEmbed.Field getHelp();
     String getInvoke();
+    String getDescription();
     boolean haveEvent();
     void onEvent(GenericEvent event);
     Collection<net.dv8tion.jda.api.Permission> requiredDiscordPermission();

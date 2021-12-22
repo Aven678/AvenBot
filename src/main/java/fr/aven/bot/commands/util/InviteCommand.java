@@ -33,12 +33,17 @@ public class InviteCommand implements ICommand
 
     @Override
     public MessageEmbed.Field getHelp() {
-        return new MessageEmbed.Field("Shows the invite link", "Usage : `"+ Constants.PREFIX+ getInvoke()+"`", false);
+        return new MessageEmbed.Field(getDescription(), "Usage : `"+ Constants.PREFIX+ getInvoke()+"`", false);
     }
 
     @Override
     public String getInvoke() {
         return "invite";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Shows the invite link";
     }
 
     @Override

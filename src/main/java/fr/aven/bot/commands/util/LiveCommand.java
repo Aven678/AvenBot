@@ -30,12 +30,17 @@ public class LiveCommand implements ICommand
 
     @Override
     public MessageEmbed.Field getHelp() {
-        return new MessageEmbed.Field("", "Usage: "+ Constants.PREFIX + getInvoke() + "<streamer> [disable]", false);
+        return new MessageEmbed.Field(getDescription(), "Usage: "+ Constants.PREFIX + getInvoke() + "<streamer> [disable]", false);
     }
 
     @Override
     public String getInvoke() {
         return "live";
+    }
+
+    @Override
+    public String getDescription() {
+        return "null";
     }
 
     @Override

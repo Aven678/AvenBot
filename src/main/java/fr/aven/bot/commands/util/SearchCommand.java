@@ -33,12 +33,17 @@ public class SearchCommand implements ICommand
 
     @Override
     public MessageEmbed.Field getHelp() {
-        return new MessageEmbed.Field("Sends a link to search something", "Usage: `" + Constants.PREFIX + getInvoke() + "` [something]", false);
+        return new MessageEmbed.Field(getDescription(), "Usage: `" + Constants.PREFIX + getInvoke() + "` [something]", false);
     }
 
     @Override
     public String getInvoke() {
         return "search";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Sends a link to search something";
     }
 
     @Override

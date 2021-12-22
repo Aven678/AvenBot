@@ -43,12 +43,17 @@ public class ClearConfigCommand implements ICommand
 
     @Override
     public MessageEmbed.Field getHelp() {
-        return new MessageEmbed.Field("Clears the bot config.", "Usage: `" + Constants.PREFIX + getInvoke() + "`", false);
+        return new MessageEmbed.Field(getDescription(), "Usage: `" + Constants.PREFIX + getInvoke() + "`", false);
     }
 
     @Override
     public String getInvoke() {
         return "clearconfig";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Clears the bot config.";
     }
 
     @Override

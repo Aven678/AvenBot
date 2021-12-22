@@ -1,7 +1,5 @@
 package fr.aven.bot.commands.music;
 
-import com.wrapper.spotify.model_objects.specification.Paging;
-import com.wrapper.spotify.model_objects.specification.Track;
 import fr.aven.bot.Constants;
 import fr.aven.bot.Main;
 import fr.aven.bot.modules.core.CommandEvent;
@@ -18,6 +16,8 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.interactions.InteractionHook;
+import se.michaelthelin.spotify.model_objects.specification.Paging;
+import se.michaelthelin.spotify.model_objects.specification.Track;
 
 import java.awt.*;
 import java.util.*;
@@ -385,12 +385,17 @@ public class LyricsCommand implements ICommand
 
     @Override
     public MessageEmbed.Field getHelp() {
-        return new MessageEmbed.Field("Get lyrics of a song.", "Usage: `" + Constants.PREFIX + getInvoke() + " <query>`", false);
+        return new MessageEmbed.Field(getDescription(), "Usage: `" + Constants.PREFIX + getInvoke() + " <query>`", false);
     }
 
     @Override
     public String getInvoke() {
         return "lyrics";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Get lyrics of a song.";
     }
 
     @Override

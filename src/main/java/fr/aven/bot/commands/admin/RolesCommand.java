@@ -381,7 +381,7 @@ public class RolesCommand implements ICommand
 
     @Override
     public MessageEmbed.Field getHelp() {
-        return new MessageEmbed.Field("Manage roles in the server","Usage: \n`"+ Constants.PREFIX + getInvoke() +" list " +
+        return new MessageEmbed.Field(getDescription(),"Usage: \n`"+ Constants.PREFIX + getInvoke() +" list " +
                 "\n"+Constants.PREFIX + getInvoke()+" add <@role> <all/bots/humans/@role/@user>" +
                 "\n"+Constants.PREFIX + getInvoke()+" remove <@role> <all/bots/humans/@role/@user>" +
                 "\n"+Constants.PREFIX + getInvoke()+" create <name> [#hex color] [hoist] [mentionable]" +
@@ -397,6 +397,11 @@ public class RolesCommand implements ICommand
     @Override
     public String getInvoke() {
         return "roles";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Manage roles in the server";
     }
 
     @Override

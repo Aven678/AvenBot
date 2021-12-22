@@ -34,11 +34,15 @@ class PokerCommand: ICommand
     }
 
     override fun getHelp(): MessageEmbed.Field {
-        return MessageEmbed.Field("Starts a Poker with your friends :)", "Usage: `" + Constants.PREFIX + invoke + "`", false)
+        return MessageEmbed.Field(description, "Usage: `" + Constants.PREFIX + invoke + "`", false)
     }
 
     override fun getInvoke(): String {
         return "poker"
+    }
+
+    override fun getDescription(): String {
+        return "Starts a Poker with your friends :)"
     }
 
     override fun haveEvent(): Boolean {

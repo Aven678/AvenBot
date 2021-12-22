@@ -23,6 +23,9 @@ public abstract class InfoCommands implements ICommand  {
     public abstract String getInvoke();
 
     @Override
+    public abstract String getDescription();
+
+    @Override
     public Type getType() {
         return Type.INFO;
     }

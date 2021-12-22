@@ -78,8 +78,13 @@ public class BotCommand implements ICommand {
     }
 
     @Override
+    public String getDescription() {
+        return "Get informations about the bot";
+    }
+
+    @Override
     public MessageEmbed.Field getHelp() {
-        return new MessageEmbed.Field("Get informations about the bot", "Usage: `" + Constants.PREFIX + "info " + getInvoke() + "`", false);
+        return new MessageEmbed.Field(getDescription(), "Usage: `" + Constants.PREFIX + "info " + getInvoke() + "`", false);
     }
 
     @Override

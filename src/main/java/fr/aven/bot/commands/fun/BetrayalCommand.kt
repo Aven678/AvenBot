@@ -34,11 +34,15 @@ class BetrayalCommand: ICommand
     }
 
     override fun getHelp(): MessageEmbed.Field {
-        return MessageEmbed.Field("Starts Betrayal (AmongUS) with your friends :)", "Usage: `" + Constants.PREFIX + invoke + "`", false)
+        return MessageEmbed.Field(description, "Usage: `" + Constants.PREFIX + invoke + "`", false)
     }
 
     override fun getInvoke(): String {
         return "betrayal"
+    }
+
+    override fun getDescription(): String {
+        return "Starts Betrayal (AmongUS) with your friends :)"
     }
 
     override fun haveEvent(): Boolean {

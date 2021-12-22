@@ -111,7 +111,7 @@ public class AnnounceCommand implements ICommand
 
     @Override
     public MessageEmbed.Field getHelp() {
-        return new MessageEmbed.Field("Set the announce message for member activity (join, leave, ban).", "Usage: `" + Constants.PREFIX + getInvoke() + "` <ban/join/leave> <remove/your message> " +
+        return new MessageEmbed.Field(getDescription(), "Usage: `" + Constants.PREFIX + getInvoke() + "` <ban/join/leave> <remove/your message> " +
                 "\nFor set the channel: use "+ Constants.PREFIX + getInvoke() + " channel #channel" +
                 "\nWarning:" +
                 "\n❱ To tag the member: use <member>"+
@@ -123,6 +123,11 @@ public class AnnounceCommand implements ICommand
     @Override
     public String getInvoke() {
         return "announce";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Set the announce message for member activity (join, leave, ban).";
     }
 
     @Override

@@ -24,6 +24,9 @@ public abstract class ModoCommands implements ICommand {
     public abstract String getInvoke();
 
     @Override
+    public abstract String getDescription();
+
+    @Override
     public Type getType() {
         return Type.MODO;
     }

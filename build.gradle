@@ -47,7 +47,11 @@ dependencies {
 
     compile 'com.google.apis:google-api-services-youtube:v3-rev20210915-1.32.1'
     compile 'net.explodingbush.KSoft4J:KSoft4J:1.0.6'
-    compile 'net.dv8tion:JDA:4.3.0_339'
+    compile 'net.dv8tion:JDA:4.4.0_352'
+
+    implementation('ch.qos.logback:logback-classic:1.2.9')
+    implementation("com.github.minndevelopment:jda-ktx:1223d5c")
+
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.7'
     //implementation 'com.github.Devoxin:lavaplayer:1.3.59'
 
@@ -67,11 +71,11 @@ dependencies {
 
     implementation 'com.github.top-gg:java-sdk:2.0.1'
 
-    compile 'se.michaelthelin.spotify:spotify-web-api-java:6.5.4'
+    compile 'se.michaelthelin.spotify:spotify-web-api-java:7.0.0'
     //implementation 'me.shib.java.lib:omdb-java:1.2.0'
     compile 'org.brianodisho.omdb:omdb:1.1'
     compile 'com.squareup.retrofit2:retrofit:2.9.0'
-    implementation('com.squareup.okhttp3:logging-interceptor:4.9.1')
+    implementation('com.squareup.okhttp3:logging-interceptor:4.9.3')
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
 
     implementation group: 'com.github.twitch4j', name: 'twitch4j', version: '1.2.0'
@@ -81,11 +85,11 @@ dependencies {
 
     implementation 'com.apptastic:rssreader:2.5.0'
 
-    implementation('org.jetbrains.exposed:exposed-core:0.33.1')
-    implementation('org.jetbrains.exposed:exposed-dao:0.33.1')
-    implementation('org.jetbrains.exposed:exposed-jdbc:0.33.1')
+    implementation('org.jetbrains.exposed:exposed-core:0.36.1')
+    implementation('org.jetbrains.exposed:exposed-dao:0.36.1')
+    implementation('org.jetbrains.exposed:exposed-jdbc:0.36.1')
 
-    implementation 'org.jsoup:jsoup:1.14.2'
+    implementation 'org.jsoup:jsoup:1.14.3'
 }
 
 compileJava.options.encoding = 'UTF-8'

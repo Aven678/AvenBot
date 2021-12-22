@@ -75,7 +75,7 @@ public class KickCommand extends ModoCommands {
     @Override
     public MessageEmbed.Field getHelp()
     {
-        return new MessageEmbed.Field("Kick a member", "Usage: `" + Constants.PREFIX + getInvoke() + " <@user> [reason]`", false);
+        return new MessageEmbed.Field(getDescription(), "Usage: `" + Constants.PREFIX + getInvoke() + " <@user> [reason]`", false);
     }
 
     @Override
@@ -90,6 +90,11 @@ public class KickCommand extends ModoCommands {
     public String getInvoke()
     {
         return "kick";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Kick a member";
     }
 
     @Override

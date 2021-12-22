@@ -60,7 +60,7 @@ public class UnmuteCommand extends ModoCommands {
 
     @Override
     public MessageEmbed.Field getHelp() {
-        return new MessageEmbed.Field("Unmute a member", "Usage: `" + Constants.PREFIX + getInvoke() + " <@user>`", false);
+        return new MessageEmbed.Field(getDescription(), "Usage: `" + Constants.PREFIX + getInvoke() + " <@user>`", false);
     }
 
     @Override
@@ -74,6 +74,11 @@ public class UnmuteCommand extends ModoCommands {
     @Override
     public String getInvoke() {
         return "unmute";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Unmute a member";
     }
 
     @Override

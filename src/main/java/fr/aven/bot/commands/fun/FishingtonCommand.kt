@@ -34,11 +34,15 @@ class FishingtonCommand: ICommand
     }
 
     override fun getHelp(): MessageEmbed.Field {
-        return MessageEmbed.Field("Starts Fishington with your friends :)", "Usage: `" + Constants.PREFIX + invoke + "`", false)
+        return MessageEmbed.Field(description, "Usage: `" + Constants.PREFIX + invoke + "`", false)
     }
 
     override fun getInvoke(): String {
         return "fishington"
+    }
+
+    override fun getDescription(): String {
+        return "Starts Fishington with your friends :)"
     }
 
     override fun haveEvent(): Boolean {

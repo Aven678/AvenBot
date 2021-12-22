@@ -53,7 +53,7 @@ public class JoinCommand extends MusicCommands
     @Override
     public MessageEmbed.Field getHelp()
     {
-        return new MessageEmbed.Field("Makes the bot join your channel", "Usage: `" + Constants.PREFIX + getInvoke() + "`", false);
+        return new MessageEmbed.Field(getDescription(), "Usage: `" + Constants.PREFIX + getInvoke() + "`", false);
     }
 
     @Override
@@ -68,6 +68,11 @@ public class JoinCommand extends MusicCommands
     public String getInvoke()
     {
         return "join";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Makes the bot join your channel";
     }
 
     @Override

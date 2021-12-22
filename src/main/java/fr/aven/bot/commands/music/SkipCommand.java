@@ -28,13 +28,18 @@ public class SkipCommand extends MusicCommands
     @Override
     public MessageEmbed.Field getHelp()
     {
-        return new MessageEmbed.Field("Skips a song", "Usage: `" + Constants.PREFIX + getInvoke() , false);
+        return new MessageEmbed.Field(getDescription(), "Usage: `" + Constants.PREFIX + getInvoke() , false);
     }
 
     @Override
     public String getInvoke()
     {
         return "skip";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Skips a song";
     }
 
     @Override

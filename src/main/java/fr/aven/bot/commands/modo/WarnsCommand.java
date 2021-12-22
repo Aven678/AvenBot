@@ -64,12 +64,17 @@ public class WarnsCommand implements ICommand
 
     @Override
     public MessageEmbed.Field getHelp() {
-        return new MessageEmbed.Field("List all warns for a member.", "Usage: `"+ Constants.PREFIX + getInvoke() + " [clear] <@user>`", false);
+        return new MessageEmbed.Field(getDescription(), "Usage: `"+ Constants.PREFIX + getInvoke() + " [clear] <@user>`", false);
     }
 
     @Override
     public String getInvoke() {
         return "warns";
+    }
+
+    @Override
+    public String getDescription() {
+        return "List all warns for a member.";
     }
 
     @Override

@@ -63,12 +63,17 @@ public class Base64Command implements ICommand
 
     @Override
     public MessageEmbed.Field getHelp() {
-        return new MessageEmbed.Field("Returns your text encoded/decoded in Base 64.", "Usage: `"+ Constants.PREFIX + getInvoke() +" <encode/decode> <something>`", false);
+        return new MessageEmbed.Field(getDescription(), "Usage: `"+ Constants.PREFIX + getInvoke() +" <encode/decode> <something>`", false);
     }
 
     @Override
     public String getInvoke() {
         return "base64";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Returns your text encoded/decoded in Base 64.";
     }
 
     @Override

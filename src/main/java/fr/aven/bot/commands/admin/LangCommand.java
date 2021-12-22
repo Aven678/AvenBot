@@ -46,12 +46,17 @@ public class LangCommand implements ICommand
 
     @Override
     public MessageEmbed.Field getHelp() {
-        return new MessageEmbed.Field("Change the language of the bot.", "Usage : `"+ Constants.PREFIX + getInvoke() + "` <en/fr>", false);
+        return new MessageEmbed.Field(getDescription(), "Usage : `"+ Constants.PREFIX + getInvoke() + "` <en/fr>", false);
     }
 
     @Override
     public String getInvoke() {
         return "lang";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Change the language of the bot.";
     }
 
     @Override

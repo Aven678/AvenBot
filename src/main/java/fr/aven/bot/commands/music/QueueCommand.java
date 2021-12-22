@@ -80,12 +80,17 @@ public class QueueCommand implements ICommand
 
     @Override
     public MessageEmbed.Field getHelp() {
-        return new MessageEmbed.Field("Show the queue of the player.", "`Usage: "+ Constants.PREFIX + getInvoke()+"`", false);
+        return new MessageEmbed.Field(getDescription(), "`Usage: "+ Constants.PREFIX + getInvoke()+"`", false);
     }
 
     @Override
     public String getInvoke() {
         return "queue";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Show the queue of the player.";
     }
 
     @Override

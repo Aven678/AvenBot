@@ -71,11 +71,15 @@ class SeekCommand : ICommand
     }
 
     override fun getHelp(): MessageEmbed.Field {
-        return MessageEmbed.Field("Seeks the track to specified time.", "Usage: `" + Constants.PREFIX + invoke + " <destination time>`", false)
+        return MessageEmbed.Field(description, "Usage: `" + Constants.PREFIX + invoke + " <destination time>`", false)
     }
 
     override fun getInvoke(): String {
         return "seek"
+    }
+
+    override fun getDescription(): String {
+        return "Seeks the track to specified time."
     }
 
     override fun haveEvent(): Boolean {

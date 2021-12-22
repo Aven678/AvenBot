@@ -64,12 +64,17 @@ public class PauseCommand implements ICommand
 
     @Override
     public MessageEmbed.Field getHelp() {
-        return new MessageEmbed.Field("Pause the player.", "Usage: `" + Constants.PREFIX + getInvoke() + "`", false);
+        return new MessageEmbed.Field(getDescription(), "Usage: `" + Constants.PREFIX + getInvoke() + "`", false);
     }
 
     @Override
     public String getInvoke() {
         return "pause";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Pause the player.";
     }
 
     @Override

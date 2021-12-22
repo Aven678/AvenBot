@@ -39,12 +39,17 @@ public class UnbanCommand extends ModoCommands
 
     @Override
     public MessageEmbed.Field getHelp() {
-        return new MessageEmbed.Field("Unban a user", "Usage: `" + Constants.PREFIX + getInvoke() + " <id>`", false);
+        return new MessageEmbed.Field(getDescription(), "Usage: `" + Constants.PREFIX + getInvoke() + " <id>`", false);
     }
 
     @Override
     public String getInvoke() {
         return "unban";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Unban a user";
     }
 
     @Override

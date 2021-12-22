@@ -27,11 +27,15 @@ class ConfusedStonks: ICommand
     }
 
     override fun getHelp(): MessageEmbed.Field {
-        return MessageEmbed.Field("Confused stonks", "Usage: `$invoke`", false)
+        return MessageEmbed.Field(description, "Usage: `$invoke`", false)
     }
 
     override fun getInvoke(): String {
         return "confusedstonks"
+    }
+
+    override fun getDescription(): String {
+        return "Confused stonks"
     }
 
     override fun haveEvent(): Boolean {

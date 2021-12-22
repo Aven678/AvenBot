@@ -70,12 +70,17 @@ public class ClearCommand implements ICommand
 
     @Override
     public MessageEmbed.Field getHelp() {
-        return new MessageEmbed.Field("Clears messages", "Usage: `"+ Constants.PREFIX + getInvoke() +" <number between 2 and 100>`", false);
+        return new MessageEmbed.Field(getDescription(), "Usage: `"+ Constants.PREFIX + getInvoke() +" <number between 2 and 100>`", false);
     }
 
     @Override
     public String getInvoke() {
         return "clear";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Clears messages";
     }
 
     @Override

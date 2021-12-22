@@ -41,12 +41,17 @@ public class SayCommand implements ICommand
 
     @Override
     public MessageEmbed.Field getHelp() {
-        return new MessageEmbed.Field("Repeats your text", "Example: `" + Constants.PREFIX + getInvoke() + " i love AvenBot`", false);
+        return new MessageEmbed.Field(getDescription(), "Example: `" + Constants.PREFIX + getInvoke() + " i love AvenBot`", false);
     }
 
     @Override
     public String getInvoke() {
         return "say";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Repeats your text";
     }
 
     @Override

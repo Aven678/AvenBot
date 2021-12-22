@@ -36,12 +36,17 @@ public class RollCommand implements ICommand
 
     @Override
     public MessageEmbed.Field getHelp() {
-        return new MessageEmbed.Field("Generates a random number (limit is default 100).", "Usage: `"+ Constants.PREFIX + getInvoke() + " [limit]`", false);
+        return new MessageEmbed.Field(getDescription(), "Usage: `"+ Constants.PREFIX + getInvoke() + " [limit]`", false);
     }
 
     @Override
     public String getInvoke() {
         return "roll";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Generates a random number (limit is default 100).";
     }
 
     @Override
