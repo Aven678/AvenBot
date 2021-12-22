@@ -1,8 +1,8 @@
 package fr.aven.bot.modules.jda.events;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import com.wrapper.spotify.model_objects.specification.Paging;
-import com.wrapper.spotify.model_objects.specification.Track;
+import se.michaelthelin.spotify.model_objects.specification.Paging;
+import se.michaelthelin.spotify.model_objects.specification.Track;
 import fr.aven.bot.Main;
 import fr.aven.bot.commands.music.LyricsCommand;
 import fr.aven.bot.modules.music.GuildMusicManager;
@@ -16,6 +16,8 @@ import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
+import se.michaelthelin.spotify.model_objects.specification.Paging;
+import se.michaelthelin.spotify.model_objects.specification.Track;
 
 import java.awt.*;
 import java.util.ArrayList;

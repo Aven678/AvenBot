@@ -1,16 +1,16 @@
 package fr.aven.bot.modules.music.spotify;
 
-import com.wrapper.spotify.SpotifyApi;
-import com.wrapper.spotify.exceptions.SpotifyWebApiException;
-import com.wrapper.spotify.model_objects.credentials.ClientCredentials;
-import com.wrapper.spotify.model_objects.specification.Paging;
-import com.wrapper.spotify.model_objects.specification.PlaylistTrack;
-import com.wrapper.spotify.model_objects.specification.Track;
-import com.wrapper.spotify.requests.authorization.client_credentials.ClientCredentialsRequest;
 import fr.aven.bot.Main;
 import org.apache.hc.core5.http.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import se.michaelthelin.spotify.SpotifyApi;
+import se.michaelthelin.spotify.exceptions.SpotifyWebApiException;
+import se.michaelthelin.spotify.model_objects.credentials.ClientCredentials;
+import se.michaelthelin.spotify.model_objects.specification.Paging;
+import se.michaelthelin.spotify.model_objects.specification.PlaylistTrack;
+import se.michaelthelin.spotify.model_objects.specification.Track;
+import se.michaelthelin.spotify.requests.authorization.client_credentials.ClientCredentialsRequest;
 
 import java.io.IOException;
 import java.net.URL;
