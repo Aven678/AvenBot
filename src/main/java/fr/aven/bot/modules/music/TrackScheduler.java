@@ -241,7 +241,7 @@ public class TrackScheduler extends AudioEventAdapter
                 ActionRow.of(
                         Button.secondary("repeatOne","Repeat track").withEmoji(Emoji.fromUnicode("\uD83D\uDD02")),
                         Button.secondary("lyrics", "Lyrics").withEmoji(Emoji.fromUnicode("\uD83D\uDCDC")),
-                        Button.danger("stop", "Stop").withEmoji(Emoji.fromEmote(channel.getJDA().getEmoteById(859847415719657473L))))
+                        Button.danger("stop", "Stop").withEmoji(Emoji.fromUnicode("❌")))
         )
 
                 .queue(msg -> {
@@ -296,7 +296,7 @@ public class TrackScheduler extends AudioEventAdapter
                 ActionRow.of(
                         Button.secondary("repeatOne","Repeat track").withEmoji(Emoji.fromUnicode("\uD83D\uDD02")),
                         Button.secondary("lyrics", "Lyrics").withEmoji(Emoji.fromUnicode("\uD83D\uDCDC")),
-                        Button.danger("stop", "Stop").withEmoji(Emoji.fromEmote(channel.getGuild().getEmoteById(859847415719657473L)))));
+                        Button.danger("stop", "Stop").withEmoji(Emoji.fromUnicode("❌"))));
 
         if (event == null) lastMessageStatus.editMessage(new MessageBuilder().setEmbeds(builder.build()).build()).setActionRows(actionRowCollections).queue();
         else event.editMessageEmbeds(builder.build()).setActionRows(actionRowCollections).queue();
