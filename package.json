@@ -1,0 +1,33 @@
+{
+  "name": "avenbot",
+  "version": "3.0.0",
+  "description": "The official sources of [AvenBot](https://invite.justaven.xyz) created by Aven#1000 with JDA and Kotlin.",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Aven678/AvenBot.git"
+  },
+  "author": "Aven",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/Aven678/AvenBot/issues"
+  },
+  "homepage": "https://github.com/Aven678/AvenBot#readme",
+  "dependencies": {
+    "@discordjs/opus": "^0.5.3",
+    "@discordjs/rest": "^0.3.0",
+    "@discordjs/voice": "^0.8.0",
+    "bufferutil": "^4.0.6",
+    "colors": "^1.4.0",
+    "discord-api-types": "^0.26.1",
+    "discord.js": "^13.6.0",
+    "erlpack": "github:discord/erlpack",
+    "ffmpeg-static": "^4.4.1",
+    "tweetnacl": "^1.0.3",
+    "utf-8-validate": "^5.0.8",
+    "zlib-sync": "^0.1.7"
+  }
+}
