@@ -1,37 +1,46 @@
-import mongoose from 'mongoose'
+const mongoose = require('mongoose')
 
-module.exports = (config) => {
-    mongoose.connect(`mongodb://${config.db.host}:${config.db.port}/${config.db.name}`).then(() => console.log('Connected to the database!'))
+let GuildModel = mongoose.model('guilds', {
+    _id: String,
+    lang: String,
+    warnConfig: {
+        limit: Number,
+        type: String
+    },
+    roles: {
+        autoRole: String,
+        dj: String,
+        mute: String
+    },
+    activity: {
+        ban: String,
+        join: String,
+        leave: String,
+        channel: String
+    }
+})
 
-    let GuildModel = mongoose.model('guilds', {
-        _id: String,
-        lang: String,
-        warnConfig: {
-            limit: Number,
-            type: String
-        },
-        roles: {
-            autoRole: String,
-            dj: String,
-            mute: String
-        },
-        activity: {
-            ban: String,
-            join: String,
-            leave: String,
-            channel: String
-        }
-    })
-    function guildConfig(guildID): GuildConfig {
+class Database {
+
+
+    constructor(config) {
+        this.config = config
+    }
+
+    init() {
+        mongoose.connect(`mongodb://${this.config.db.host}:${this.config.db.port}/${this.config.db.name}`).then(() => console.log('Connected to the database!'))
+    }
+
+    guildConfig(guildID) {
         GuildModel.findOne().where('_id').gte(guildID).exec(async document => {
             if (document == null) {
-                await createGuildConfig(guildID)
+                await this.createGuildConfig(guildID)
             }
 
             return GuildConfig(guildID, document)
         })
     }
-    function createGuildConfig(guildID) {
+    createGuildConfig(guildID) {
         let _doc = new GuildModel({
             _id: guildID,
             lang: 'en',
@@ -67,3 +76,5 @@ class GuildConfig {
         this.activity = document.get('activity')
     }
 }
+
+exports.Database = Database

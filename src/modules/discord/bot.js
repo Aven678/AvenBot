@@ -1,13 +1,21 @@
-const { Client, Intents } = require('discord.js')
-const config = require('../../config/config.json')
+const {Client, Intents} = require('discord.js')
 
-const client = new Client({ intents: [Intents.FLAGS.GUILDS,"GUILD_MEMBERS"]})
+class Bot {
+    constructor(config) {
+        this.config = config
+        this.client = new Client({ intents: [Intents.FLAGS.GUILDS,"GUILD_MEMBERS"]})
 
-client.on('ready', () => {
-    console.log(`${client.user.tag} is connected!`)
-    client.user.setActivity('justaven.xyz', { type: "WATCHING" })
-})
+        this.init()
+    }
 
-client.login(config.token).catch(e => console.log(e))
+    init() {
+        this.client.on('ready', () => {
+            console.log(`${this.client.user.tag} is connected!`)
+            this.client.user.setActivity('justaven.xyz', { type: "WATCHING" })
+        })
 
-module.exports = client
+        this.client.login(this.config.token).catch(e => console.log(e))
+    }
+}
+
+exports.Bot = Bot
