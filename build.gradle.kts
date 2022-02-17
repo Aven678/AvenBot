@@ -31,6 +31,12 @@ dependencies {
     implementation("com.sksamuel.hoplite:hoplite-yaml:1.4.16")
 
     implementation("com.google.firebase:firebase-admin:8.1.0")
+
+    implementation("ch.qos.logback", "logback-classic", "1.0.9")
+    implementation("ch.qos.logback", "logback-core", "1.0.9")
+
+    @Suppress("GradlePackageUpdate")
+    implementation("org.reflections:reflections:0.9.11")
 }
 
 tasks.withType<KotlinCompile> {
