@@ -1,5 +1,6 @@
 package fr.aven.bot.music
 
+import api.deezer.objects.Track
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager
@@ -16,6 +17,7 @@ import dev.minn.jda.ktx.SLF4J
 import fr.aven.bot.core.Config
 import fr.aven.bot.util.Language
 import net.dv8tion.jda.api.entities.Guild
+import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent
 import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction
 import java.awt.Color
 import java.time.Instant
@@ -34,7 +36,7 @@ class PlayerManager(private val config: Config, val language: Language)
         logger.info("Init YouTube IP Rotator...")
         val ipv6 = config.ipv6_block
         if (ipv6 == "none") logger.warn("Skipped IP Rotator")
-        else YoutubeIpRotatorSetup(NanoIpRoutePlanner(listOf( Ipv6Block(ipv6)), true)).forSource(youtubeAudioSourceManager).setup()
+        else YoutubeIpRotatorSetup(NanoIpRoutePlanner(listOf(Ipv6Block(ipv6)), true)).forSource(youtubeAudioSourceManager).setup()
 
         this.playerManager.registerSourceManager(youtubeAudioSourceManager)
         logger.info("Initialized!")
@@ -43,17 +45,28 @@ class PlayerManager(private val config: Config, val language: Language)
         AudioSourceManagers.registerRemoteSources(playerManager)
     }
 
-    private fun guildMusicManager(guild: Guild): GuildMusicManager
+    fun guildMusicManager(event: ButtonInteractionEvent): GuildMusicManager
     {
-        musicManagers.putIfAbsent(guild.idLong, GuildMusicManager(playerManager, guild))
+        val guild = event.guild!!
+        musicManagers.putIfAbsent(guild.idLong, GuildMusicManager(playerManager, guild, event.textChannel, language))
         guild.audioManager.sendingHandler = musicManagers[guild.idLong]!!.sendHandler()
         return musicManagers[guild.idLong]!!
     }
 
+    private fun guildMusicManager(interaction: SlashCommandInteraction): GuildMusicManager
+    {
+        val guild = interaction.guild!!
+        musicManagers.putIfAbsent(guild.idLong, GuildMusicManager(playerManager, guild, interaction.textChannel, language))
+        guild.audioManager.sendingHandler = musicManagers[guild.idLong]!!.sendHandler()
+        return musicManagers[guild.idLong]!!
+    }
+
+    fun loadAndPlayDeezerTrack(interaction: SlashCommandInteraction, track: Track) = loadAndPlay(interaction, "ytsearch:${track.title} ${track.artist.name}")
+
     fun loadAndPlay(interaction: SlashCommandInteraction, trackUrl: String)
     {
         val guild = interaction.guild!!
-        val musicManager = guildMusicManager(guild)
+        val musicManager = guildMusicManager(interaction)
         playerManager.frameBufferDuration = 5000
         playerManager.loadItemOrdered(musicManager, trackUrl, object : AudioLoadResultHandler
         {
@@ -84,7 +97,7 @@ class PlayerManager(private val config: Config, val language: Language)
             }
 
             override fun playlistLoaded(playlist: AudioPlaylist) {
-                if (playlist!!.isSearchResult) TODO()
+                if (playlist.isSearchResult) TODO()
                 else {
                     var firstTrack: AudioTrack? = playlist.selectedTrack;
                     if (firstTrack == null)
@@ -109,7 +122,7 @@ class PlayerManager(private val config: Config, val language: Language)
                     }).queue()
 
                     play(musicManager, firstTrack!!, interaction)
-                    playlist.tracks.forEach { musicManager.scheduler.queue(it) }
+                    playlist.tracks.forEach { musicManager.scheduler.queue(it, interaction.textChannel, interaction.member!!) }
                 }
             }
 
@@ -126,7 +139,7 @@ class PlayerManager(private val config: Config, val language: Language)
 
     fun play(musicManager: GuildMusicManager, track: AudioTrack, interaction: SlashCommandInteraction)
     {
-        musicManager.scheduler.queue(track)
+        musicManager.scheduler.queue(track, interaction.textChannel, interaction.member!!)
     }
 
 }

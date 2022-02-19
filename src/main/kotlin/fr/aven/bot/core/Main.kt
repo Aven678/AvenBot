@@ -5,7 +5,9 @@ import dev.minn.jda.ktx.SLF4J
 import dev.minn.jda.ktx.cache
 import dev.minn.jda.ktx.default
 import dev.minn.jda.ktx.intents
+import fr.aven.bot.commands.CommandManager
 import fr.aven.bot.events.Listener
+import fr.aven.bot.util.Language
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.entities.Activity
@@ -15,9 +17,6 @@ import java.io.File
 
 data class Config(
     val token: String,
-    val guild_id: String,
-    val logsChannelID: String,
-
     val firebaseUrl: String,
 
     val ipv6_block: String = "none"
@@ -25,27 +24,34 @@ data class Config(
 
 class Main
 {
-    lateinit var configuration: Config
+    lateinit var config: Config
     lateinit var jda: JDA
-    val logger by SLF4J
+    lateinit var manager: CommandManager
 
-    val firebase = Firebase(configuration)
+    private val logger by SLF4J
+
+    val language = Language()
+    lateinit var firebase: Firebase
 
     init {
         logger.info("Starting bot...")
-        if (!checkConfigFile()) start()
+        if (checkConfigFile()) start()
     }
 
     private fun start() {
-        configuration = ConfigLoader().loadConfigOrThrow<Config>("config.yml")
+        config = ConfigLoader().loadConfigOrThrow<Config>(File("config.yml"))
+        firebase = Firebase(config)
+        val listener = Listener(this)
 
-        jda = default(configuration.token, enableCoroutines = true) {
+        jda = default(config.token, enableCoroutines = true) {
             intents += listOf(GatewayIntent.GUILD_MEMBERS)
             setAutoReconnect(true)
             setActivity(Activity.watching("justaven.xyz"))
-            addEventListeners(Listener)
+            addEventListeners(listener)
             setMemberCachePolicy(MemberCachePolicy.ALL)
         }
+
+        manager = CommandManager(this)
     }
 
     private fun checkConfigFile(): Boolean {

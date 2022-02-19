@@ -7,7 +7,7 @@ import java.nio.ByteBuffer
 
 class AudioPlayerSendHandler(private val audioPlayer: AudioPlayer): AudioSendHandler {
 
-    lateinit var lastFrame: AudioFrame
+    var lastFrame: AudioFrame? = null
 
     override fun canProvide(): Boolean {
         lastFrame = audioPlayer.provide()
@@ -15,7 +15,7 @@ class AudioPlayerSendHandler(private val audioPlayer: AudioPlayer): AudioSendHan
     }
 
     override fun provide20MsAudio(): ByteBuffer {
-        return ByteBuffer.wrap(lastFrame.data)
+        return ByteBuffer.wrap(lastFrame!!.data)
     }
 
     @Override

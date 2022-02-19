@@ -1,0 +1,113 @@
+{
+    "link": "Link",
+    "music": {
+        "repeatPlaylistRequested": "Playlist repeat enabled.",
+        "repeatRequested": "The music will be repeated.",
+        "couldntPlay": "Could not play.",
+        "notFound": "Nothing found, please retry (link recommended).",
+        "canceled": "Search canceled by ",
+        "request": "Request from ",
+        "duration": "Duration",
+        "progress": "Music in progress",
+        "playlistAdd": "Adding to queue : %s (first track of playlist %s)",
+        "searchFooter": "Enter the number of your choice.",
+        "searchTitle": "Music search.",
+        "author": "Author",
+        "add": "Music added"
+    },
+    "tickets": {
+        "closeConfirm": "The channel will be deleted in 5 seconds.",
+        "closeDesc": "🔓 To reopen the ticket. \n❌ To delete the channel.",
+        "closeTitle": "Ticket closed.",
+        "closeText": "To close the ticket, click on the reaction."
+    },
+    "warn": {
+        "mpDisabled": "The user has disabled his private messages.",
+        "mp": "You have been warned in %s",
+        "reason": "Reason: ",
+        "moderator": "Moderator: ",
+        "user": "User: ",
+        "title": "User warned"
+    },
+    "player": {
+        "paused": "Player is paused."
+    },
+    "missingPermissions": "I don't have the permission to do this command.",
+    "isNotNSFW": "The channel is not a NSFW Channel.",
+    "playlist": {
+        "firstTrack": "First track",
+        "title": "Playlist added"
+    },
+    "invite": {
+        "text": "You can add me in your server with this link: "
+    },
+    "hasNotPermission": "I don't have the permission to do this.",
+    "lang": {
+        "success:": "Language changed successfully."
+    },
+    "lyrics": {
+        "searchTitle": "Lyrics search.",
+        "title": "Lyrics for: "
+    },
+    "pause": {
+        "playerResume": "The player is successfully resumed.",
+        "playerPaused": "The player is successfully paused.",
+        "notConnected": "The player is not connected."
+    },
+    "notFound": "Not found",
+    "shuffle": {
+        "confirm": "The queue has shuffled."
+    },
+    "queue": {
+        "playerNotActive": "The player doesn't play music."
+    },
+    "volume": {
+        "confirm": "The volume has been %s now.",
+        "exceed": "Volume cannot exceed 200."
+    },
+    "stop": {
+        "confirm": "Disconnected from your channel.",
+        "isNotInSameChannel": "You have to be in the same voice channel as me to use this.",
+        "botNotConnected": "I'm not connected to a voice channel."
+    },
+    "skip": {
+        "confirm": "Track skipped."
+    },
+    "play": {
+        "confirmChoice": "Please confirm your choice."
+    },
+    "join": {
+        "success": "Joining your voice channel.",
+        "isNotInChannel": "Please join a voice channel first.",
+        "missingPerm": "I am missing permission to join %s"
+    },
+    "unmute": {
+        "isNotMute": "Please provide a muted member.",
+        "confirm": "Member unmuted.",
+        "notMentionned": "Please provide a member to unmute."
+    },
+    "mute": {
+        "confirm": "Member mute.",
+        "notMentionned": "Please provide a member to mute."
+    },
+    "kick": {
+        "confirm": "Member kicked.",
+        "notMentionned": "Please provide a member to kick."
+    },
+    "ban": {
+        "confirm": "Member banned.",
+        "notMentionned": "Please provide a member to ban."
+    },
+    "argsNotFound": "Please provide the required arguments.",
+    "cc.success": "Config reset.",
+    "success": "Success",
+    "errordesc": "An error has occurred, please retry.",
+    "error": "Error",
+    "dj": {
+        "success": "The DJ Role is now : "
+    },
+    "prefix": {
+        "sucesstitle": "Prefix changed !",
+        "sucessdescription": "The new prefix is : "
+    }
+}

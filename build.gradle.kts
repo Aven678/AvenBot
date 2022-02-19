@@ -27,6 +27,8 @@ dependencies {
     implementation("com.sedmelluq:lavaplayer:1.3.78")
     implementation("com.sedmelluq:lavaplayer-ext-youtube-rotator:0.2.3")
 
+    implementation("com.github.yvasyliev:deezer-api:1.0.3")
+
     implementation("com.sksamuel.hoplite:hoplite-core:1.4.16")
     implementation("com.sksamuel.hoplite:hoplite-yaml:1.4.16")
 
