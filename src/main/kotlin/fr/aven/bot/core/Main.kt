@@ -2,14 +2,12 @@ package fr.aven.bot.core
 
 import com.sksamuel.hoplite.ConfigLoader
 import dev.minn.jda.ktx.SLF4J
-import dev.minn.jda.ktx.cache
 import dev.minn.jda.ktx.default
 import dev.minn.jda.ktx.intents
 import fr.aven.bot.commands.CommandManager
-import fr.aven.bot.events.Listener
+import fr.aven.bot.events.CListener
 import fr.aven.bot.util.Language
 import net.dv8tion.jda.api.JDA
-import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.entities.Activity
 import net.dv8tion.jda.api.requests.GatewayIntent
 import net.dv8tion.jda.api.utils.MemberCachePolicy
@@ -41,7 +39,7 @@ class Main
     private fun start() {
         config = ConfigLoader().loadConfigOrThrow<Config>(File("config.yml"))
         database = Database(config.database)
-        val listener = Listener(this)
+        val listener = CListener(this)
 
         jda = default(config.token, enableCoroutines = true) {
             intents += listOf(GatewayIntent.GUILD_MEMBERS)
