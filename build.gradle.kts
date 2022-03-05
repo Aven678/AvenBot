@@ -21,7 +21,7 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib"))
-    implementation("net.dv8tion:JDA:5.0.0-alpha.9")
+    implementation("com.github.OcelusPRO:JDA:4ff20ae")
     implementation("com.github.minndevelopment:jda-ktx:6527755")
 
     implementation("com.sedmelluq:lavaplayer:1.3.78")
