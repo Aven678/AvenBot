@@ -32,13 +32,16 @@ dependencies {
     implementation("com.sksamuel.hoplite:hoplite-core:1.4.16")
     implementation("com.sksamuel.hoplite:hoplite-yaml:1.4.16")
 
-    implementation("com.google.firebase:firebase-admin:8.1.0")
-
     implementation("ch.qos.logback", "logback-classic", "1.0.9")
     implementation("ch.qos.logback", "logback-core", "1.0.9")
 
     @Suppress("GradlePackageUpdate")
     implementation("org.reflections:reflections:0.9.11")
+
+    implementation("org.jetbrains.exposed", "exposed-core", "0.37.3")
+    implementation("org.jetbrains.exposed", "exposed-dao", "0.37.3")
+    implementation("org.jetbrains.exposed", "exposed-jdbc", "0.37.3")
+    implementation("mysql:mysql-connector-java:8.0.25")
 }
 
 tasks.withType<KotlinCompile> {

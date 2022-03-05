@@ -1,4 +1,9 @@
 token: INSERT_HERE
-firebaseUrl: INSERT_HERE
+
+database:
+  host: INSERT_HERE
+  port: 3306
+  user: bot
+  pass: changeme
 
 ipv6_block: none

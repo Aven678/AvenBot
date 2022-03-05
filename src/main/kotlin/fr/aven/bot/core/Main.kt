@@ -17,7 +17,7 @@ import java.io.File
 
 data class Config(
     val token: String,
-    val firebaseUrl: String,
+    val database: DatabaseConfig,
 
     val ipv6_block: String = "none"
 )
@@ -27,11 +27,11 @@ class Main
     lateinit var config: Config
     lateinit var jda: JDA
     lateinit var manager: CommandManager
+    lateinit var database: Database
 
     private val logger by SLF4J
 
     val language = Language()
-    lateinit var firebase: Firebase
 
     init {
         logger.info("Starting bot...")
@@ -40,7 +40,7 @@ class Main
 
     private fun start() {
         config = ConfigLoader().loadConfigOrThrow<Config>(File("config.yml"))
-        firebase = Firebase(config)
+        database = Database(config.database)
         val listener = Listener(this)
 
         jda = default(config.token, enableCoroutines = true) {

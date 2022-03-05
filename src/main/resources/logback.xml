@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="false">
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>[%d{HH:mm:ss, -5}] %boldRed([%thread]) %boldBlue([%logger{36}]) %level - %msg%n</pattern>
+        </encoder>
+    </appender>
+    <root level="INFO"> <!-- ERROR, WARN, INFO, DEBUG, TRACE -->
+        <appender-ref ref="STDOUT"/>
+    </root>
+</configuration>
