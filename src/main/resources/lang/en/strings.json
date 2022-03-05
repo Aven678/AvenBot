@@ -5,12 +5,12 @@
         "repeatRequested": "The music will be repeated.",
         "couldntPlay": "Could not play.",
         "notFound": "Nothing found, please retry (link recommended).",
-        "canceled": "Search canceled by ",
+        "canceled": "Search canceled",
         "request": "Request from ",
         "duration": "Duration",
         "progress": "Music in progress",
         "playlistAdd": "Adding to queue : %s (first track of playlist %s)",
-        "searchFooter": "Enter the number of your choice.",
+        "search": "Select your track.",
         "searchTitle": "Music search.",
         "author": "Author",
         "add": "Music added"
@@ -59,7 +59,8 @@
         "confirm": "The queue has shuffled."
     },
     "queue": {
-        "playerNotActive": "The player doesn't play music."
+        "playerNotActive": "The player doesn't play music.",
+        "title": "Queue: %s tracks"
     },
     "volume": {
         "confirm": "The volume has been %s now.",

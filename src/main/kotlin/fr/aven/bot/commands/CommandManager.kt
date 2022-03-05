@@ -5,6 +5,8 @@ import dev.minn.jda.ktx.interactions.option
 import dev.minn.jda.ktx.interactions.slash
 import dev.minn.jda.ktx.interactions.updateCommands
 import fr.aven.bot.commands.music.Play
+import fr.aven.bot.commands.music.Queue
+import fr.aven.bot.commands.music.Volume
 import fr.aven.bot.core.Main
 import fr.aven.bot.music.PlayerManager
 import fr.aven.bot.util.Language
@@ -23,7 +25,7 @@ class CommandManager(val main: Main)
 
     init {
         logger.info("Init CommandManager...")
-        registerCommands(Play(this))
+        registerCommands(Play(this), Volume(this), Queue(this))
         postCommands()
     }
 
@@ -40,8 +42,12 @@ class CommandManager(val main: Main)
         val commandSlash = mutableListOf< SlashCommandData>()
 
         main.jda.awaitReady().updateCommands {
-            slash("play", "Plays a song") {
-                option<String>("song", "URL or title to search in YouTube", true)
+            for (command in commands.values) {
+                slash(command.name, command.description) {
+                    addOptions(command.options)
+                    addSubcommandGroups(command.subCommandGroups)
+                    addSubcommands(command.subCommands)
+                }
             }
         }.queue()
     }

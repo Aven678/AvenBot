@@ -22,7 +22,7 @@ import kotlin.time.Duration
 class TrackScheduler(private val player: AudioPlayer, private val guild: Guild, private var channel: TextChannel, private val language: Language): AudioEventAdapter()
 {
     private val oldQueue = LinkedBlockingQueue<AudioTrack>()
-    private val queue = LinkedBlockingQueue<AudioTrack>()
+    val queue = LinkedBlockingQueue<AudioTrack>()
     private var statusMessage = ""
     private var requester: Member? = null
 
@@ -43,7 +43,7 @@ class TrackScheduler(private val player: AudioPlayer, private val guild: Guild, 
         {
             requester = member
             this.channel = channel
-            player.startTrack(track, false)
+            player.startTrack(track, true)
         }
         else
             queue.put(track)
@@ -156,7 +156,7 @@ class TrackScheduler(private val player: AudioPlayer, private val guild: Guild, 
         else channel.editMessageEmbedsById(statusMessage, embed).setActionRows(actionRows).queue()
     }
 
-    private fun getTimestamp(milis: Long): String {
+    fun getTimestamp(milis: Long): String {
         var seconds = milis / 1000
         val hours = Math.floorDiv(seconds, 3600)
         seconds -= hours * 3600

@@ -5,12 +5,12 @@
         "repeatRequested": "La musique va être répétée.",
         "couldntPlay": "Impossible de lire.",
         "notFound": "Aucun résultat trouvé, veuillez réessayer (lien recommandé).",
-        "canceled": "Recherche annulée par ",
+        "canceled": "Recherche annulée.",
         "request": "Requête de ",
         "duration": "Durée",
         "progress": "Musique en cours",
         "playlistAdd": "Ajout à la queue : %s (première piste de la playlist %s)",
-        "searchFooter": "Entrez le numéro de votre choix.",
+        "search": "Choisissez votre piste.",
         "searchTitle": "Recherches de musiques.",
         "author": "Auteur",
         "add": "Musique ajoutée"
@@ -59,7 +59,8 @@
         "confirm": "La queue a bien été mélangée."
     },
     "queue":{
-        "playerNotActive": "Le player ne joue pas de musique."
+        "playerNotActive": "Le player ne joue pas de musique.",
+        "title": "File d'attente: %s pistes"
     },
     "volume": {
         "confirm": "Le volume est désormais à %s.",

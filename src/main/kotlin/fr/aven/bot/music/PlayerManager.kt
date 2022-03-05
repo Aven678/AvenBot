@@ -17,7 +17,9 @@ import dev.minn.jda.ktx.SLF4J
 import fr.aven.bot.core.Config
 import fr.aven.bot.util.Language
 import net.dv8tion.jda.api.entities.Guild
+import net.dv8tion.jda.api.entities.TextChannel
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent
+import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent
 import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction
 import java.awt.Color
 import java.time.Instant
@@ -45,18 +47,12 @@ class PlayerManager(private val config: Config, val language: Language)
         AudioSourceManagers.registerRemoteSources(playerManager)
     }
 
-    fun guildMusicManager(event: ButtonInteractionEvent): GuildMusicManager
+    fun guildMusicManager(event: ButtonInteractionEvent): GuildMusicManager = guildMusicManager(event.guild!!, event.textChannel)
+    fun guildMusicManager(event: SelectMenuInteractionEvent): GuildMusicManager = guildMusicManager(event.guild!!, event.textChannel)
+    fun guildMusicManager(interaction: SlashCommandInteraction): GuildMusicManager = guildMusicManager(interaction.guild!!, interaction.textChannel)
+    private fun guildMusicManager(guild: Guild, channel: TextChannel): GuildMusicManager
     {
-        val guild = event.guild!!
-        musicManagers.putIfAbsent(guild.idLong, GuildMusicManager(playerManager, guild, event.textChannel, language))
-        guild.audioManager.sendingHandler = musicManagers[guild.idLong]!!.sendHandler()
-        return musicManagers[guild.idLong]!!
-    }
-
-    private fun guildMusicManager(interaction: SlashCommandInteraction): GuildMusicManager
-    {
-        val guild = interaction.guild!!
-        musicManagers.putIfAbsent(guild.idLong, GuildMusicManager(playerManager, guild, interaction.textChannel, language))
+        musicManagers.putIfAbsent(guild.idLong, GuildMusicManager(playerManager, guild, channel, language))
         guild.audioManager.sendingHandler = musicManagers[guild.idLong]!!.sendHandler()
         return musicManagers[guild.idLong]!!
     }
@@ -71,33 +67,13 @@ class PlayerManager(private val config: Config, val language: Language)
         playerManager.loadItemOrdered(musicManager, trackUrl, object : AudioLoadResultHandler
         {
             override fun trackLoaded(track: AudioTrack) {
-                interaction.hook.editOriginalEmbeds(Embed {
-                    author {
-                        name = language.getTextFor(guild, "music.add")
-                        url = track.info.uri
-                        iconUrl = interaction.jda.selfUser.avatarUrl
-                    }
-
-                    field {
-                        name = "❱ ${language.getTextFor(guild, "music.author")} : ${track.info.author}"
-                        value = "❱ ${track.info.title}"
-                        inline = false
-                    }
-
-                    color = Color(0,255,151).rgb
-                    timestamp = Instant.now()
-                    footer {
-                        name = "AvenBot by Aven#1000"
-                    }
-
-                    thumbnail = "https://i.ytimg.com/vi/${track.info.identifier}/maxresdefault.jpg"
-                }).queue()
+                interaction.hook.editOriginalEmbeds(musicManager.embedConfirm(track)).queue()
 
                 play(musicManager, track, interaction)
             }
 
             override fun playlistLoaded(playlist: AudioPlaylist) {
-                if (playlist.isSearchResult) TODO()
+                if (playlist.isSearchResult) musicManager.searchResult(playlist, interaction)
                 else {
                     var firstTrack: AudioTrack? = playlist.selectedTrack;
                     if (firstTrack == null)
@@ -137,9 +113,5 @@ class PlayerManager(private val config: Config, val language: Language)
         })
     }
 
-    fun play(musicManager: GuildMusicManager, track: AudioTrack, interaction: SlashCommandInteraction)
-    {
-        musicManager.scheduler.queue(track, interaction.textChannel, interaction.member!!)
-    }
-
+    fun play(musicManager: GuildMusicManager, track: AudioTrack, interaction: SlashCommandInteraction) = musicManager.scheduler.queue(track, interaction.textChannel, interaction.member!!)
 }

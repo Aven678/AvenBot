@@ -6,6 +6,7 @@ import fr.aven.bot.core.Main
 import net.dv8tion.jda.api.events.ReadyEvent
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent
+import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 
 class Listener(private val main: Main) : ListenerAdapter()
@@ -26,30 +27,28 @@ class Listener(private val main: Main) : ListenerAdapter()
         val button = event.button
         event.deferEdit().queue()
 
-        when (button.id)
-        {
-            "m.old" -> {
-                main.manager.playerManager.guildMusicManager(event).scheduler.playBackTrack()
-            }
-            "m.player" -> {
-                main.manager.playerManager.guildMusicManager(event).scheduler.changePlayerStatus()
-            }
-            "m.skip" -> {
-                main.manager.playerManager.guildMusicManager(event).scheduler.skipTrack()
-            }
-            "m.lyrics" -> {
-                TODO()
-            }
-            "m.repeatPlaylist" -> {
-                main.manager.playerManager.guildMusicManager(event).scheduler.repeatPlaylist()
-            }
-            "m.repeatTrack" -> {
-                main.manager.playerManager.guildMusicManager(event).scheduler.repeatTrack()
-            }
-            "m.stop" -> {
-                main.manager.playerManager.guildMusicManager(event).scheduler.stopPlayer()
+        val guildMusicManager = main.manager.playerManager.guildMusicManager(event)
+
+        with(button.id!!) {
+            when {
+                equals("m.old") -> guildMusicManager.scheduler.playBackTrack()
+                equals("m.player") -> guildMusicManager.scheduler.changePlayerStatus()
+                equals("m.skip") -> guildMusicManager.scheduler.skipTrack()
+                equals("m.lyrics") -> TODO()
+                equals("m.repeatPlaylist") -> guildMusicManager.scheduler.repeatPlaylist()
+                equals("m.repeatTrack") -> guildMusicManager.scheduler.repeatTrack()
+                equals("m.stop") -> guildMusicManager.scheduler.stopPlayer()
+
+                startsWith("m.queue") -> main.manager.playerManager.guildMusicManager(event).sendQueueMessage(event)
             }
         }
         super.onButtonInteraction(event)
+    }
+
+    override fun onSelectMenuInteraction(event: SelectMenuInteractionEvent) {
+        event.deferEdit().queue()
+        main.manager.playerManager.guildMusicManager(event).searchConfirm(event)
+
+        super.onSelectMenuInteraction(event)
     }
 }
