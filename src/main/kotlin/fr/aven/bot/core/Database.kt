@@ -52,7 +52,7 @@ class Database(private val config: DatabaseConfig)
         db = Database.connect("jdbc:mysql://${config.host}:${config.port}/${config.name}", driver = "com.mysql.cj.jdbc.Driver", user = config.user, password = config.pass)
 
         transaction {
-            SchemaUtils.create (GuildConfig, Activities, WarnConfig, Roles)
+            SchemaUtils.createMissingTablesAndColumns (GuildConfig, Activities, WarnConfig, Roles)
         }
     }
 
