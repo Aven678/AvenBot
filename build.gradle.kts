@@ -42,6 +42,9 @@ dependencies {
     implementation("org.jetbrains.exposed", "exposed-dao", "0.37.3")
     implementation("org.jetbrains.exposed", "exposed-jdbc", "0.37.3")
     implementation("mysql:mysql-connector-java:8.0.25")
+
+    implementation("io.github.reactivecircus.cache4k:cache4k:0.4.0")
+    implementation("com.google.code.gson:gson:2.9.0")
 }
 
 tasks.withType<KotlinCompile> {
