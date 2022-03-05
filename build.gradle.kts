@@ -49,4 +49,8 @@ dependencies {
 
 tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "11"
+    kotlinOptions.freeCompilerArgs = listOf(
+        "-Xjvm-default=all",  // use default methods in interfaces
+        "-Xlambdas=indy"      // use invokedynamic lambdas instead of synthetic classes
+    )
 }
