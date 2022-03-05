@@ -124,12 +124,12 @@ class GuildMusicManager(private val manager: AudioPlayerManager, private val gui
 
     fun sendQueueMessage(event: ButtonInteractionEvent)
     {
-        val page = event.id.split(".")[2].toInt()
+        val page = event.button.id!!.split(".")[2].toInt()
         event.interaction
             .hook
             .editOriginalEmbeds(queueEmbed(page))
             .setActionRows(ActionRow.of(
-                secondary("m.queue.${page-1}", label = "Previous page", emoji = Emoji.fromUnicode("⬅️")),
+                if (page > 0) secondary("m.queue.${page-1}", label = "Previous page", emoji = Emoji.fromUnicode("⬅️")) else null,
                 secondary("m.queue.${page+1}", label = "Next page", emoji = Emoji.fromUnicode("➡️"))
             )).queue()
     }
@@ -138,31 +138,35 @@ class GuildMusicManager(private val manager: AudioPlayerManager, private val gui
     {
         event.interaction
             .hook
-            .editOriginalEmbeds(queueEmbed(1))
+            .editOriginalEmbeds(queueEmbed(0))
             .setActionRows(ActionRow.of(
-                secondary("m.queue.2", label = "Next page", emoji = Emoji.fromUnicode("➡️"))
+                secondary("m.queue.1", label = "Next page", emoji = Emoji.fromUnicode("➡️"))
             )).queue()
     }
 
     private fun queueEmbed(page: Int): MessageEmbed
     {
         val builder = StringBuilder()
-        val queue = LinkedBlockingQueue(scheduler.queue).toMutableList()
+        var queue = LinkedBlockingQueue(scheduler.queue).toMutableList()
 
         builder.append("**${language.getTextFor(guild, "music.progress")}**")
-        builder.append("\n`${player.playingTrack.info.title}` ${scheduler.getTimestamp(player.playingTrack.duration)}")
+        val playingTrack = player.playingTrack
+        builder.append("\n[${playingTrack.info.title}](${playingTrack.info.uri}) ${scheduler.getTimestamp(playingTrack.duration)} \n")
 
-        if (queue.size > 10) queue.subList((10-1) * page, (10*page)+10)
-        queue.forEach { builder.append("\n`${it.info.title}` ${scheduler.getTimestamp(it.duration)}") }
+        if (queue.size > 10) queue = queue.subList(10 *page, if (10*page+10 > queue.size) queue.size else 10*page+10)
 
-        println(builder.toString().length)
+        var count = 0
+        queue.forEach {
+            count += 1
+            builder.append("\n`${count + (10*page)}`[${it.info.title}](${it.info.uri}) ${scheduler.getTimestamp(it.duration)}")
+        }
 
         return Embed {
             title = language.getTextFor(guild, "queue.title").format(scheduler.queue.size)
             description = builder.toString()
 
             footer {
-                title = "Page 1/${if (scheduler.queue.size >= 10) (scheduler.queue.size / 10) else 1}"
+                name = "Page ${page+1}/${if (scheduler.queue.size >= 10) (scheduler.queue.size / 10) else 1}"
             }
 
             timestamp = Instant.now()
