@@ -3,6 +3,7 @@ package fr.aven.bot.util.lang
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.User
 import java.io.File
+
 private val LANG_MANAGERS: MutableMap<String, LangManager> = mutableMapOf()
 
 /**
