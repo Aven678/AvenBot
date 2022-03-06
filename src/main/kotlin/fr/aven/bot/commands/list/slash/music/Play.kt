@@ -27,7 +27,7 @@ class Play: ISlashCmd
     override suspend fun action(event: SlashCommandInteractionEvent, lang: LangManager) {
         val memberChannel = event.member?.voiceState?.channel ?: return event
             .reply(lang.getString(LangKey.keyBuilder(this, "action", "isNotInChannel"),
-                "Vous devez être connecter a un channel vocal pour utiliser cette commande !"))
+                "Please join a voice channel first."))
             .setEphemeral(true)
             .queue()
         val guild = event.guild ?: throw IllegalStateException("Guild is null")
@@ -35,7 +35,7 @@ class Play: ISlashCmd
         if (!guild.audioManager.isConnected) {
             if (!guild.selfMember.hasPermission(memberChannel, Permission.VOICE_CONNECT))
                 return event.reply(lang.getString(LangKey.keyBuilder(this, "action", "missingPermission"),
-                    "Vous devez être connecter a un channel vocal pour utiliser cette commande !"))
+                    "I am missing permission to join your channel"))
                     .setEphemeral(true)
                     .queue()
             guild.audioManager.openAudioConnection(memberChannel)
@@ -44,7 +44,7 @@ class Play: ISlashCmd
 
         else if (guild.audioManager.connectedChannel?.id != memberChannel.id) {
             return event.reply(lang.getString(LangKey.keyBuilder(this, "action", "isNotInSameChannel"),
-                "Vous devez être connecter dans le même channel que moi pour ajouté des musiques !"))
+                "You have to be in the same voice channel as me to use this."))
                 .setEphemeral(true)
                 .queue()
         }

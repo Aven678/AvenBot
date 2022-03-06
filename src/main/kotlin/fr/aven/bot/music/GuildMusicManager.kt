@@ -9,7 +9,10 @@ import dev.minn.jda.ktx.interactions.SelectMenu
 import dev.minn.jda.ktx.interactions.button
 import dev.minn.jda.ktx.interactions.option
 import dev.minn.jda.ktx.interactions.secondary
+import fr.aven.bot.LANG_LOADER
 import fr.aven.bot.util.Language
+import fr.aven.bot.util.lang.LangKey
+import fr.aven.bot.util.lang.LangManager
 import net.dv8tion.jda.api.entities.*
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent
@@ -22,9 +25,10 @@ import java.awt.Color
 import java.time.Instant
 import java.util.concurrent.LinkedBlockingQueue
 
-class GuildMusicManager(private val manager: AudioPlayerManager, private val guild: Guild, private val channel: TextChannel, val language: Language)
+class GuildMusicManager(private val manager: AudioPlayerManager, private val guild: Guild, private val channel: TextChannel)
 {
     val player: AudioPlayer = manager.createPlayer()
+    val language = LANG_LOADER.getLangManager(user = null, guild)
     val scheduler = TrackScheduler(player, guild, channel, language)
 
     //Key : UserID
@@ -42,20 +46,20 @@ class GuildMusicManager(private val manager: AudioPlayerManager, private val gui
     fun searchResult(playlist: AudioPlaylist, interaction: SlashCommandInteraction) {
         if (searchMessage != "")
         {
-            interaction.hook.editOriginalEmbeds(Embed { description = language.getTextFor(interaction.guild!!, "play.confirmChoice") }).queue()
+            interaction.replyEmbeds(Embed { description = language.getString(LangKey.keyBuilder(this, "searchResult", "play.confirmChoice"), "Please confirm your choice.") }).setEphemeral(true).queue()
             return
         }
 
         val tracks = mutableListOf<AudioTrack>()
         val options = mutableListOf<SelectOption>()
-        interaction.hook.editOriginalEmbeds(Embed {
+        interaction.replyEmbeds(Embed {
             field {
-                name = language.getTextFor(interaction.guild!!, "music.searchTitle")
-                value = language.getTextFor(interaction.guild!!, "music.search")
+                name = language.getString(LangKey.keyBuilder(this, "searchResult", "music.searchTitle"), "Music search.")
+                value = language.getString(LangKey.keyBuilder(this, "searchResult","music.search"), "Select your track.")
             }
 
             color = Color(255,0,0).rgb
-        }).setActionRows(
+        }).setEphemeral(true).addActionRows(
             ActionRow.of(
                 SelectMenu("music:search") {
                     for (i in 0..4)
@@ -81,7 +85,7 @@ class GuildMusicManager(private val manager: AudioPlayerManager, private val gui
 
         if (choice == "cancel")
         {
-            event.interaction.hook.editOriginal(language.getTextFor(guild, "music.canceled")).setEmbeds().setActionRows().queue()
+            event.interaction.hook.editOriginal(language.getString(LangKey.keyBuilder(this, "searchConfirm","music.canceled"), "Search canceled")).setEmbeds().setActionRows().queue()
             search[event.user.id]!!.clear()
             return true
         }
@@ -101,13 +105,13 @@ class GuildMusicManager(private val manager: AudioPlayerManager, private val gui
     {
         return Embed {
             author {
-                name = language.getTextFor(guild, "music.add")
+                name = language.getString(LangKey.keyBuilder(this, "embedConfirm","music.add"), "Music added")
                 url = track.info.uri
                 iconUrl = guild.jda.selfUser.avatarUrl
             }
 
             field {
-                name = "❱ ${language.getTextFor(guild, "music.author")} : ${track.info.author}"
+                name = "❱ ${language.getString(LangKey.keyBuilder(this, "embedConfirm", "music.author"), "Author")} : ${track.info.author}"
                 value = "❱ ${track.info.title}"
                 inline = false
             }
@@ -147,7 +151,7 @@ class GuildMusicManager(private val manager: AudioPlayerManager, private val gui
         val builder = StringBuilder()
         var queue = LinkedBlockingQueue(scheduler.queue).toMutableList()
 
-        builder.append("**${language.getTextFor(guild, "music.progress")}**")
+        builder.append("**${language.getString(LangKey.keyBuilder(this, "queueEmbed","music.progress"), "Music in progress")}**")
         val playingTrack = player.playingTrack
         builder.append("\n[${playingTrack.info.title}](${playingTrack.info.uri}) ${scheduler.getTimestamp(playingTrack.duration)} \n")
 
@@ -160,11 +164,11 @@ class GuildMusicManager(private val manager: AudioPlayerManager, private val gui
         }
 
         return Embed {
-            title = language.getTextFor(guild, "queue.title").format(scheduler.queue.size)
+            title = language.getString(LangKey.keyBuilder(this, "queueEmbed","queue.title"), "Queue: %s tracks").format(scheduler.queue.size)
             description = builder.toString()
 
             footer {
-                name = "Page ${page+1}/${if (scheduler.queue.size >= 10) (scheduler.queue.size / 10) else 1}"
+                name = "Page ${page+1}/${if (scheduler.queue.size >= 10) (if (scheduler.queue.size % 10 == 0) (scheduler.queue.size / 10) else (scheduler.queue.size / 10 + 1)) else 1}"
             }
 
             timestamp = Instant.now()

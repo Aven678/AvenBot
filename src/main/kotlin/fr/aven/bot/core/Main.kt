@@ -29,8 +29,6 @@ class Main
 
     private val logger by SLF4J
 
-    val language = Language()
-
     init {
         logger.info("Starting bot...")
         if (checkConfigFile()) start()

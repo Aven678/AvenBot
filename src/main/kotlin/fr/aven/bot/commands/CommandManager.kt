@@ -18,10 +18,9 @@ class CommandManager(private val main: Main)
     private val commands = mutableListOf<ICommand>()
     private val logger by SLF4J
 
-
     init {
         manager = this
-        playerManager = PlayerManager(main.config, main.language)
+        playerManager = PlayerManager(main.config)
 
         logger.info("Init CommandManager...")
         registerCommand()
@@ -30,7 +29,7 @@ class CommandManager(private val main: Main)
     private fun registerCommand()
     {
         val reflections: Set<Class<out ICommand?>> = Reflections("fr.aven.bot.commands.list").getSubTypesOf(ICommand::class.java)
-        for (instance in reflections) commands.add(instance.getConstructor().newInstance()!!)
+        for (instance in reflections) if (!instance.isInterface) commands.add(instance.getConstructor().newInstance()!!)
         main.jda.awaitReady().updateCommands().addCommands(commands.filterIsInstance(IDataCommand::class.java).map { it.data }).queue()
     }
 

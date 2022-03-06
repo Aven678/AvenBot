@@ -16,6 +16,7 @@ import dev.minn.jda.ktx.Embed
 import dev.minn.jda.ktx.SLF4J
 import fr.aven.bot.core.Config
 import fr.aven.bot.util.Language
+import fr.aven.bot.util.lang.LangKey
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.TextChannel
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent
@@ -24,7 +25,7 @@ import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction
 import java.awt.Color
 import java.time.Instant
 
-class PlayerManager(private val config: Config, val language: Language)
+class PlayerManager(private val config: Config)
 {
     private val logger by SLF4J
     private var playerManager: AudioPlayerManager = DefaultAudioPlayerManager()
@@ -52,7 +53,7 @@ class PlayerManager(private val config: Config, val language: Language)
     fun guildMusicManager(interaction: SlashCommandInteraction): GuildMusicManager = guildMusicManager(interaction.guild!!, interaction.textChannel)
     private fun guildMusicManager(guild: Guild, channel: TextChannel): GuildMusicManager
     {
-        musicManagers.putIfAbsent(guild.idLong, GuildMusicManager(playerManager, guild, channel, language))
+        musicManagers.putIfAbsent(guild.idLong, GuildMusicManager(playerManager, guild, channel))
         guild.audioManager.sendingHandler = musicManagers[guild.idLong]!!.sendHandler()
         return musicManagers[guild.idLong]!!
     }
@@ -81,12 +82,12 @@ class PlayerManager(private val config: Config, val language: Language)
 
                     interaction.replyEmbeds(Embed {
                         author {
-                            name = language.getTextFor(guild, "playlist.title")
+                            name = musicManager.language.getString(LangKey.keyBuilder(this, "playlistLoaded", "playlist.title"), "Playlist added")
                         }
 
                         field {
                             name = "❱ ${playlist.name} (${playlist.tracks.size} tracks)"
-                            value = "❱ ${language.getTextFor(guild, "playlist.firstTrack")} : ${firstTrack!!.info.title}"
+                            value = "❱ ${musicManager.language.getString(LangKey.keyBuilder(this, "playlistLoaded", "playlist.firstTrack"), "First track")} : ${firstTrack!!.info.title}"
                             inline = false
                         }
 
@@ -103,11 +104,11 @@ class PlayerManager(private val config: Config, val language: Language)
             }
 
             override fun noMatches() {
-                interaction.hook.editOriginal(language.getTextFor(guild, "music.notFound")).queue()
+                interaction.reply(musicManager.language.getString(LangKey.keyBuilder(this, "noMatches", "music.notFound"), "Nothing found, please retry (link recommended).")).queue()
             }
 
             override fun loadFailed(exception: FriendlyException?) {
-                interaction.hook.editOriginal(language.getTextFor(guild, "music.couldntPlay")).queue()
+                interaction.reply(musicManager.language.getString(LangKey.keyBuilder(this, "noMatches","music.couldntPlay"), "Could not play.")).queue()
             }
 
         })

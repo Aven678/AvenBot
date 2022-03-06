@@ -7,7 +7,8 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason
 import dev.minn.jda.ktx.Embed
 import dev.minn.jda.ktx.interactions.button
-import fr.aven.bot.util.Language
+import fr.aven.bot.util.lang.LangKey
+import fr.aven.bot.util.lang.LangManager
 import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.entities.Emoji
 import net.dv8tion.jda.api.entities.Guild
@@ -19,7 +20,7 @@ import java.time.Instant
 import java.util.concurrent.LinkedBlockingQueue
 import kotlin.time.Duration
 
-class TrackScheduler(private val player: AudioPlayer, private val guild: Guild, private var channel: TextChannel, private val language: Language): AudioEventAdapter()
+class TrackScheduler(private val player: AudioPlayer, private val guild: Guild, private var channel: TextChannel, private val language: LangManager): AudioEventAdapter()
 {
     private val oldQueue = LinkedBlockingQueue<AudioTrack>()
     val queue = LinkedBlockingQueue<AudioTrack>()
@@ -92,7 +93,10 @@ class TrackScheduler(private val player: AudioPlayer, private val guild: Guild, 
                 it?.delete()?.queue()
                 statusMessage = ""
             }
-            channel.sendMessage(language.getTextFor(guild, "stop.confirm"))
+            channel.sendMessage(language.getString(
+                LangKey.keyBuilder(this, "trackEnd", "stop.confirm"),
+                "Disconnected from your channel.")
+            )
             return
         }
 
@@ -118,22 +122,24 @@ class TrackScheduler(private val player: AudioPlayer, private val guild: Guild, 
 
         val embed = Embed {
             author {
-                name = language.getTextFor(guild, if (player.isPaused) "player.paused" else "music.progress")
+                name = language.getString(
+                    LangKey.keyBuilder(this, "statusMessage", if (player.isPaused) "player.paused" else "music.progress"),
+                    "Music in progress")
                 url = track.info.uri
                 iconUrl = guild.jda.selfUser.avatarUrl
             }
 
             field {
                 name = track.info.title
-                value = "❱ ${language.getTextFor(guild, "music.author")} : ${track.info.author} " +
-                        "\n❱ ${language.getTextFor(guild, "music.duration")} : ${getTimestamp(track.duration)}" +
-                        (if (repeatTrack) "\n❱ ${language.getTextFor(guild, "music.repeatRequested")}" else "") +
-                        (if (repeatPlaylist) "\n❱ ${language.getTextFor(guild, "music.repeatPlaylistRequested")}" else "")
+                value = "❱ ${language.getString(LangKey.keyBuilder(this, "statusMessage", "music.author"), "Author")} : ${track.info.author} " +
+                        "\n❱ ${language.getString(LangKey.keyBuilder(this, "statusMessage", "music.duration"), "Duration")} : ${getTimestamp(track.duration)}" +
+                        (if (repeatTrack) "\n❱ ${language.getString(LangKey.keyBuilder(this, "statusMessage", "music.repeatRequested"), "The music will be repeated.")}" else "") +
+                        (if (repeatPlaylist) "\n❱ ${language.getString(LangKey.keyBuilder(this, "statusMessage", "music.repeatPlaylistRequested"), "Playlist repeat enabled.")}" else "")
             }
 
             timestamp = Instant.now()
             footer {
-                name = language.getTextFor(guild, "music.request") + requester!!.user.name
+                name = language.getString(LangKey.keyBuilder(this, "statusMessage", "music.request"), "Request from ") + requester!!.user.name
                 iconUrl = requester!!.user.avatarUrl
             }
 
