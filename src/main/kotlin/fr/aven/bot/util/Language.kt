@@ -5,6 +5,7 @@ import net.dv8tion.jda.api.entities.Guild
 import java.io.InputStream
 import java.io.InputStreamReader
 
+@Deprecated("Use fr.aven.bot.util.LangLoader")
 class Language
 {
     private var folder = "lang/"
