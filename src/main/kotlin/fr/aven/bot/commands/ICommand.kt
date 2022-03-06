@@ -1,6 +1,7 @@
 package fr.aven.bot.commands
 
 import fr.aven.bot.util.lang.LangManager
+import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent
 import net.dv8tion.jda.api.events.interaction.command.MessageContextInteractionEvent
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.events.interaction.command.UserContextInteractionEvent
@@ -79,4 +80,14 @@ interface IButtonCmd: ICommand {
      * Function call when the command is executed.
      */
     suspend fun action(event: ButtonInteractionEvent, lang: LangManager)
+}
+
+/**
+ * Interface for modal commands
+ */
+interface IModalCmd: ICommand {
+    /**
+     * Function call when the command is executed.
+     */
+    suspend fun action(event: ModalInteractionEvent, lang: LangManager)
 }
