@@ -23,13 +23,10 @@ class CListener(private val main: Main) : CoroutineEventListener
         }
     }
 
-    fun onReady(event: ReadyEvent) {
-        log.info("${event.jda.selfUser.asTag} is connected!")
-    }
+    private fun onReady(event: ReadyEvent) = log.info("${event.jda.selfUser.asTag} is connected!")
 
-    fun onSlashCommandInteraction(event: SlashCommandInteractionEvent) {
-        main.manager.handleCommand(event.name, event)
-    }
+    private suspend inline fun onSlashCommandInteraction(event: SlashCommandInteractionEvent) = CommandManager.handleCommand(event)
+
 
     fun onButtonInteraction(event: ButtonInteractionEvent) {
         val button = event.button
