@@ -28,8 +28,8 @@ class CommandManager(private val main: Main)
 
     private fun registerCommand()
     {
-        val reflections: Set<Class<out ICommand?>> = Reflections("fr.aven.bot.commands.list").getSubTypesOf(ICommand::class.java)
-        for (instance in reflections) if (!instance.isInterface) commands.add(instance.getConstructor().newInstance()!!)
+        val reflections: Set<Class<out ICommand>> = Reflections("fr.aven.bot.commands.list").getSubTypesOf(ICommand::class.java)
+        for (instance in reflections) if (!instance.isInterface) commands.add(instance.getConstructor().newInstance())
         main.jda.awaitReady().updateCommands().addCommands(commands.filterIsInstance(IDataCommand::class.java).map { it.data }).queue()
     }
 
