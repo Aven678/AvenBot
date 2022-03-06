@@ -1,10 +1,10 @@
-package fr.aven.bot.core.database.structures
+package fr.aven.bot.core.database.structures.gConfig
 
-import fr.aven.bot.core.database.structures.Activities.ban
-import fr.aven.bot.core.database.structures.Activities.channel
-import fr.aven.bot.core.database.structures.Activities.id
-import fr.aven.bot.core.database.structures.Activities.join
-import fr.aven.bot.core.database.structures.Activities.leave
+import fr.aven.bot.core.database.structures.gConfig.Activities.ban
+import fr.aven.bot.core.database.structures.gConfig.Activities.channel
+import fr.aven.bot.core.database.structures.gConfig.Activities.id
+import fr.aven.bot.core.database.structures.gConfig.Activities.join
+import fr.aven.bot.core.database.structures.gConfig.Activities.leave
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.Table
 

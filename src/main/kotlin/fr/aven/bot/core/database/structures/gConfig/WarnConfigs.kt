@@ -1,8 +1,8 @@
-package fr.aven.bot.core.database.structures
+package fr.aven.bot.core.database.structures.gConfig
 
-import fr.aven.bot.core.database.structures.WarnConfigs.id
-import fr.aven.bot.core.database.structures.WarnConfigs.limit
-import fr.aven.bot.core.database.structures.WarnConfigs.type
+import fr.aven.bot.core.database.structures.gConfig.WarnConfigs.id
+import fr.aven.bot.core.database.structures.gConfig.WarnConfigs.limit
+import fr.aven.bot.core.database.structures.gConfig.WarnConfigs.type
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.Table
 
