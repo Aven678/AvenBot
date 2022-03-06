@@ -9,7 +9,7 @@ import org.jetbrains.exposed.sql.Table
 /**
  * Represent guild configuration on database
  *
- * @property id [String] guild id
+ * @property id [Integer] guild id
  * @property type [String] type of warn
  * @property limit [String] limit of warn
  */

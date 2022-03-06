@@ -1,12 +1,7 @@
 package fr.aven.bot.core.database
 
-import fr.aven.bot.core.database.structures.Activities
-import fr.aven.bot.core.database.structures.GuildConfigs
-import fr.aven.bot.core.database.structures.Roles
-import fr.aven.bot.core.database.structures.WarnConfigs
-import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.SchemaUtils
-import org.jetbrains.exposed.sql.Table
+import fr.aven.bot.core.database.structures.*
+import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 
 /**
@@ -34,13 +29,13 @@ data class DatabaseConfig(
  */
 class DBManager(private val config: DatabaseConfig) {
     init {
-        transaction {
-            instance = Database.connect(
-                "jdbc:mysql://${config.host}:${config.port}/${config.name}",
-                driver = "com.mysql.cj.jdbc.Driver",
-                user = config.user,
-                password = config.pass)
+        instance = Database.connect(
+            "jdbc:mysql://${config.host}:${config.port}/${config.name}",
+            driver = "com.mysql.cj.jdbc.Driver",
+            user = config.user,
+            password = config.pass)
 
+        transaction {
             SchemaUtils.createMissingTablesAndColumns(
                 GuildConfigs,
                 Activities,
@@ -48,6 +43,9 @@ class DBManager(private val config: DatabaseConfig) {
                 Roles
             )
         }
+
+        //GuildConfig.insert()
+        GuildConfig.test()
     }
 
     companion object {

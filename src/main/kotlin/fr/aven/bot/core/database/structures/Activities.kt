@@ -11,7 +11,7 @@ import org.jetbrains.exposed.sql.Table
 /**
  * Represent guild configuration on database
  *
- * @property id [String] guild id
+ * @property id [Integer] id
  * @property join [String] join message
  * @property leave [String] leave message
  * @property ban [String] ban message
