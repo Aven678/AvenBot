@@ -67,7 +67,7 @@ class PlayerManager(private val config: Config, val language: Language)
         playerManager.loadItemOrdered(musicManager, trackUrl, object : AudioLoadResultHandler
         {
             override fun trackLoaded(track: AudioTrack) {
-                interaction.hook.editOriginalEmbeds(musicManager.embedConfirm(track)).queue()
+                interaction.replyEmbeds(musicManager.embedConfirm(track)).setEphemeral(true).queue()
 
                 play(musicManager, track, interaction)
             }
@@ -79,7 +79,7 @@ class PlayerManager(private val config: Config, val language: Language)
                     if (firstTrack == null)
                         firstTrack = playlist.tracks.removeFirst()
 
-                    interaction.hook.editOriginalEmbeds(Embed {
+                    interaction.replyEmbeds(Embed {
                         author {
                             name = language.getTextFor(guild, "playlist.title")
                         }
@@ -95,7 +95,7 @@ class PlayerManager(private val config: Config, val language: Language)
                         }
 
                         color = Color(255, 127, 0).rgb
-                    }).queue()
+                    }).setEphemeral(true).queue()
 
                     play(musicManager, firstTrack!!, interaction)
                     playlist.tracks.forEach { musicManager.scheduler.queue(it, interaction.textChannel, interaction.member!!) }
