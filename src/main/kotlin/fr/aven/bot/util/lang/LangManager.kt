@@ -42,7 +42,7 @@ class LangManager(private val lang: String) {
             var current = newObject
             missing.forEach {
                 checked.add(it)
-                current = if (current.has(it)) current.getAsJsonObject(it)
+                current = if (current.has(it) && current.get(it) is JsonObject) current.getAsJsonObject(it)
                 else {
                     if (missing.indexOf(it) == missing.size - 1) return@forEach current.addProperty(it, default)
                     current.add(it, JsonObject())
@@ -61,9 +61,9 @@ class LangManager(private val lang: String) {
             if (currentElement !is JsonObject) continue
             if (currentElement.has(current)) {
                 val element = currentElement.get(current)
-                if (element is JsonObject && queue.isEmpty()) createMissingKeys()
+                if (element is JsonObject && queue.isEmpty()) return createMissingKeys()
                 else currentElement = element
-            } else createMissingKeys()
+            } else return createMissingKeys()
         }
         currentElement as JsonElement
         return currentElement.asString

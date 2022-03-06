@@ -23,7 +23,7 @@ class Queue: ISlashCmd
     override suspend fun action(event: SlashCommandInteractionEvent, lang: LangManager) {
         val guildMusicManager = CommandManager.playerManager.guildMusicManager(event)
         guildMusicManager.player.playingTrack ?: return event.reply(lang.getString(LangKey.keyBuilder(this, "action", "playerNotActive"),
-            "Aucune piste n'est en cours de lecture !"))
+            "The player doesn't play music!"))
             .setEphemeral(true)
             .queue()
         guildMusicManager.sendQueueMessage(event)
