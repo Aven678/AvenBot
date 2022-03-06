@@ -1,63 +1,69 @@
 package fr.aven.bot.commands.music
 
-import dev.minn.jda.ktx.interactions.Option
 import fr.aven.bot.commands.CommandManager
 import fr.aven.bot.commands.ISlashCmd
 import fr.aven.bot.util.lang.LangKey
 import fr.aven.bot.util.lang.LangManager
 import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
-import net.dv8tion.jda.api.interactions.commands.build.OptionData
-import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData
-import java.net.MalformedURLException
-import java.net.URL
+import net.dv8tion.jda.api.interactions.commands.OptionType
+import net.dv8tion.jda.api.interactions.commands.build.CommandData
+import net.dv8tion.jda.api.interactions.commands.build.Commands
 
 /**
  * Musique play command
  */
 class Play(private val manager: CommandManager): ISlashCmd
 {
-    override suspend fun action(event: SlashCommandInteractionEvent) {
-        if (event.member!!.voiceState?.channel == null) event.interaction.hook.editOriginal(manager.language.getTextFor(event.guild!!, "join.isNotInChannel"))
+    override val name: String
+        get() = "play"
+    override val description: String
+        get() = "Plays a song"
 
-        val memberChannel = event.member!!.voiceState?.channel!!
-        if (!event.guild!!.audioManager.isConnected) {
-            if (!event.guild!!.selfMember.hasPermission(memberChannel, Permission.VOICE_CONNECT))
-            {
-                event.interaction.hook.editOriginal(manager.language.getTextFor(event.guild!!, "")).queue()
-                return
-            }
+    override val data: CommandData
+        get() = Commands.slash(name, description)
+            .addOption(OptionType.STRING, "song", "URL or title to search in YouTube", true)
 
-            event.guild!!.audioManager.openAudioConnection(memberChannel)
-            event.guild!!.audioManager.isSelfDeafened = true
+    override suspend fun action(event: SlashCommandInteractionEvent, lang: LangManager) {
+        val memberChannel = event.member?.voiceState?.channel ?: return event
+            .reply(lang.getString(LangKey.keyBuilder(this, "action", "isNotInChannel"),
+                "Vous devez être connecter a un channel vocal pour utiliser cette commande !"))
+            .setEphemeral(true)
+            .queue()
+        val guild = event.guild ?: throw IllegalStateException("Guild is null")
+
+        if (!guild.audioManager.isConnected) {
+            if (guild.selfMember.hasPermission(memberChannel, Permission.VOICE_CONNECT))
+                return event.reply(lang.getString(LangKey.keyBuilder(this, "action", "missingPermission"),
+                    "Vous devez être connecter a un channel vocal pour utiliser cette commande !"))
+                    .setEphemeral(true)
+                    .queue()
+            guild.audioManager.openAudioConnection(memberChannel)
+            guild.audioManager.isSelfDeafened = true
         }
-        else if (event.guild!!.audioManager.connectedChannel!!.id != event.member!!.voiceState!!.channel!!.id)
-        {
-            event.interaction.hook.editOriginal(manager.language.getTextFor(event.guild!!, "stop.isNotInSameChannel")).queue()
-            return
+
+        else if (guild.audioManager.connectedChannel?.id != memberChannel.id) {
+            return event.reply(lang.getString(LangKey.keyBuilder(this, "action", "isNotInSameChannel"),
+                "Vous devez être connecter dans le même channel que moi pour ajouté des musiques !"))
+                .setEphemeral(true)
+                .queue()
         }
+        var request = event.getOptionsByName("song").first().asString
 
-        var request = event.getOption("song")!!.asString
-
-        if (!isUrl(event.getOption("song")!!.asString)) request = "ytsearch:$request"
+        if (!isUrl(request)) request = "ytsearch:$request"
         manager.playerManager.loadAndPlay(event, request)
     }
 
     private fun isUrl(str: String): Boolean {
-        try {
-            URL(str)
-            return true
-        } catch (_: MalformedURLException) {}
-
-        return false
+        val regex = "^(https?)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]"
+        return str.matches(regex.toRegex())
     }
-
-    override val name: String
-        get() = "play"
-
-    override val description: String
-        get() = "Plays a song"
-
-    override val options: List<OptionData>
-        get() = listOf(Option<String>("song", "URL or title to search in YouTube", true))
 }
+
+
+/*
+        return try {
+            URL(str)
+            true
+        } catch (_: MalformedURLException) { false }
+* */
