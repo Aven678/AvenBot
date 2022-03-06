@@ -8,13 +8,16 @@ import fr.aven.bot.util.lang.LangLoader
 /**
  * Global variable [GSON]
  */
-val GSON: Gson = GsonBuilder().setPrettyPrinting().serializeNulls().create()
+val GSON: Gson by lazy { GsonBuilder().setPrettyPrinting().serializeNulls().create() }
 
 /**
  * the [LangLoader] global instance
  */
 val LANG_LOADER by lazy { LangLoader() }
 
-fun main(args: Array<String>) {
+/**
+ * Main function
+ */
+fun main() {
     Main()
 }
