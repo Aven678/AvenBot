@@ -129,17 +129,15 @@ class GuildMusicManager(private val manager: AudioPlayerManager, private val gui
             .hook
             .editOriginalEmbeds(queueEmbed(page))
             .setActionRows(ActionRow.of(
-                if (page > 0) secondary("m.queue.${page-1}", label = "Previous page", emoji = Emoji.fromUnicode("⬅️")) else null,
+                if (page >= 0) secondary("m.queue.${page-1}", label = "Previous page", emoji = Emoji.fromUnicode("⬅️")) else null,
                 secondary("m.queue.${page+1}", label = "Next page", emoji = Emoji.fromUnicode("➡️"))
             )).queue()
     }
 
     fun sendQueueMessage(event: SlashCommandInteractionEvent)
     {
-        event.interaction
-            .hook
-            .editOriginalEmbeds(queueEmbed(0))
-            .setActionRows(ActionRow.of(
+        event.replyEmbeds(queueEmbed(0))
+            .addActionRows(ActionRow.of(
                 secondary("m.queue.1", label = "Next page", emoji = Emoji.fromUnicode("➡️"))
             )).queue()
     }

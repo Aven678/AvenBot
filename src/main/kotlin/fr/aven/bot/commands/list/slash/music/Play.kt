@@ -33,7 +33,7 @@ class Play: ISlashCmd
         val guild = event.guild ?: throw IllegalStateException("Guild is null")
 
         if (!guild.audioManager.isConnected) {
-            if (guild.selfMember.hasPermission(memberChannel, Permission.VOICE_CONNECT))
+            if (!guild.selfMember.hasPermission(memberChannel, Permission.VOICE_CONNECT))
                 return event.reply(lang.getString(LangKey.keyBuilder(this, "action", "missingPermission"),
                     "Vous devez être connecter a un channel vocal pour utiliser cette commande !"))
                     .setEphemeral(true)

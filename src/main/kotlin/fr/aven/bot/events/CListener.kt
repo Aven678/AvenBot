@@ -27,7 +27,7 @@ class CListener(private val main: Main) : CoroutineEventListener
     private suspend inline fun onSlashCommandInteraction(event: SlashCommandInteractionEvent) = CommandManager.handleSlashCommand(event)
     private suspend inline fun onButtonInteraction(event: ButtonInteractionEvent) = CommandManager.handleButtonCommand(event)
 
-    fun onSelectMenuInteraction(event: SelectMenuInteractionEvent) {
+    private fun onSelectMenuInteraction(event: SelectMenuInteractionEvent) {
         event.deferEdit().queue()
         CommandManager.playerManager.guildMusicManager(event).searchConfirm(event)
     }
