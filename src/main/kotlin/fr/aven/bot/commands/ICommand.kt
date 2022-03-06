@@ -20,6 +20,7 @@ interface ICommand {
 
 /**
  * Interface for commands require CommandData
+ * @property data [CommandData] The data of the command.
  */
 interface IDataCommand : ICommand {
     val data: CommandData

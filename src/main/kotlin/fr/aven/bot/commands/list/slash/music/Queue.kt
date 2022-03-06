@@ -11,7 +11,7 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands
 /**
  * View queue
  */
-class Queue(private val manager: CommandManager): ISlashCmd
+class Queue: ISlashCmd
 {
     override val name: String
         get() = "queue"

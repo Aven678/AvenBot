@@ -12,7 +12,7 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands
 /**
  * Set volume of the music player.
  */
-class Volume(private val manager: CommandManager): ISlashCmd
+class Volume: ISlashCmd
 {
     override val name: String
         get() = "volume"

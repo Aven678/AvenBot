@@ -13,7 +13,7 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands
 /**
  * Musique play command
  */
-class Play(private val manager: CommandManager): ISlashCmd
+class Play: ISlashCmd
 {
     override val name: String
         get() = "play"
