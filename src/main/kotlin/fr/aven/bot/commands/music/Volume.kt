@@ -3,10 +3,11 @@ package fr.aven.bot.commands.music
 import dev.minn.jda.ktx.interactions.Option
 import fr.aven.bot.commands.CommandManager
 import fr.aven.bot.commands.ICommand
+import fr.aven.bot.commands.ISlashCmd
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.interactions.commands.build.OptionData
 
-class Volume(private val manager: CommandManager): ICommand
+class Volume(private val manager: CommandManager): ISlashCmd
 {
     override val name: String
         get() = "volume"

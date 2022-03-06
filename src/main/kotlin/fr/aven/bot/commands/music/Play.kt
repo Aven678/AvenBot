@@ -2,7 +2,9 @@ package fr.aven.bot.commands.music
 
 import dev.minn.jda.ktx.interactions.Option
 import fr.aven.bot.commands.CommandManager
-import fr.aven.bot.commands.ICommand
+import fr.aven.bot.commands.ISlashCmd
+import fr.aven.bot.util.lang.LangKey
+import fr.aven.bot.util.lang.LangManager
 import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.interactions.commands.build.OptionData
@@ -10,7 +12,10 @@ import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData
 import java.net.MalformedURLException
 import java.net.URL
 
-class Play(private val manager: CommandManager): ICommand
+/**
+ * Musique play command
+ */
+class Play(private val manager: CommandManager): ISlashCmd
 {
     override suspend fun action(event: SlashCommandInteractionEvent) {
         if (event.member!!.voiceState?.channel == null) event.interaction.hook.editOriginal(manager.language.getTextFor(event.guild!!, "join.isNotInChannel"))
