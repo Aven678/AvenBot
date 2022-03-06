@@ -1,8 +1,6 @@
-package fr.aven.bot.commands.music
+package fr.aven.bot.commands.list.slash.music
 
-import dev.minn.jda.ktx.interactions.Option
 import fr.aven.bot.commands.CommandManager
-import fr.aven.bot.commands.ICommand
 import fr.aven.bot.commands.ISlashCmd
 import fr.aven.bot.util.lang.LangKey
 import fr.aven.bot.util.lang.LangManager
@@ -10,8 +8,10 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import net.dv8tion.jda.api.interactions.commands.OptionType
 import net.dv8tion.jda.api.interactions.commands.build.CommandData
 import net.dv8tion.jda.api.interactions.commands.build.Commands
-import net.dv8tion.jda.api.interactions.commands.build.OptionData
 
+/**
+ * Set volume of the music player.
+ */
 class Volume(private val manager: CommandManager): ISlashCmd
 {
     override val name: String
@@ -23,10 +23,10 @@ class Volume(private val manager: CommandManager): ISlashCmd
             .addOption(OptionType.INTEGER, "volume", "Volume to set", true)
 
     override suspend fun action(event: SlashCommandInteractionEvent, lang: LangManager) {
-        val musicManager = manager.playerManager.guildMusicManager(event)
+        val musicManager = CommandManager.playerManager.guildMusicManager(event)
         val guild = event.guild ?: throw IllegalStateException("Guild is null")
 
-        musicManager.player.playingTrack ?: return event.reply(lang.getString(LangKey.keyBuilder(this, "", "playerNotActive"),
+        musicManager.player.playingTrack ?: return event.reply(lang.getString(LangKey.keyBuilder(this, "action", "playerNotActive"),
             "Aucune piste n'est en cours de lecture !"))
             .setEphemeral(true)
             .queue()

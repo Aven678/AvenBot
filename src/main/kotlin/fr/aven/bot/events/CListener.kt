@@ -9,7 +9,6 @@ import net.dv8tion.jda.api.events.ReadyEvent
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent
 import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent
-import net.dv8tion.jda.api.hooks.ListenerAdapter
 
 class CListener(private val main: Main) : CoroutineEventListener
 {
@@ -25,33 +24,12 @@ class CListener(private val main: Main) : CoroutineEventListener
 
     private fun onReady(event: ReadyEvent) = log.info("${event.jda.selfUser.asTag} is connected!")
 
-    private suspend inline fun onSlashCommandInteraction(event: SlashCommandInteractionEvent) = CommandManager.handleCommand(event)
-
-
-    fun onButtonInteraction(event: ButtonInteractionEvent) {
-        val button = event.button
-        event.deferEdit().queue()
-
-        val guildMusicManager = main.manager.playerManager.guildMusicManager(event)
-
-        with(button.id!!) {
-            when {
-                equals("m.old") -> guildMusicManager.scheduler.playBackTrack()
-                equals("m.player") -> guildMusicManager.scheduler.changePlayerStatus()
-                equals("m.skip") -> guildMusicManager.scheduler.skipTrack()
-                equals("m.lyrics") -> TODO()
-                equals("m.repeatPlaylist") -> guildMusicManager.scheduler.repeatPlaylist()
-                equals("m.repeatTrack") -> guildMusicManager.scheduler.repeatTrack()
-                equals("m.stop") -> guildMusicManager.scheduler.stopPlayer()
-
-                startsWith("m.queue") -> main.manager.playerManager.guildMusicManager(event).sendQueueMessage(event)
-            }
-        }
-    }
+    private suspend inline fun onSlashCommandInteraction(event: SlashCommandInteractionEvent) = CommandManager.handleSlashCommand(event)
+    private suspend inline fun onButtonInteraction(event: ButtonInteractionEvent) = CommandManager.handleButtonCommand(event)
 
     fun onSelectMenuInteraction(event: SelectMenuInteractionEvent) {
         event.deferEdit().queue()
-        main.manager.playerManager.guildMusicManager(event).searchConfirm(event)
+        CommandManager.playerManager.guildMusicManager(event).searchConfirm(event)
     }
 
 

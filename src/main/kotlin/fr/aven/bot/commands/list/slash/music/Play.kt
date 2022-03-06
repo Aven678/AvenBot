@@ -1,4 +1,4 @@
-package fr.aven.bot.commands.music
+package fr.aven.bot.commands.list.slash.music
 
 import fr.aven.bot.commands.CommandManager
 import fr.aven.bot.commands.ISlashCmd
@@ -51,7 +51,7 @@ class Play(private val manager: CommandManager): ISlashCmd
         var request = event.getOptionsByName("song").first().asString
 
         if (!isUrl(request)) request = "ytsearch:$request"
-        manager.playerManager.loadAndPlay(event, request)
+        CommandManager.playerManager.loadAndPlay(event, request)
     }
 
     private fun isUrl(str: String): Boolean {
