@@ -35,8 +35,8 @@ dependencies {
     implementation("ch.qos.logback", "logback-classic", "1.0.9")
     implementation("ch.qos.logback", "logback-core", "1.0.9")
 
-    @Suppress("GradlePackageUpdate")
-    implementation("org.reflections:reflections:0.9.11")
+    // https://mvnrepository.com/artifact/org.reflections/reflections
+    implementation("org.reflections:reflections:0.10.2")
 
     implementation("org.jetbrains.exposed", "exposed-core", "0.37.3")
     implementation("org.jetbrains.exposed", "exposed-dao", "0.37.3")
