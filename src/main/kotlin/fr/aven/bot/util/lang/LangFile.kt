@@ -20,7 +20,10 @@ class LangFile(private val lang: String, data: JsonObject) {
 
     companion object {
         private val LANG_DIR = File("./lang/")
-        init { LANG_DIR.mkdirs() }
+
+        init {
+            LANG_DIR.mkdirs()
+        }
 
         /**
          * Load lang file

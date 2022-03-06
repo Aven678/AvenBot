@@ -11,8 +11,7 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands
 /**
  * View queue
  */
-class Queue: ISlashCmd
-{
+class Queue : ISlashCmd {
     override val name: String
         get() = "queue"
     override val description: String
@@ -22,7 +21,9 @@ class Queue: ISlashCmd
 
     override suspend fun action(event: SlashCommandInteractionEvent, lang: LangManager) {
         val guildMusicManager = CommandManager.playerManager.guildMusicManager(event)
-        guildMusicManager.player.playingTrack ?: return event.reply(lang.getString(LangKey.keyBuilder(this, "action", "playerNotActive"),
+        guildMusicManager.player.playingTrack ?: return event.reply(lang.getString(LangKey.keyBuilder(this,
+            "action",
+            "playerNotActive"),
             "The player doesn't play music!"))
             .setEphemeral(true)
             .queue()

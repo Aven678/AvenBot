@@ -8,12 +8,12 @@ import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent
 /**
  * Buttons musique commands.
  */
-class MusicButtons: IButtonCmd {
+class MusicButtons : IButtonCmd {
     override suspend fun action(event: ButtonInteractionEvent, lang: LangManager) {
         event.deferEdit().queue()
         val guildMusicManager = CommandManager.playerManager.guildMusicManager(event)
 
-        with(event.button.id){
+        with(event.button.id) {
             when {
                 equals("m.old") -> guildMusicManager.scheduler.playBackTrack()
                 equals("m.player") -> guildMusicManager.scheduler.changePlayerStatus()

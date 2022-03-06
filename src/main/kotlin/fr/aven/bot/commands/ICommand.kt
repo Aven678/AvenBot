@@ -6,7 +6,8 @@ import net.dv8tion.jda.api.events.interaction.command.MessageContextInteractionE
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.events.interaction.command.UserContextInteractionEvent
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent
-import net.dv8tion.jda.api.interactions.commands.build.*
+import net.dv8tion.jda.api.interactions.commands.build.CommandData
+import net.dv8tion.jda.api.interactions.commands.build.Commands
 
 /**
  * Interface for commands.
@@ -48,7 +49,7 @@ interface ISlashCmd : IDataCommand {
  * Interface for user context commands
  * @property data [CommandData] The data of the command.
  */
-interface IUserCmd: IDataCommand {
+interface IUserCmd : IDataCommand {
     override val data: CommandData
         get() = Commands.user(name)
 
@@ -62,7 +63,7 @@ interface IUserCmd: IDataCommand {
  * Interface for message context commands
  * @property data [CommandData] The data of the command.
  */
-interface IMessageCmd: IDataCommand {
+interface IMessageCmd : IDataCommand {
     override val data: CommandData
         get() = Commands.message(name)
 
@@ -75,7 +76,7 @@ interface IMessageCmd: IDataCommand {
 /**
  * Interface for button commands
  */
-interface IButtonCmd: ICommand {
+interface IButtonCmd : ICommand {
     /**
      * Function call when the command is executed.
      */
@@ -85,7 +86,7 @@ interface IButtonCmd: ICommand {
 /**
  * Interface for modal commands
  */
-interface IModalCmd: ICommand {
+interface IModalCmd : ICommand {
     /**
      * Function call when the command is executed.
      */

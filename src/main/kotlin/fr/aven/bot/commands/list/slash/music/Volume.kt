@@ -12,8 +12,7 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands
 /**
  * Set volume of the music player.
  */
-class Volume: ISlashCmd
-{
+class Volume : ISlashCmd {
     override val name: String
         get() = "volume"
     override val description: String
@@ -26,15 +25,20 @@ class Volume: ISlashCmd
         val musicManager = CommandManager.playerManager.guildMusicManager(event)
         val guild = event.guild ?: throw IllegalStateException("Guild is null")
 
-        musicManager.player.playingTrack ?: return event.reply(lang.getString(LangKey.keyBuilder(this, "action", "playerNotActive"),
+        musicManager.player.playingTrack ?: return event.reply(lang.getString(LangKey.keyBuilder(this,
+            "action",
+            "playerNotActive"),
             "Aucune piste n'est en cours de lecture !"))
             .setEphemeral(true)
             .queue()
 
-        val connectedChannel = guild.audioManager.connectedChannel ?: return event.reply(lang.getString(LangKey.keyBuilder(this, "action", "notConnected"),
-            "Aucune piste n'est en cours de lecture !"))
-            .setEphemeral(true)
-            .queue()
+        val connectedChannel =
+            guild.audioManager.connectedChannel ?: return event.reply(lang.getString(LangKey.keyBuilder(this,
+                "action",
+                "notConnected"),
+                "Aucune piste n'est en cours de lecture !"))
+                .setEphemeral(true)
+                .queue()
 
         if (connectedChannel.id != event.member?.voiceState?.channel?.id) {
             return event.reply(lang.getString(LangKey.keyBuilder(this, "action", "isNotInSameChannel"),

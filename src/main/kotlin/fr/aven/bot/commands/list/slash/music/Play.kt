@@ -13,8 +13,7 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands
 /**
  * Musique play command
  */
-class Play: ISlashCmd
-{
+class Play : ISlashCmd {
     override val name: String
         get() = "play"
     override val description: String
@@ -40,9 +39,7 @@ class Play: ISlashCmd
                     .queue()
             guild.audioManager.openAudioConnection(memberChannel)
             guild.audioManager.isSelfDeafened = true
-        }
-
-        else if (guild.audioManager.connectedChannel?.id != memberChannel.id) {
+        } else if (guild.audioManager.connectedChannel?.id != memberChannel.id) {
             return event.reply(lang.getString(LangKey.keyBuilder(this, "action", "isNotInSameChannel"),
                 "You have to be in the same voice channel as me to use this."))
                 .setEphemeral(true)

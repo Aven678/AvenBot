@@ -2,14 +2,12 @@ package fr.aven.bot.music
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter
-import com.sedmelluq.discord.lavaplayer.tools.FriendlyException
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason
 import dev.minn.jda.ktx.Embed
 import dev.minn.jda.ktx.interactions.button
 import fr.aven.bot.util.lang.LangKey
 import fr.aven.bot.util.lang.LangManager
-import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.entities.Emoji
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.Member
@@ -18,10 +16,13 @@ import net.dv8tion.jda.api.interactions.components.ActionRow
 import net.dv8tion.jda.api.interactions.components.buttons.ButtonStyle
 import java.time.Instant
 import java.util.concurrent.LinkedBlockingQueue
-import kotlin.time.Duration
 
-class TrackScheduler(private val player: AudioPlayer, private val guild: Guild, private var channel: TextChannel, private val language: LangManager): AudioEventAdapter()
-{
+class TrackScheduler(
+    private val player: AudioPlayer,
+    private val guild: Guild,
+    private var channel: TextChannel,
+    private val language: LangManager,
+) : AudioEventAdapter() {
     private val oldQueue = LinkedBlockingQueue<AudioTrack>()
     val queue = LinkedBlockingQueue<AudioTrack>()
     private var statusMessage = ""
@@ -34,19 +35,16 @@ class TrackScheduler(private val player: AudioPlayer, private val guild: Guild, 
     private var repeatPlaylist = false
     private var backRequested = false
 
-    fun queue(track: AudioTrack, channel: TextChannel, member: Member)
-    {
+    fun queue(track: AudioTrack, channel: TextChannel, member: Member) {
         channelTrack[track] = channel
         requesters[track] = member
         oldQueue.put(track)
 
-        if (player.playingTrack == null)
-        {
+        if (player.playingTrack == null) {
             requester = member
             this.channel = channel
             player.startTrack(track, true)
-        }
-        else
+        } else
             queue.put(track)
     }
 
@@ -61,8 +59,7 @@ class TrackScheduler(private val player: AudioPlayer, private val guild: Guild, 
     }
 
     override fun onTrackEnd(player: AudioPlayer, finished_track: AudioTrack, endReason: AudioTrackEndReason) {
-        if (backRequested)
-        {
+        if (backRequested) {
             val oldTrack = oldQueue.poll()
             if (requesters[oldTrack]!!.id != requester!!.id || requester == null) requester = requesters[oldTrack]!!
             statusMessage = ""
@@ -72,22 +69,19 @@ class TrackScheduler(private val player: AudioPlayer, private val guild: Guild, 
             return
         }
 
-        if (repeatTrack)
-        {
+        if (repeatTrack) {
             val cloneTrack = finished_track.makeClone()
             statusMessage = ""
             player.startTrack(cloneTrack, false)
             return
         }
 
-        if (repeatPlaylist)
-        {
+        if (repeatPlaylist) {
             val cloneTrack = finished_track.makeClone()
             queue(cloneTrack, channel, requester!!)
         }
 
-        if (queue.isEmpty())
-        {
+        if (queue.isEmpty()) {
             guild.audioManager.closeAudioConnection()
             channel.retrieveMessageById(statusMessage).queue {
                 it?.delete()?.queue()
@@ -115,15 +109,16 @@ class TrackScheduler(private val player: AudioPlayer, private val guild: Guild, 
         super.onTrackStart(player, track)
     }
 
-    private fun statusMessage()
-    {
+    private fun statusMessage() {
         if (player.playingTrack == null) return
         val track = player.playingTrack
 
         val embed = Embed {
             author {
                 name = language.getString(
-                    LangKey.keyBuilder(this, "statusMessage", if (player.isPaused) "player.paused" else "music.progress"),
+                    LangKey.keyBuilder(this,
+                        "statusMessage",
+                        if (player.isPaused) "player.paused" else "music.progress"),
                     "Music in progress")
                 url = track.info.uri
                 iconUrl = guild.jda.selfUser.avatarUrl
@@ -131,15 +126,30 @@ class TrackScheduler(private val player: AudioPlayer, private val guild: Guild, 
 
             field {
                 name = track.info.title
-                value = "❱ ${language.getString(LangKey.keyBuilder(this, "statusMessage", "music.author"), "Author")} : ${track.info.author} " +
-                        "\n❱ ${language.getString(LangKey.keyBuilder(this, "statusMessage", "music.duration"), "Duration")} : ${getTimestamp(track.duration)}" +
-                        (if (repeatTrack) "\n❱ ${language.getString(LangKey.keyBuilder(this, "statusMessage", "music.repeatRequested"), "The music will be repeated.")}" else "") +
-                        (if (repeatPlaylist) "\n❱ ${language.getString(LangKey.keyBuilder(this, "statusMessage", "music.repeatPlaylistRequested"), "Playlist repeat enabled.")}" else "")
+                value = "❱ ${
+                    language.getString(LangKey.keyBuilder(this, "statusMessage", "music.author"),
+                        "Author")
+                } : ${track.info.author} " +
+                        "\n❱ ${
+                            language.getString(LangKey.keyBuilder(this, "statusMessage", "music.duration"),
+                                "Duration")
+                        } : ${getTimestamp(track.duration)}" +
+                        (if (repeatTrack) "\n❱ ${
+                            language.getString(LangKey.keyBuilder(this,
+                                "statusMessage",
+                                "music.repeatRequested"), "The music will be repeated.")
+                        }" else "") +
+                        (if (repeatPlaylist) "\n❱ ${
+                            language.getString(LangKey.keyBuilder(this,
+                                "statusMessage",
+                                "music.repeatPlaylistRequested"), "Playlist repeat enabled.")
+                        }" else "")
             }
 
             timestamp = Instant.now()
             footer {
-                name = language.getString(LangKey.keyBuilder(this, "statusMessage", "music.request"), "Request from ") + requester!!.user.name
+                name = language.getString(LangKey.keyBuilder(this, "statusMessage", "music.request"),
+                    "Request from ") + requester!!.user.name
                 iconUrl = requester!!.user.avatarUrl
             }
 
@@ -149,7 +159,9 @@ class TrackScheduler(private val player: AudioPlayer, private val guild: Guild, 
 
         val actionRows = listOf(ActionRow.of(
             button(id = "m.old", emoji = Emoji.fromUnicode("⏮️"), style = ButtonStyle.SECONDARY),
-            button(id = "m.player", emoji = if (player.isPaused) Emoji.fromUnicode("▶️") else Emoji.fromUnicode("⏸️"), style = ButtonStyle.SECONDARY),
+            button(id = "m.player",
+                emoji = if (player.isPaused) Emoji.fromUnicode("▶️") else Emoji.fromUnicode("⏸️"),
+                style = ButtonStyle.SECONDARY),
             button(id = "m.skip", emoji = Emoji.fromUnicode("⏭️"), style = ButtonStyle.SECONDARY)
         ), ActionRow.of(
             button(id = "m.repeatPlaylist", emoji = Emoji.fromUnicode("\uD83D\uDD01"), style = ButtonStyle.SECONDARY),
@@ -158,7 +170,8 @@ class TrackScheduler(private val player: AudioPlayer, private val guild: Guild, 
             button(id = "m.stop", label = "Stop", style = ButtonStyle.DANGER),
         ))
 
-        if (statusMessage == "") channel.sendMessageEmbeds(embed).setActionRows(actionRows).queue  { statusMessage = it.id }
+        if (statusMessage == "") channel.sendMessageEmbeds(embed).setActionRows(actionRows)
+            .queue { statusMessage = it.id }
         else channel.editMessageEmbedsById(statusMessage, embed).setActionRows(actionRows).queue()
     }
 
@@ -176,30 +189,25 @@ class TrackScheduler(private val player: AudioPlayer, private val guild: Guild, 
         player.stopTrack()
     }
 
-    fun changePlayerStatus()
-    {
+    fun changePlayerStatus() {
         player.isPaused = !player.isPaused
     }
 
-    fun skipTrack()
-    {
+    fun skipTrack() {
         player.stopTrack()
     }
 
-    fun repeatPlaylist()
-    {
+    fun repeatPlaylist() {
         repeatPlaylist = !repeatPlaylist
         statusMessage()
     }
 
-    fun repeatTrack()
-    {
+    fun repeatTrack() {
         repeatTrack = !repeatTrack
         statusMessage()
     }
 
-    fun stopPlayer()
-    {
+    fun stopPlayer() {
         queue.clear()
         repeatTrack = false
         repeatPlaylist = false

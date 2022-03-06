@@ -10,11 +10,10 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent
 import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent
 
-class CListener(private val main: Main) : CoroutineEventListener
-{
+class CListener(private val main: Main) : CoroutineEventListener {
     private val log by SLF4J
     override suspend fun onEvent(event: GenericEvent) {
-        when(event) {
+        when (event) {
             is ReadyEvent -> onReady(event)
             is ButtonInteractionEvent -> onButtonInteraction(event)
             is SlashCommandInteractionEvent -> onSlashCommandInteraction(event)
@@ -24,8 +23,11 @@ class CListener(private val main: Main) : CoroutineEventListener
 
     private fun onReady(event: ReadyEvent) = log.info("${event.jda.selfUser.asTag} is connected!")
 
-    private suspend inline fun onSlashCommandInteraction(event: SlashCommandInteractionEvent) = CommandManager.handleSlashCommand(event)
-    private suspend inline fun onButtonInteraction(event: ButtonInteractionEvent) = CommandManager.handleButtonCommand(event)
+    private suspend inline fun onSlashCommandInteraction(event: SlashCommandInteractionEvent) =
+        CommandManager.handleSlashCommand(event)
+
+    private suspend inline fun onButtonInteraction(event: ButtonInteractionEvent) =
+        CommandManager.handleButtonCommand(event)
 
     private fun onSelectMenuInteraction(event: SelectMenuInteractionEvent) {
         event.deferEdit().queue()

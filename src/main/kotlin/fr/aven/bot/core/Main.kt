@@ -6,7 +6,6 @@ import dev.minn.jda.ktx.default
 import dev.minn.jda.ktx.intents
 import fr.aven.bot.commands.CommandManager
 import fr.aven.bot.events.CListener
-import fr.aven.bot.util.Language
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.entities.Activity
 import net.dv8tion.jda.api.requests.GatewayIntent
@@ -17,11 +16,10 @@ data class Config(
     val token: String,
     val database: DatabaseConfig,
 
-    val ipv6_block: String = "none"
+    val ipv6_block: String = "none",
 )
 
-class Main
-{
+class Main {
     lateinit var config: Config
     lateinit var jda: JDA
     lateinit var manager: CommandManager
@@ -52,8 +50,7 @@ class Main
 
     private fun checkConfigFile(): Boolean {
         val file = File("config.yml")
-        if (!file.exists())
-        {
+        if (!file.exists()) {
             logger.error("config.yml missing!")
             return false
         }
