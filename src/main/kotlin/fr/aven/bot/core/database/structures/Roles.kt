@@ -2,6 +2,7 @@ package fr.aven.bot.core.database.structures
 
 import fr.aven.bot.core.database.structures.Roles.admin
 import fr.aven.bot.core.database.structures.Roles.dj
+import fr.aven.bot.core.database.structures.Roles.id
 import fr.aven.bot.core.database.structures.Roles.mute
 import fr.aven.bot.core.database.structures.Roles.role
 import org.jetbrains.exposed.sql.ResultRow
@@ -17,13 +18,12 @@ import org.jetbrains.exposed.sql.Table
  * @property admin [Boolean] is admin role
  */
 object Roles : Table("roles") {
+    val id = varchar("id", 25)
     val role = varchar("role", 25)
     val dj = bool("dj")
     val mute = bool("mute")
     val admin = bool("admin")
     val mod = bool("mod")
-
-    override val primaryKey = PrimaryKey(role, name = "PK_Roles")
 }
 
 /**
@@ -34,22 +34,27 @@ object Roles : Table("roles") {
  * @property dj [Boolean] is dj role
  * @property mute [Boolean] is mute role
  * @property admin [Boolean] is admin role
+ * @property mod [Boolean] is mod role
  */
 data class Role(
+    val id: String,
     val role: String,
     val dj: Boolean,
     val mute: Boolean,
-    val admin: Boolean
+    val admin: Boolean,
+    val mod: Boolean
 ) {
     companion object {
         /**
          * Create [Role] from [ResultRow]
          */
         fun fromRaw(rle: ResultRow) = Role(
+            rle[id],
             rle[role],
             rle[dj],
             rle[mute],
-            rle[admin]
+            rle[admin],
+            rle[Roles.mod]
         )
     }
 }

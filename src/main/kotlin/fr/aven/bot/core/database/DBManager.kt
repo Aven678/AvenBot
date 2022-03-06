@@ -2,6 +2,7 @@ package fr.aven.bot.core.database
 
 import fr.aven.bot.core.database.structures.*
 import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
 
 /**
@@ -44,7 +45,7 @@ class DBManager(private val config: DatabaseConfig) {
             )
         }
 
-        //GuildConfig.insert()
+        GuildConfig.insert()
         GuildConfig.test()
     }
 

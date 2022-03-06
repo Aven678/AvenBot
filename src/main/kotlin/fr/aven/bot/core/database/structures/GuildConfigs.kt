@@ -22,6 +22,7 @@ object GuildConfigs : Table("guild_configs") {
     val lang = varchar("lang", 5)
     val activities = (integer("join_activity") references Activities.id)
     val warnConfig = (integer("warn_config") references WarnConfigs.id)
+    val roles = (varchar("role", 25) references Roles.id)
 
     override val primaryKey = PrimaryKey(id)
 }
@@ -42,6 +43,20 @@ data class GuildConfig(
                     it[channel] = "sussy"
                 } get Activities.id
 
+                val role1 = Roles.insert {
+                    it[role] = "sussy"
+                    it[dj] = false
+                    it[admin] = false
+                    it[mod] = false
+                } get Roles.id
+
+                val role2 = Roles.insert {
+                    it[role] = "sussy2"
+                    it[dj] = false
+                    it[admin] = false
+                    it[mod] = false
+                } get Roles.id
+
                 val warnID = WarnConfigs.insert {
                     it[limit] = 2
                     it[type] = "sussy"
@@ -52,6 +67,7 @@ data class GuildConfig(
                     it[lang] = "en"
                     it[activities] = activityID
                     it[warnConfig] = warnID
+                    it[roles] = "sussy"
                 }
             }
         }
@@ -59,7 +75,7 @@ data class GuildConfig(
         fun test() {
             transaction {
                 addLogger(StdOutSqlLogger)
-                val test = (GuildConfigs innerJoin Activities innerJoin WarnConfigs).select { GuildConfigs.id.eq("sussy") }.map { fromRaw(it) }.first()
+                val test = (GuildConfigs innerJoin Activities innerJoin WarnConfigs innerJoin Roles).select { GuildConfigs.id.eq("sussy") }.first()
 
                 println(test)
             }
