@@ -7,7 +7,7 @@ plugins {
 }
 
 application {
-    mainClassName = "fr.aven.bot.Launcher"
+    mainClass.set("fr.aven.bot.Launcher")
 }
 
 group = "fr.aven"
