@@ -213,4 +213,14 @@ class TrackScheduler(
         repeatPlaylist = false
         player.stopTrack()
     }
+
+    fun shuffleQueue()
+    {
+        val tempQueue: MutableList<AudioTrack> = LinkedHashSet<AudioTrack>(queue).toMutableList()
+        val currentTrack = tempQueue.removeFirst()
+        tempQueue.shuffle()
+        tempQueue.add(0, currentTrack)
+        queue.clear()
+        queue.addAll(tempQueue)
+    }
 }

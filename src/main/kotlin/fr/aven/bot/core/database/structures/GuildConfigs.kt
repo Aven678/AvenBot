@@ -34,10 +34,8 @@ data class GuildConfig(
     val warnConfig: WarnConfig
 ) {
     companion object {
-        fun createGuildConfig(guild: Guild): GuildConfig?
+        private fun createGuildConfig(guild: Guild)
         {
-            var config: GuildConfig? = null
-
             transaction {
                 val activityID = Activities.insert {
                     it[join] = "nothing"
@@ -56,23 +54,29 @@ data class GuildConfig(
                     it[lang] = "en"
                     it[activities] = activityID
                     it[warnConfig] = warnID
-                }.resultedValues?.get(0)
+                }
+            }
+        }
 
-                config = insert?.let { fromRaw(it) }
+        fun getGuildConfig(guild: Guild): GuildConfig? {
+            var config: GuildConfig? = getDatabaseConfig(guild)
+            if (config == null)
+            {
+                createGuildConfig(guild)
+                config = getDatabaseConfig(guild)
             }
 
             return config
         }
 
-        fun getGuildConfig(guild: Guild): GuildConfig? {
+        private fun getDatabaseConfig(guild: Guild): GuildConfig? {
             var config: GuildConfig? = null
-
             transaction {
                 val raw = (GuildConfigs innerJoin Activities innerJoin WarnConfigs).select { GuildConfigs.id.eq(guild.id) }.firstOrNull()
                 config = raw?.let { fromRaw(it) }
             }
 
-            return config?: createGuildConfig(guild)
+            return config
         }
 
         private fun fromRaw(raw: ResultRow): GuildConfig {
