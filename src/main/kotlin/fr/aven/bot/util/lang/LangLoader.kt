@@ -34,11 +34,11 @@ class LangLoader {
         return LANG_MANAGERS[code]!!
     }
 
-    fun getGuildLangCode(guild: Guild?): String? {
+    private fun getGuildLangCode(guild: Guild?): String? {
         return guild?.let { GuildConfig.getGuildConfig(it)?.lang }
     }
 
-    fun getUserLangCode(userId: String?): String? {
+    private fun getUserLangCode(userId: String?): String? {
         return null // TODO : get user lang code on database
     }
 
