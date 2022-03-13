@@ -44,9 +44,6 @@ class DBManager(private val config: DatabaseConfig) {
                 Roles
             )
         }
-
-        GuildConfig.insert()
-        GuildConfig.test()
     }
 
     companion object {

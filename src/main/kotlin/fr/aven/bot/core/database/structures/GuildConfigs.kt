@@ -5,6 +5,7 @@ import fr.aven.bot.core.database.structures.GuildConfigs.activities
 import fr.aven.bot.core.database.structures.GuildConfigs.id
 import fr.aven.bot.core.database.structures.GuildConfigs.lang
 import fr.aven.bot.core.database.structures.GuildConfigs.warnConfig
+import net.dv8tion.jda.api.entities.Guild
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 
@@ -22,7 +23,6 @@ object GuildConfigs : Table("guild_configs") {
     val lang = varchar("lang", 5)
     val activities = (integer("join_activity") references Activities.id)
     val warnConfig = (integer("warn_config") references WarnConfigs.id)
-    val roles = (varchar("role", 25) references Roles.id)
 
     override val primaryKey = PrimaryKey(id)
 }
@@ -34,54 +34,48 @@ data class GuildConfig(
     val warnConfig: WarnConfig
 ) {
     companion object {
-        fun insert() {
+        fun createGuildConfig(guild: Guild): GuildConfig?
+        {
+            var config: GuildConfig? = null
+
             transaction {
                 val activityID = Activities.insert {
-                    it[ban] = "sussy"
-                    it[join] = "sussy"
-                    it[leave] = "sussy"
-                    it[channel] = "sussy"
+                    it[join] = "nothing"
+                    it[leave] = "nothing"
+                    it[ban] = "nothing"
+                    it[channel] = "nothing"
                 } get Activities.id
 
-                val role1 = Roles.insert {
-                    it[role] = "sussy"
-                    it[dj] = false
-                    it[admin] = false
-                    it[mod] = false
-                } get Roles.id
-
-                val role2 = Roles.insert {
-                    it[role] = "sussy2"
-                    it[dj] = false
-                    it[admin] = false
-                    it[mod] = false
-                } get Roles.id
-
                 val warnID = WarnConfigs.insert {
-                    it[limit] = 2
-                    it[type] = "sussy"
+                    it[type] = "kick"
+                    it[limit] = 5
                 } get WarnConfigs.id
 
-                GuildConfigs.insert {
-                    it[id] = "sussy"
+                val insert = GuildConfigs.insert {
+                    it[id] = guild.id
                     it[lang] = "en"
                     it[activities] = activityID
                     it[warnConfig] = warnID
-                    it[roles] = "sussy"
-                }
+                }.resultedValues?.get(0)
+
+                config = insert?.let { fromRaw(it) }
             }
+
+            return null
         }
 
-        fun test() {
+        fun getGuildConfig(guild: Guild): GuildConfig? {
+            var config: GuildConfig? = null
+
             transaction {
-                addLogger(StdOutSqlLogger)
-                val test = (GuildConfigs innerJoin Activities innerJoin WarnConfigs innerJoin Roles).select { GuildConfigs.id.eq("sussy") }.first()
-
-                println(test)
+                val raw = (GuildConfigs innerJoin Activities innerJoin WarnConfigs).select { GuildConfigs.id.eq(guild.id) }.firstOrNull()
+                config = raw?.let { fromRaw(it) }
             }
+
+            return config
         }
 
-        fun fromRaw(raw: ResultRow): GuildConfig {
+        private fun fromRaw(raw: ResultRow): GuildConfig {
             return GuildConfig(
                 raw[id],
                 raw[lang],
