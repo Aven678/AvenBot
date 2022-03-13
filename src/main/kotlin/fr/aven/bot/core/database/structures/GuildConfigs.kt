@@ -61,7 +61,7 @@ data class GuildConfig(
                 config = insert?.let { fromRaw(it) }
             }
 
-            return null
+            return config
         }
 
         fun getGuildConfig(guild: Guild): GuildConfig? {
@@ -72,7 +72,7 @@ data class GuildConfig(
                 config = raw?.let { fromRaw(it) }
             }
 
-            return config
+            return config?: createGuildConfig(guild)
         }
 
         private fun fromRaw(raw: ResultRow): GuildConfig {

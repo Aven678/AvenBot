@@ -1,5 +1,6 @@
 package fr.aven.bot.util.lang
 
+import fr.aven.bot.core.database.structures.GuildConfig
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.User
 import java.io.File
@@ -28,13 +29,13 @@ class LangLoader {
      * @return [LangManager] langManager.
      */
     fun getLangManager(user: User? = null, guild: Guild? = null): LangManager {
-        val code = getUserLangCode(user?.id) ?: getGuildLangCode(guild?.id) ?: "en"
+        val code = getUserLangCode(user?.id) ?: getGuildLangCode(guild) ?: "en"
         if (!LANG_MANAGERS.containsKey(code)) LANG_MANAGERS[code] = LangManager(code)
         return LANG_MANAGERS[code]!!
     }
 
-    fun getGuildLangCode(guildId: String?): String? {
-        return null // TODO : get guild lang code on database
+    fun getGuildLangCode(guild: Guild?): String? {
+        return guild?.let { GuildConfig.getGuildConfig(it)?.lang }
     }
 
     fun getUserLangCode(userId: String?): String? {
