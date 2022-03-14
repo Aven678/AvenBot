@@ -66,7 +66,7 @@ class LangManager(private val lang: String) {
             } else return createMissingKeys()
         }
         currentElement as JsonElement
-        return currentElement.asString
+        return currentElement.asString.ifEmpty { default }
     }
 }
 
