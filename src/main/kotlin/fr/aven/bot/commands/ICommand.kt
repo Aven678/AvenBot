@@ -32,12 +32,9 @@ interface IDataCommand : ICommand {
  * Interface for Slash commands.
  *
  * @property description [String] The description of the command.
- * @property usage [String] The usage of the command.
  */
 interface ISlashCmd : IDataCommand {
     val description: String
-    val usage: String
-        get() = "/${name}"
 
     /**
      * Function call when the command is executed.
