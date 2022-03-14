@@ -45,6 +45,10 @@ dependencies {
 
     implementation("io.github.reactivecircus.cache4k:cache4k:0.4.0")
     implementation("com.google.code.gson:gson:2.9.0")
+
+    // https://mvnrepository.com/artifact/org.json/json
+    implementation("org.json:json:20211205")
+
 }
 
 tasks.withType<KotlinCompile> {
