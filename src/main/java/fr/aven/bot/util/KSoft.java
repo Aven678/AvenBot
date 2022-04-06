@@ -23,7 +23,7 @@ public class KSoft
     public KSoftAPI getKSoftAPI()
     {
         if (kSoftAPI == null)
-            kSoftAPI = new KSoftAPI(Main.getConfiguration().getString("ksoft-api", "6272b057973847dc8dca241a9ced9213d35e8963"));
+            kSoftAPI = new KSoftAPI(Main.getConfiguration().getString("ksoft-api", "default"));
 
         return kSoftAPI;
     }

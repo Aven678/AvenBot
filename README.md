@@ -2,7 +2,7 @@
 
 The official sources of [AvenBot](https://invite.justaven.xyz) created by Aven#1000 with JDA and Kotlin.
 
-Copyright [2021] [Matthieu V.]
+Copyright [2018-2022] [Matthieu V.]
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
