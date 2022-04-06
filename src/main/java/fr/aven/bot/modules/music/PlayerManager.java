@@ -37,7 +37,7 @@ public class PlayerManager
     private final AudioPlayerManager playerManager;
     private final Map<Long, GuildMusicManager> musicManagers;
 
-    private YoutubeAudioSourceManager youtubeAudioSourceManager = new YoutubeAudioSourceManager(true);
+    private YoutubeAudioSourceManager youtubeAudioSourceManager = new YoutubeAudioSourceManager();
 
     private PlayerManager()
     {
