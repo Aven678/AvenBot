@@ -1,7 +1,7 @@
 package fr.aven.bot.events
 
-import dev.minn.jda.ktx.CoroutineEventListener
-import dev.minn.jda.ktx.SLF4J
+import dev.minn.jda.ktx.util.SLF4J
+import dev.minn.jda.ktx.events.CoroutineEventListener
 import fr.aven.bot.commands.CommandManager
 import fr.aven.bot.core.Main
 import net.dv8tion.jda.api.events.GenericEvent

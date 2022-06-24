@@ -5,6 +5,7 @@ import fr.aven.bot.core.database.structures.gConfig.Roles.dj
 import fr.aven.bot.core.database.structures.gConfig.Roles.id
 import fr.aven.bot.core.database.structures.gConfig.Roles.mute
 import fr.aven.bot.core.database.structures.gConfig.Roles.role
+import net.dv8tion.jda.api.entities.Guild
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.select
@@ -41,7 +42,7 @@ object Roles : Table("roles") {
  */
 data class Role(
     val id: String,
-    val role: String,
+    val roleId: String,
     val dj: Boolean,
     val mute: Boolean,
     val admin: Boolean,
@@ -69,6 +70,16 @@ data class Role(
             return transaction {
                 Roles.select { Roles.id eq guildId }.map { fromRaw(it) }
             }
+        }
+
+        fun getModRole(guild: Guild): String? {
+            val roles = getGuildRoles(guild.id)
+
+            for (role in roles){
+                if (role.mute) return role.roleId
+            }
+
+            return null
         }
     }
 }

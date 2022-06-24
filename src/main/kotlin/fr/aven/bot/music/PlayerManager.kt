@@ -12,8 +12,8 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack
 import com.sedmelluq.lava.extensions.youtuberotator.YoutubeIpRotatorSetup
 import com.sedmelluq.lava.extensions.youtuberotator.planner.NanoIpRoutePlanner
 import com.sedmelluq.lava.extensions.youtuberotator.tools.ip.Ipv6Block
-import dev.minn.jda.ktx.Embed
-import dev.minn.jda.ktx.SLF4J
+import dev.minn.jda.ktx.messages.Embed
+import dev.minn.jda.ktx.util.SLF4J
 import fr.aven.bot.core.Config
 import fr.aven.bot.util.lang.LangKey
 import net.dv8tion.jda.api.entities.Guild
@@ -28,7 +28,7 @@ class PlayerManager(private val config: Config) {
     private var playerManager: AudioPlayerManager = DefaultAudioPlayerManager()
     private var musicManagers = mutableMapOf<Long, GuildMusicManager>()
 
-    private val youtubeAudioSourceManager = YoutubeAudioSourceManager(true)
+    private val youtubeAudioSourceManager = YoutubeAudioSourceManager(true, if (config.ytMail == "none") null else config.ytMail, if (config.ytPass == "none") null else config.ytPass)
 
     init {
         logger.info("Init PlayerManager...")

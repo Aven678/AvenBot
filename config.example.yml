@@ -7,3 +7,6 @@ database:
   pass: changeme
 
 ipv6_block: none
+
+ytMail: none
+ytPass: none

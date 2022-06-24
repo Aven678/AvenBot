@@ -4,8 +4,8 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayer
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason
-import dev.minn.jda.ktx.Embed
-import dev.minn.jda.ktx.interactions.button
+import dev.minn.jda.ktx.interactions.components.button
+import dev.minn.jda.ktx.messages.Embed
 import fr.aven.bot.util.lang.LangKey
 import fr.aven.bot.util.lang.LangManager
 import net.dv8tion.jda.api.entities.Emoji
@@ -166,7 +166,7 @@ class TrackScheduler(
         ), ActionRow.of(
             button(id = "m.repeatPlaylist", emoji = Emoji.fromUnicode("\uD83D\uDD01"), style = ButtonStyle.SECONDARY),
             button(id = "m.repeatTrack", emoji = Emoji.fromUnicode("\uD83D\uDD02"), style = ButtonStyle.SECONDARY),
-            button(id = "m.lyrics", emoji = Emoji.fromUnicode("\uD83D\uDCDC"), style = ButtonStyle.SECONDARY),
+            button(id = "m.lyrics", emoji = Emoji.fromUnicode("\uD83D\uDCDC"), style = ButtonStyle.SECONDARY, disabled = true),
             button(id = "m.stop", label = "Stop", style = ButtonStyle.DANGER),
         ))
 

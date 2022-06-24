@@ -56,11 +56,3 @@ class Play : ISlashCmd {
         return str.matches(regex.toRegex())
     }
 }
-
-
-/*
-        return try {
-            URL(str)
-            true
-        } catch (_: MalformedURLException) { false }
-* */

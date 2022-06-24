@@ -5,6 +5,10 @@ import fr.aven.bot.core.database.structures.GuildConfigs.activities
 import fr.aven.bot.core.database.structures.GuildConfigs.id
 import fr.aven.bot.core.database.structures.GuildConfigs.lang
 import fr.aven.bot.core.database.structures.GuildConfigs.warnConfig
+import fr.aven.bot.core.database.structures.gConfig.Activities
+import fr.aven.bot.core.database.structures.gConfig.Activity
+import fr.aven.bot.core.database.structures.gConfig.WarnConfig
+import fr.aven.bot.core.database.structures.gConfig.WarnConfigs
 import net.dv8tion.jda.api.entities.Guild
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction

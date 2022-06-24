@@ -4,10 +4,10 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayer
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack
-import dev.minn.jda.ktx.Embed
-import dev.minn.jda.ktx.interactions.SelectMenu
-import dev.minn.jda.ktx.interactions.option
-import dev.minn.jda.ktx.interactions.secondary
+import dev.minn.jda.ktx.messages.Embed
+import dev.minn.jda.ktx.interactions.components.SelectMenu
+import dev.minn.jda.ktx.interactions.components.option
+import dev.minn.jda.ktx.interactions.components.secondary
 import fr.aven.bot.LANG_LOADER
 import fr.aven.bot.util.lang.LangKey
 import net.dv8tion.jda.api.entities.Emoji

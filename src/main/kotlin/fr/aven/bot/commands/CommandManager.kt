@@ -1,6 +1,6 @@
 package fr.aven.bot.commands
 
-import dev.minn.jda.ktx.SLF4J
+import dev.minn.jda.ktx.util.SLF4J
 import fr.aven.bot.LANG_LOADER
 import fr.aven.bot.commands.CommandManager.Companion.playerManager
 import fr.aven.bot.core.Main
