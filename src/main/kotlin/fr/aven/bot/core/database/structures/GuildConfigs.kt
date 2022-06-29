@@ -5,10 +5,7 @@ import fr.aven.bot.core.database.structures.GuildConfigs.activities
 import fr.aven.bot.core.database.structures.GuildConfigs.id
 import fr.aven.bot.core.database.structures.GuildConfigs.lang
 import fr.aven.bot.core.database.structures.GuildConfigs.warnConfig
-import fr.aven.bot.core.database.structures.gConfig.Activities
-import fr.aven.bot.core.database.structures.gConfig.Activity
-import fr.aven.bot.core.database.structures.gConfig.WarnConfig
-import fr.aven.bot.core.database.structures.gConfig.WarnConfigs
+import fr.aven.bot.core.database.structures.gConfig.*
 import net.dv8tion.jda.api.entities.Guild
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -25,6 +22,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 object GuildConfigs : Table("guild_configs") {
     val id = varchar("id", 25)
     val lang = varchar("lang", 5)
+    val logs = (integer("logs") references LogsConfigs.id)
     val activities = (integer("join_activity") references Activities.id)
     val warnConfig = (integer("warn_config") references WarnConfigs.id)
 
@@ -34,6 +32,7 @@ object GuildConfigs : Table("guild_configs") {
 data class GuildConfig(
     val id: String,
     val lang: String,
+    val logs: LogsConfig,
     val activities: Activity,
     val warnConfig: WarnConfig
 ) {
@@ -41,6 +40,11 @@ data class GuildConfig(
         private fun createGuildConfig(guild: Guild)
         {
             transaction {
+                val logsID = LogsConfigs.insert {
+                    it[channel] = "none"
+                    it[logs] = "{}"
+                } get LogsConfigs.id
+
                 val activityID = Activities.insert {
                     it[join] = "nothing"
                     it[leave] = "nothing"
@@ -56,6 +60,7 @@ data class GuildConfig(
                 val insert = GuildConfigs.insert {
                     it[id] = guild.id
                     it[lang] = "en"
+                    it[logs] = logsID
                     it[activities] = activityID
                     it[warnConfig] = warnID
                 }
@@ -76,7 +81,7 @@ data class GuildConfig(
         private fun getDatabaseConfig(guild: Guild): GuildConfig? {
             var config: GuildConfig? = null
             transaction {
-                val raw = (GuildConfigs innerJoin Activities innerJoin WarnConfigs).select { GuildConfigs.id.eq(guild.id) }.firstOrNull()
+                val raw = (GuildConfigs innerJoin LogsConfigs innerJoin Activities innerJoin WarnConfigs).select { GuildConfigs.id.eq(guild.id) }.firstOrNull()
                 config = raw?.let { fromRaw(it) }
             }
 
@@ -87,6 +92,7 @@ data class GuildConfig(
             return GuildConfig(
                 raw[id],
                 raw[lang],
+                LogsConfig.fromRow(raw),
                 Activity.fromRaw(raw),
                 WarnConfig.fromRaw(raw)
             )

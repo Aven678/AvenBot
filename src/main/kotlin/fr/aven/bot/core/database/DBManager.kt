@@ -4,6 +4,8 @@ import fr.aven.bot.core.database.structures.*
 import fr.aven.bot.core.database.structures.gConfig.Activities
 import fr.aven.bot.core.database.structures.gConfig.Roles
 import fr.aven.bot.core.database.structures.gConfig.WarnConfigs
+import fr.aven.bot.core.database.structures.tickets.Categories
+import fr.aven.bot.core.database.structures.tickets.Tickets
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 
@@ -43,7 +45,9 @@ class DBManager(private val config: DatabaseConfig) {
                 Activities,
                 WarnConfigs,
                 Roles,
-                GuildConfigs
+                GuildConfigs,
+                Categories,
+                Tickets
             )
         }
     }
