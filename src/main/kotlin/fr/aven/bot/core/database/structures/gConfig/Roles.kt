@@ -1,5 +1,6 @@
 package fr.aven.bot.core.database.structures.gConfig
 
+import fr.aven.bot.core.JDA
 import fr.aven.bot.core.database.structures.gConfig.Roles.admin
 import fr.aven.bot.core.database.structures.gConfig.Roles.dj
 import fr.aven.bot.core.database.structures.gConfig.Roles.id
@@ -42,7 +43,7 @@ object Roles : Table("roles") {
  */
 data class Role(
     val id: String,
-    val roleId: String,
+    val roleObj: net.dv8tion.jda.api.entities.Role?,
     val dj: Boolean,
     val mute: Boolean,
     val admin: Boolean,
@@ -55,7 +56,7 @@ data class Role(
          */
         fun fromRaw(row: ResultRow) = Role(
             row[id],
-            row[role],
+            JDA.getRoleById(row[role]),
             row[dj],
             row[mute],
             row[admin],
@@ -72,11 +73,11 @@ data class Role(
             }
         }
 
-        fun getModRole(guild: Guild): String? {
+        fun getModRole(guild: Guild): net.dv8tion.jda.api.entities.Role? {
             val roles = getGuildRoles(guild.id)
 
             for (role in roles){
-                if (role.mute) return role.roleId
+                if (role.mute) return role.roleObj
             }
 
             return null

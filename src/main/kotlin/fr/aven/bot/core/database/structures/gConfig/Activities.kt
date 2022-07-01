@@ -1,10 +1,12 @@
 package fr.aven.bot.core.database.structures.gConfig
 
+import fr.aven.bot.core.JDA
 import fr.aven.bot.core.database.structures.gConfig.Activities.ban
 import fr.aven.bot.core.database.structures.gConfig.Activities.channel
 import fr.aven.bot.core.database.structures.gConfig.Activities.id
 import fr.aven.bot.core.database.structures.gConfig.Activities.join
 import fr.aven.bot.core.database.structures.gConfig.Activities.leave
+import net.dv8tion.jda.api.entities.GuildChannel
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.Table
 
@@ -42,7 +44,7 @@ data class Activity(
     val join: String,
     val leave: String,
     val ban: String,
-    val channel: String
+    val channel: GuildChannel?
 ) {
     companion object {
         /**
@@ -53,7 +55,7 @@ data class Activity(
             join    = row[join],
             leave   = row[leave],
             ban     = row[ban],
-            channel = row[channel]
+            channel = JDA.getGuildChannelById(row[channel])
         )
     }
 }
