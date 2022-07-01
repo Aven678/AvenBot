@@ -26,9 +26,10 @@ data class Config(
     val ytPass: String = "none"
 )
 
+lateinit var JDA: JDA
+
 class Main {
     lateinit var config: Config
-    lateinit var jda: JDA
     lateinit var manager: CommandManager
     lateinit var database: DBManager
 
@@ -44,7 +45,7 @@ class Main {
         database = DBManager(config.database)
         val listener = CListener(this)
 
-        jda = default(config.token, enableCoroutines = true) {
+        JDA = default(config.token, enableCoroutines = true) {
             intents += listOf(GatewayIntent.GUILD_MEMBERS)
             setAutoReconnect(true)
             setActivity(Activity.watching("justaven.xyz"))
