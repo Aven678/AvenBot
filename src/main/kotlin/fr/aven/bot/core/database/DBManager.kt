@@ -46,8 +46,13 @@ class DBManager(private val config: DatabaseConfig) {
                 WarnConfigs,
                 Roles,
                 GuildConfigs,
+
+                //Tickets
                 Categories,
-                Tickets
+                Tickets,
+
+                //AFK
+                AFKs
             )
         }
     }
