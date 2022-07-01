@@ -21,8 +21,8 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib"))
-    implementation("net.dv8tion:JDA:5.0.0-alpha.12")
-    implementation("com.github.minndevelopment:jda-ktx:bf7cd96")
+    implementation("net.dv8tion:JDA:5.0.0-alpha.13")
+    implementation("com.github.minndevelopment:jda-ktx:d5c5d9d")
 
     implementation("com.github.walkyst:lavaplayer-fork:custom-SNAPSHOT")
     implementation("com.github.walkyst.lavaplayer-fork:lavaplayer-ext-youtube-rotator:df43206b26")
