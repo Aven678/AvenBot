@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.6.21"
+    kotlin("jvm") version "1.7.10"
     id("com.github.johnrengelman.shadow") version "7.1.2"
     application
 }
@@ -21,16 +21,16 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib"))
-    implementation("net.dv8tion:JDA:5.0.0-alpha.13")
-    implementation("com.github.minndevelopment:jda-ktx:d5c5d9d")
+    implementation("net.dv8tion:JDA:5.0.0-alpha.18")
+    implementation("com.github.minndevelopment:jda-ktx:081a177")
 
     implementation("com.github.walkyst:lavaplayer-fork:custom-SNAPSHOT")
     implementation("com.github.walkyst.lavaplayer-fork:lavaplayer-ext-youtube-rotator:df43206b26")
 
-    implementation("com.github.yvasyliev:deezer-api:1.0.3")
+    implementation("com.github.yvasyliev:deezer-api:1.0.6")
 
-    implementation("com.sksamuel.hoplite:hoplite-core:2.1.5")
-    implementation("com.sksamuel.hoplite:hoplite-yaml:2.1.5")
+    implementation("com.sksamuel.hoplite:hoplite-core:2.5.2")
+    implementation("com.sksamuel.hoplite:hoplite-yaml:2.5.2")
 
     implementation("ch.qos.logback", "logback-classic", "1.0.9")
     implementation("ch.qos.logback", "logback-core", "1.0.9")
@@ -41,9 +41,9 @@ dependencies {
     implementation("org.jetbrains.exposed", "exposed-core", "0.37.3")
     implementation("org.jetbrains.exposed", "exposed-dao", "0.37.3")
     implementation("org.jetbrains.exposed", "exposed-jdbc", "0.37.3")
-    implementation("mysql:mysql-connector-java:8.0.29")
+    implementation("mysql:mysql-connector-java:8.0.30")
 
-    implementation("io.github.reactivecircus.cache4k:cache4k:0.6.0")
+    implementation("io.github.reactivecircus.cache4k:cache4k:0.7.0")
     implementation("com.google.code.gson:gson:2.9.0")
 
     // https://mvnrepository.com/artifact/org.json/json
