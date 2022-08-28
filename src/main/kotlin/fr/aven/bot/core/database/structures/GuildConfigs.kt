@@ -57,7 +57,7 @@ data class GuildConfig(
                     it[limit] = 5
                 } get WarnConfigs.id
 
-                val insert = GuildConfigs.insert {
+                GuildConfigs.insert {
                     it[id] = guild.id
                     it[lang] = "en"
                     it[logs] = logsID

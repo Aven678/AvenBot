@@ -3,6 +3,7 @@ package fr.aven.bot.events
 import dev.minn.jda.ktx.events.CoroutineEventListener
 import dev.minn.jda.ktx.messages.Embed
 import dev.minn.jda.ktx.util.SLF4J
+import fr.aven.bot.core.JDA
 import fr.aven.bot.core.Main
 import fr.aven.bot.core.database.structures.GuildConfig
 import net.dv8tion.jda.api.entities.Guild
@@ -32,11 +33,11 @@ class ActivitiesListener(private val main: Main): CoroutineEventListener
     {
         log.info("${guild.name} ${if (joined) "joined" else "leaved"}")
 
-        main.jda.getTextChannelById(412908508590243840)?.sendMessageEmbeds(Embed {
+        JDA.getTextChannelById(412908508590243840)?.sendMessageEmbeds(Embed {
             author {
                 name = if (joined) "New guild joined" else "Guild leaved"
                 url = "https://wwww.justaven.xyz"
-                iconUrl = main.jda.selfUser.avatarUrl
+                iconUrl = JDA.selfUser.avatarUrl
             }
 
             field {
@@ -67,9 +68,9 @@ class ActivitiesListener(private val main: Main): CoroutineEventListener
         event.guild.getTextChannelById(event.guild.defaultChannel?.id!!)?.sendMessageEmbeds(
             Embed {
                 author {
-                    name = "Author"
+                    name = "AvenBot"
                     url = "https://discord.gg/ntbdKjv"
-                    iconUrl = main.jda.selfUser.avatarUrl
+                    iconUrl = JDA.selfUser.avatarUrl
                 }
 
                 description = "It's a JDA multifonction bot, do /help to have all the commands"
@@ -103,7 +104,7 @@ class ActivitiesListener(private val main: Main): CoroutineEventListener
 
     private fun onJoinMemberEvent(event: GuildMemberJoinEvent) {
         GuildConfig.getGuildConfig(event.guild)?.activities?.join?.let {
-            event.guild.getTextChannelById(GuildConfig.getGuildConfig(event.guild)?.activities?.channel!!)?.sendMessage(
+            GuildConfig.getGuildConfig(event.guild)?.activities?.channel?.sendMessage(
                 it.replace("[guild]", event.guild.name).replace("[member]", event.user.asTag).replace("[number]", event.guild.memberCount.toString())
             )?.queue()
         }
@@ -116,7 +117,7 @@ class ActivitiesListener(private val main: Main): CoroutineEventListener
         }
 
         GuildConfig.getGuildConfig(event.guild)?.activities?.leave?.let {
-            event.guild.getTextChannelById(GuildConfig.getGuildConfig(event.guild)?.activities?.channel!!)?.sendMessage(
+            GuildConfig.getGuildConfig(event.guild)?.activities?.channel?.sendMessage(
                 it.replace("[guild]", event.guild.name).replace("[member]", event.user.asTag).replace("[number]", event.guild.memberCount.toString())
             )?.queue()
         }
@@ -124,7 +125,7 @@ class ActivitiesListener(private val main: Main): CoroutineEventListener
 
     private fun onBanEvent(event: GuildBanEvent) {
         GuildConfig.getGuildConfig(event.guild)?.activities?.ban?.let {
-            event.guild.getTextChannelById(GuildConfig.getGuildConfig(event.guild)?.activities?.channel!!)?.sendMessage(
+            GuildConfig.getGuildConfig(event.guild)?.activities?.channel?.sendMessage(
                 it.replace("[guild]", event.guild.name).replace("[member]", event.user.asTag).replace("[number]", event.guild.memberCount.toString())
             )?.queue()
         }

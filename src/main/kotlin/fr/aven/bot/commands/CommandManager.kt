@@ -3,6 +3,7 @@ package fr.aven.bot.commands
 import dev.minn.jda.ktx.util.SLF4J
 import fr.aven.bot.LANG_LOADER
 import fr.aven.bot.commands.CommandManager.Companion.playerManager
+import fr.aven.bot.core.JDA
 import fr.aven.bot.core.Main
 import fr.aven.bot.music.PlayerManager
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
@@ -30,7 +31,7 @@ class CommandManager(private val main: Main) {
         val reflections: Set<Class<out ICommand>> =
             Reflections("fr.aven.bot.commands.list").getSubTypesOf(ICommand::class.java)
         for (instance in reflections) if (!instance.isInterface) commands.add(instance.getConstructor().newInstance())
-        main.jda.awaitReady().updateCommands()
+        JDA.awaitReady().updateCommands()
             .addCommands(commands.filterIsInstance(IDataCommand::class.java).map { it.data }).queue()
     }
 

@@ -12,7 +12,9 @@ import org.json.JSONObject
 object LogsConfigs: Table("logs_config") {
     val id = integer("id").autoIncrement()
     val channel = varchar("channel", 25)
-    val logs = text("logs")
+    val logs = text("logs").default("{}")
+
+    override val primaryKey = PrimaryKey(id, name = "PK_LogsConfigs")
 }
 
 data class LogsConfig(
@@ -21,6 +23,6 @@ data class LogsConfig(
     val logs: JSONObject
 ) {
     companion object {
-        fun fromRow(row: ResultRow) = LogsConfig(row[id], JDA.getGuildChannelById(row[channel]), JSONObject(row[logs]))
+        fun fromRow(row: ResultRow) = LogsConfig(row[id], if (row[channel] == "none") null else JDA.getGuildChannelById(row[channel]), JSONObject(row[logs]))
     }
 }

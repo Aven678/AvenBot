@@ -8,10 +8,10 @@ import dev.minn.jda.ktx.interactions.components.button
 import dev.minn.jda.ktx.messages.Embed
 import fr.aven.bot.util.lang.LangKey
 import fr.aven.bot.util.lang.LangManager
-import net.dv8tion.jda.api.entities.Emoji
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.Member
-import net.dv8tion.jda.api.entities.TextChannel
+import net.dv8tion.jda.api.entities.MessageChannel
+import net.dv8tion.jda.api.entities.emoji.Emoji
 import net.dv8tion.jda.api.interactions.components.ActionRow
 import net.dv8tion.jda.api.interactions.components.buttons.ButtonStyle
 import java.time.Instant
@@ -20,7 +20,7 @@ import java.util.concurrent.LinkedBlockingQueue
 class TrackScheduler(
     private val player: AudioPlayer,
     private val guild: Guild,
-    private var channel: TextChannel,
+    private var channel: MessageChannel,
     private val language: LangManager,
 ) : AudioEventAdapter() {
     private val oldQueue = LinkedBlockingQueue<AudioTrack>()
@@ -28,14 +28,14 @@ class TrackScheduler(
     private var statusMessage = ""
     private var requester: Member? = null
 
-    private val channelTrack = mutableMapOf<AudioTrack, TextChannel>()
+    private val channelTrack = mutableMapOf<AudioTrack, MessageChannel>()
     private val requesters = mutableMapOf<AudioTrack, Member>()
 
     private var repeatTrack = false
     private var repeatPlaylist = false
     private var backRequested = false
 
-    fun queue(track: AudioTrack, channel: TextChannel, member: Member) {
+    fun queue(track: AudioTrack, channel: MessageChannel, member: Member) {
         channelTrack[track] = channel
         requesters[track] = member
         oldQueue.put(track)
@@ -157,22 +157,22 @@ class TrackScheduler(
 
         }
 
-        val actionRows = listOf(ActionRow.of(
+        val actionRows1 = listOf(
             button(id = "m.old", emoji = Emoji.fromUnicode("⏮️"), style = ButtonStyle.SECONDARY),
             button(id = "m.player",
                 emoji = if (player.isPaused) Emoji.fromUnicode("▶️") else Emoji.fromUnicode("⏸️"),
                 style = ButtonStyle.SECONDARY),
             button(id = "m.skip", emoji = Emoji.fromUnicode("⏭️"), style = ButtonStyle.SECONDARY)
-        ), ActionRow.of(
-            button(id = "m.repeatPlaylist", emoji = Emoji.fromUnicode("\uD83D\uDD01"), style = ButtonStyle.SECONDARY),
+        )
+
+        val actionRows2 = listOf(button(id = "m.repeatPlaylist", emoji = Emoji.fromUnicode("\uD83D\uDD01"), style = ButtonStyle.SECONDARY),
             button(id = "m.repeatTrack", emoji = Emoji.fromUnicode("\uD83D\uDD02"), style = ButtonStyle.SECONDARY),
             button(id = "m.lyrics", emoji = Emoji.fromUnicode("\uD83D\uDCDC"), style = ButtonStyle.SECONDARY, disabled = true),
-            button(id = "m.stop", label = "Stop", style = ButtonStyle.DANGER),
-        ))
+            button(id = "m.stop", label = "Stop", style = ButtonStyle.DANGER))
 
-        if (statusMessage == "") channel.sendMessageEmbeds(embed).setActionRows(actionRows)
+        if (statusMessage == "") channel.sendMessageEmbeds(embed).addActionRow(actionRows1).addActionRow(actionRows2)
             .queue { statusMessage = it.id }
-        else channel.editMessageEmbedsById(statusMessage, embed).setActionRows(actionRows).queue()
+        else channel.editMessageEmbedsById(statusMessage, embed).setComponents(ActionRow.of(actionRows1), ActionRow.of(actionRows2)).queue()
     }
 
     fun getTimestamp(milis: Long): String {

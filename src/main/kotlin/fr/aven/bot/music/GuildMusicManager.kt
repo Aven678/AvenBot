@@ -10,10 +10,11 @@ import dev.minn.jda.ktx.interactions.components.option
 import dev.minn.jda.ktx.interactions.components.secondary
 import fr.aven.bot.LANG_LOADER
 import fr.aven.bot.util.lang.LangKey
-import net.dv8tion.jda.api.entities.Emoji
 import net.dv8tion.jda.api.entities.Guild
+import net.dv8tion.jda.api.entities.MessageChannel
 import net.dv8tion.jda.api.entities.MessageEmbed
 import net.dv8tion.jda.api.entities.TextChannel
+import net.dv8tion.jda.api.entities.emoji.Emoji
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent
 import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent
@@ -27,7 +28,7 @@ import java.util.concurrent.LinkedBlockingQueue
 class GuildMusicManager(
     private val manager: AudioPlayerManager,
     private val guild: Guild,
-    private val channel: TextChannel,
+    private val channel: MessageChannel,
 ) {
     val player: AudioPlayer = manager.createPlayer()
     val language = LANG_LOADER.getLangManager(user = null, guild)
@@ -65,8 +66,7 @@ class GuildMusicManager(
             }
 
             color = Color(255, 0, 0).rgb
-        }).setEphemeral(true).addActionRows(
-            ActionRow.of(
+        }).setEphemeral(true).setActionRow(
                 SelectMenu("music:search") {
                     for (i in 0..4) {
                         tracks.add(playlist.tracks[i])
@@ -75,7 +75,6 @@ class GuildMusicManager(
 
                     option("Cancel", "cancel", default = false)
                 }
-            )
         ).queue {
             if (search.containsKey(interaction.user.id)) search[interaction.user.id]!!.addAll(tracks)
             else search[interaction.user.id] = tracks
@@ -90,7 +89,7 @@ class GuildMusicManager(
         if (choice == "cancel") {
             event.interaction.hook.editOriginal(language.getString(LangKey.keyBuilder(this,
                 "searchConfirm",
-                "music.canceled"), "Search canceled")).setEmbeds().setActionRows().queue()
+                "music.canceled"), "Search canceled")).setEmbeds().setActionRow().queue()
             search[event.user.id]!!.clear()
             return true
         }
@@ -100,9 +99,9 @@ class GuildMusicManager(
 
         search[event.user.id]!!.clear()
 
-        scheduler.queue(track, event.textChannel, event.member!!)
+        scheduler.queue(track, event.channel.asTextChannel(), event.member!!)
 
-        event.interaction.hook.editOriginalEmbeds(embedConfirm(track)).setActionRows().queue()
+        event.interaction.hook.editOriginalEmbeds(embedConfirm(track)).setActionRow().queue()
         return true
     }
 
@@ -138,19 +137,19 @@ class GuildMusicManager(
         event.interaction
             .hook
             .editOriginalEmbeds(queueEmbed(page))
-            .setActionRows(ActionRow.of(
+            .setActionRow(
                 if (page >= 0) secondary("m.queue.${page - 1}",
                     label = "Previous page",
                     emoji = Emoji.fromUnicode("⬅️")) else null,
                 secondary("m.queue.${page + 1}", label = "Next page", emoji = Emoji.fromUnicode("➡️"))
-            )).queue()
+            ).queue()
     }
 
     fun sendQueueMessage(event: SlashCommandInteractionEvent) {
         event.replyEmbeds(queueEmbed(0))
-            .addActionRows(ActionRow.of(
+            .setActionRow(
                 secondary("m.queue.1", label = "Next page", emoji = Emoji.fromUnicode("➡️"))
-            )).queue()
+            ).queue()
     }
 
     private fun queueEmbed(page: Int): MessageEmbed {

@@ -17,6 +17,7 @@ import dev.minn.jda.ktx.util.SLF4J
 import fr.aven.bot.core.Config
 import fr.aven.bot.util.lang.LangKey
 import net.dv8tion.jda.api.entities.Guild
+import net.dv8tion.jda.api.entities.MessageChannel
 import net.dv8tion.jda.api.entities.TextChannel
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent
 import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent
@@ -47,15 +48,15 @@ class PlayerManager(private val config: Config) {
     }
 
     fun guildMusicManager(event: ButtonInteractionEvent): GuildMusicManager =
-        guildMusicManager(event.guild!!, event.textChannel)
+        guildMusicManager(event.guild!!, event.channel)
 
     fun guildMusicManager(event: SelectMenuInteractionEvent): GuildMusicManager =
-        guildMusicManager(event.guild!!, event.textChannel)
+        guildMusicManager(event.guild!!, event.channel)
 
     fun guildMusicManager(interaction: SlashCommandInteraction): GuildMusicManager =
-        guildMusicManager(interaction.guild!!, interaction.textChannel)
+        guildMusicManager(interaction.guild!!, interaction.channel)
 
-    private fun guildMusicManager(guild: Guild, channel: TextChannel): GuildMusicManager {
+    private fun guildMusicManager(guild: Guild, channel: MessageChannel): GuildMusicManager {
         musicManagers.putIfAbsent(guild.idLong, GuildMusicManager(playerManager, guild, channel))
         guild.audioManager.sendingHandler = musicManagers[guild.idLong]!!.sendHandler()
         return musicManagers[guild.idLong]!!
@@ -109,7 +110,7 @@ class PlayerManager(private val config: Config) {
                     play(musicManager, firstTrack!!, interaction)
                     playlist.tracks.forEach {
                         musicManager.scheduler.queue(it,
-                            interaction.textChannel,
+                            interaction.channel.asTextChannel(),
                             interaction.member!!)
                     }
                 }
@@ -131,5 +132,5 @@ class PlayerManager(private val config: Config) {
     }
 
     fun play(musicManager: GuildMusicManager, track: AudioTrack, interaction: SlashCommandInteraction) =
-        musicManager.scheduler.queue(track, interaction.textChannel, interaction.member!!)
+        musicManager.scheduler.queue(track, interaction.channel, interaction.member!!)
 }

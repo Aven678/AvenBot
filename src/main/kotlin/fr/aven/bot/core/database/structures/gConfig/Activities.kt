@@ -7,6 +7,7 @@ import fr.aven.bot.core.database.structures.gConfig.Activities.id
 import fr.aven.bot.core.database.structures.gConfig.Activities.join
 import fr.aven.bot.core.database.structures.gConfig.Activities.leave
 import net.dv8tion.jda.api.entities.GuildChannel
+import net.dv8tion.jda.api.entities.TextChannel
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.Table
 
@@ -44,7 +45,7 @@ data class Activity(
     val join: String,
     val leave: String,
     val ban: String,
-    val channel: GuildChannel?
+    val channel: TextChannel?
 ) {
     companion object {
         /**
@@ -55,7 +56,7 @@ data class Activity(
             join    = row[join],
             leave   = row[leave],
             ban     = row[ban],
-            channel = JDA.getGuildChannelById(row[channel])
+            channel = if (row[channel] == "nothing") null else JDA.getTextChannelById(row[channel])
         )
     }
 }
