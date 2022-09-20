@@ -4,7 +4,7 @@ import fr.aven.bot.core.JDA
 import fr.aven.bot.core.database.structures.gConfig.LogsConfigs.channel
 import fr.aven.bot.core.database.structures.gConfig.LogsConfigs.id
 import fr.aven.bot.core.database.structures.gConfig.LogsConfigs.logs
-import net.dv8tion.jda.api.entities.GuildChannel
+import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.Table
 import org.json.JSONObject

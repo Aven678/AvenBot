@@ -1,12 +1,11 @@
 package fr.aven.bot.util
 
 import com.google.gson.Gson
-import net.dv8tion.jda.api.entities.AudioChannel
+import net.dv8tion.jda.api.entities.channel.middleman.AudioChannel
 import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
 import org.json.JSONTokener

@@ -17,14 +17,13 @@ import dev.minn.jda.ktx.util.SLF4J
 import fr.aven.bot.core.Config
 import fr.aven.bot.util.lang.LangKey
 import net.dv8tion.jda.api.entities.Guild
-import net.dv8tion.jda.api.entities.MessageChannel
-import net.dv8tion.jda.api.entities.TextChannel
+import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent
 import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent
 import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction
 import java.awt.Color
 
-class PlayerManager(private val config: Config) {
+class PlayerManager(config: Config) {
     private val logger by SLF4J
     private var playerManager: AudioPlayerManager = DefaultAudioPlayerManager()
     private var musicManagers = mutableMapOf<Long, GuildMusicManager>()
@@ -66,7 +65,6 @@ class PlayerManager(private val config: Config) {
         loadAndPlay(interaction, "ytsearch:${track.title} ${track.artist.name}")
 
     fun loadAndPlay(interaction: SlashCommandInteraction, trackUrl: String) {
-        val guild = interaction.guild!!
         val musicManager = guildMusicManager(interaction)
         playerManager.frameBufferDuration = 5000
         playerManager.loadItemOrdered(musicManager, trackUrl, object : AudioLoadResultHandler {

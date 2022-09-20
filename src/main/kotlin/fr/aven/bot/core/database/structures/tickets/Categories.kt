@@ -7,7 +7,7 @@ import fr.aven.bot.core.database.structures.tickets.Categories.id
 import fr.aven.bot.core.database.structures.tickets.Categories.message
 import fr.aven.bot.core.database.structures.tickets.Categories.name
 import net.dv8tion.jda.api.entities.Guild
-import net.dv8tion.jda.api.entities.GuildChannel
+import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.Table
 import org.json.JSONObject

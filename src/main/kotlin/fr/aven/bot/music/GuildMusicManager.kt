@@ -11,24 +11,22 @@ import dev.minn.jda.ktx.interactions.components.secondary
 import fr.aven.bot.LANG_LOADER
 import fr.aven.bot.util.lang.LangKey
 import net.dv8tion.jda.api.entities.Guild
-import net.dv8tion.jda.api.entities.MessageChannel
 import net.dv8tion.jda.api.entities.MessageEmbed
-import net.dv8tion.jda.api.entities.TextChannel
+import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel
 import net.dv8tion.jda.api.entities.emoji.Emoji
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent
 import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent
 import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction
-import net.dv8tion.jda.api.interactions.components.ActionRow
-import net.dv8tion.jda.api.interactions.components.selections.SelectOption
 import java.awt.Color
 import java.time.Instant
+import java.util.*
 import java.util.concurrent.LinkedBlockingQueue
 
 class GuildMusicManager(
-    private val manager: AudioPlayerManager,
+    manager: AudioPlayerManager,
     private val guild: Guild,
-    private val channel: MessageChannel,
+    channel: MessageChannel,
 ) {
     val player: AudioPlayer = manager.createPlayer()
     val language = LANG_LOADER.getLangManager(user = null, guild)
@@ -56,7 +54,6 @@ class GuildMusicManager(
         }
 
         val tracks = mutableListOf<AudioTrack>()
-        val options = mutableListOf<SelectOption>()
         interaction.replyEmbeds(Embed {
             field {
                 name =
@@ -89,7 +86,7 @@ class GuildMusicManager(
         if (choice == "cancel") {
             event.interaction.hook.editOriginal(language.getString(LangKey.keyBuilder(this,
                 "searchConfirm",
-                "music.canceled"), "Search canceled")).setEmbeds().setActionRow().queue()
+                "music.canceled"), "Search canceled")).setEmbeds().setComponents(Collections.emptyList()).queue()
             search[event.user.id]!!.clear()
             return true
         }
@@ -101,7 +98,7 @@ class GuildMusicManager(
 
         scheduler.queue(track, event.channel.asTextChannel(), event.member!!)
 
-        event.interaction.hook.editOriginalEmbeds(embedConfirm(track)).setActionRow().queue()
+        event.interaction.hook.editOriginalEmbeds(embedConfirm(track)).setComponents(Collections.emptyList()).queue()
         return true
     }
 
